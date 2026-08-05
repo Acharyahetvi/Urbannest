@@ -1,4 +1,6 @@
+
 <?php
+
 require_once __DIR__ . '/db.php';
 $pageTitle = $pageTitle ?? 'UrbanNest — Luxury Real Estate';
 $pageDesc  = $pageDesc  ?? 'Discover premium homes, penthouses & investment properties curated by UrbanNest.';

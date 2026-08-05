@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg un-navbar sticky-top">
     <div class="container">
         <a class="navbar-brand un-brand" href="<?= url('index.php') ?>">
-            <span class="un-brand-mark"><i class="fa-solid fa-building-columns"></i></span>
+            <!--<span class="un-brand-mark"><i class="fa-solid fa-building-columns"></i></span>-->
             <span class="un-brand-text">Urban<span>Nest</span></span>
         </a>
 
@@ -47,21 +47,21 @@
                         </div>
                     </li>
 
-                    <li class="nav-item"><a class="nav-link <?= is_active('agents') ?>" href="<?= url('agents.php') ?>">Agents</a></li>
-                    <li class="nav-item"><a class="nav-link <?= is_active('owners') ?>" href="<?= url('owners.php') ?>">Owners</a></li>
-                    <li class="nav-item"><a class="nav-link <?= is_active('blog') ?>" href="<?= url('blog.php') ?>">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link <?= is_active('agents') ?>" href="<?= url('urbannest/agents.php') ?>">Agents</a></li>
+                    <li class="nav-item"><a class="nav-link <?= is_active('owners') ?>" href="<?= url('urbannest/owners.php') ?>">Owners</a></li>
+                    <li class="nav-item"><a class="nav-link <?= is_active('blog') ?>" href="<?= url('urbannest/blog.php') ?>">Blog</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Pages</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?= url('about.php') ?>">About</a></li>
-                            <li><a class="dropdown-item" href="<?= url('faq.php') ?>">FAQ</a></li>
-                            <li><a class="dropdown-item" href="<?= url('contact.php') ?>">Contact</a></li>
+                            <li><a class="dropdown-item" href="<?= url('urbannest/about.php') ?>">About</a></li>
+                            <li><a class="dropdown-item" href="<?= url('urbannest/faq.php') ?>">FAQ</a></li>
+                            <li><a class="dropdown-item" href="<?= url('urbannest/contact.php') ?>">Contact</a></li>
                         </ul>
                     </li>
 
                     <li class="nav-item ms-lg-3 d-flex gap-2 mt-3 mt-lg-0">
-                        <a href="<?= url('auth/login.php') ?>" class="btn btn-outline-navy btn-sm px-3">Login</a>
-                        <a href="<?= url('auth/register.php') ?>" class="btn btn-gold btn-sm px-3">Register</a>
+                        <a href="<?= url('urbannest/auth/login.php') ?>" class="btn btn-outline-navy btn-sm px-3">Login</a>
+                        <a href="<?= url('urbannest/auth/register.php') ?>" class="btn btn-gold btn-sm px-3">Register</a>
                     </li>
                 </ul>
             </div>

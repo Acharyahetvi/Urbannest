@@ -11,18 +11,18 @@
                     <a href="#" class="un-social"><i class="fa-brands fa-instagram"></i></a>
                     <a href="#" class="un-social"><i class="fa-brands fa-facebook-f"></i></a>
                     <a href="#" class="un-social"><i class="fa-brands fa-x-twitter"></i></a>
-                    <a href="#" class="un-social"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="https://www.linkedin.com" class="un-social"><i class="fa-brands fa-linkedin-in"></i></a>
                     <a href="#" class="un-social"><i class="fa-brands fa-youtube"></i></a>
                 </div>
             </div>
             <div class="col-6 col-lg-2">
                 <h6 class="un-footer-title">Company</h6>
                 <ul class="list-unstyled un-footer-links">
-                    <li><a href="<?= url('about.php') ?>">About Us</a></li>
-                    <li><a href="<?= url('agents.php') ?>">Our Agents</a></li>
-                    <li><a href="<?= url('blog.php') ?>">Journal</a></li>
-                    <li><a href="<?= url('contact.php') ?>">Contact</a></li>
-                    <li><a href="<?= url('faq.php') ?>">FAQ</a></li>
+                    <li><a href="<?= url('urbannest/about.php') ?>">About Us</a></li>
+                    <li><a href="<?= url('urbannest/agents.php') ?>">Our Agents</a></li>
+                    <li><a href="<?= url('urbannest/blog.php') ?>">Journal</a></li>
+                    <li><a href="<?= url('urbannest/contact.php') ?>">Contact</a></li>
+                    <li><a href="<?= url('urbannest/faq.php') ?>">FAQ</a></li>
                 </ul>
             </div>
             <div class="col-6 col-lg-2">

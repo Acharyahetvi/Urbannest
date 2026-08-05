@@ -37,7 +37,7 @@ require_once __DIR__ . '/../includes/header.php';
                             <div class="col-6"><button type="button" class="btn btn-outline-navy w-100"><i class="fa-brands fa-apple me-2"></i>Apple</button></div>
                         </div>
                     </form>
-                    <p class="text-center small text-muted mt-4 mb-0">Don't have an account? <a href="<?= url('auth/register.php') ?>" class="text-gold fw-semibold">Create one</a></p>
+                    <p class="text-center small text-muted mt-4 mb-0">Don't have an account? <a href="<?= url('urbannest/auth/register.php') ?>" class="text-gold fw-semibold">Create one</a></p>
                 </div>
             </div>
         </div>
