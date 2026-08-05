@@ -1,0 +1,241 @@
+/* ===========================
+   ADMIN PANEL CSS - URBANNEST
+=========================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#f4f7fb;
+    font-family:Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+    color:#333;
+}
+
+.admin-container{
+    width:90%;
+    max-width:1100px;
+    margin:50px auto;
+}
+
+.admin-container h1{
+    text-align:center;
+    margin-bottom:35px;
+    color:#0d2342;
+    font-size:34px;
+}
+
+/* ===========================
+   CARD
+=========================== */
+.form-card{
+    background:#ffffff;
+    border-radius:12px;
+    padding:30px;
+    margin-bottom:30px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.form-card h2{
+    color:#0d2342;
+    margin-bottom:25px;
+    padding-bottom:10px;
+    border-bottom:3px solid #d4af37;
+    font-size:24px;
+}
+
+/* ===========================
+   FORM LAYOUT
+=========================== */
+
+.form-row{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.form-group{
+    flex:1;
+    min-width:280px;
+    margin-bottom:20px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:#444;
+}
+
+/* ===========================
+   INPUTS
+=========================== */
+
+input[type=text],
+input[type=number],
+input[type=file],
+select,
+textarea{
+
+    width:100%;
+    padding:12px 15px;
+
+    border:1px solid #d0d7de;
+    border-radius:8px;
+
+    outline:none;
+
+    font-size:15px;
+
+    transition:.3s;
+
+    background:#fff;
+}
+
+textarea{
+    resize:vertical;
+    min-height:120px;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+
+    border-color:#0d2342;
+
+    box-shadow:0 0 8px rgba(13,35,66,.15);
+
+}
+
+/* ===========================
+   CHECKBOXES
+=========================== */
+
+.checkbox-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:15px;
+
+}
+
+.checkbox-grid label{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    font-weight:500;
+
+}
+
+/* ===========================
+   BUTTON
+=========================== */
+
+.btn-save{
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#0d2342;
+
+    color:#fff;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.btn-save:hover{
+
+    background:#d4af37;
+
+    color:#0d2342;
+
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media(max-width:768px){
+
+.form-row{
+
+    flex-direction:column;
+
+}
+
+.checkbox-grid{
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media(max-width:500px){
+
+.checkbox-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+.admin-container{
+
+    width:95%;
+
+}
+
+}
+*{
+    box-sizing:border-box;
+}
+
+img{
+    max-width:100%;
+    height:auto;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+}
+
+@media (max-width:768px){
+
+    .form-row{
+        display:flex;
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .admin-container{
+        width:95%;
+        margin:20px auto;
+    }
+
+    .form-card{
+        padding:20px;
+    }
+
+}

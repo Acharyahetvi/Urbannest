@@ -1,0 +1,16 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# XAMPP temp files
+tmp/
+
+# Environment files (if you use them later)
+.env
