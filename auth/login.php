@@ -8,7 +8,7 @@ require_once __DIR__ . '/../includes/header.php';
             <div class="col-md-8 col-lg-6 col-xl-5">
                 <div class="un-auth-card">
                     <a class="un-brand mb-3 d-inline-flex" href="<?= url('index.php') ?>">
-                        <span class="un-brand-mark"><i class="fa-solid fa-building-columns"></i></span>
+                         <img src="/urbannest/assets/images/img1.png" class="un-brand-mark">
                         <span class="un-brand-text">Urban<span>Nest</span></span>
                     </a>
                     <h2 class="section-title mb-1" style="font-size:1.8rem;">Welcome back</h2>

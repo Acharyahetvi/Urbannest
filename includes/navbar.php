@@ -1,7 +1,9 @@
 <nav class="navbar navbar-expand-lg un-navbar sticky-top">
     <div class="container">
         <a class="navbar-brand un-brand" href="<?= url('index.php') ?>">
-            <!--<span class="un-brand-mark"><i class="fa-solid fa-building-columns"></i></span>-->
+            <!--<span class="un-brand-mark"><i class="fa-solid fa-building-columns"></i></span>  old logo-->
+            <!--<img src="assets/images/img1.png" alt="Description of the image"  width="40" height="40">-->
+            <img src="/urbannest/assets/images/img1.png" class="un-brand-mark">
             <span class="un-brand-text">Urban<span>Nest</span></span>
         </a>
 
