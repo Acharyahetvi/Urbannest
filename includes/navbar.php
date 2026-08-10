@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg un-navbar sticky-top">
     <div class="container">
         <a class="navbar-brand un-brand" href="<?= url('index.php') ?>">
-            <img src="/urbannest/assets/images/img1.png" class="un-brand-mark">
+            <img src="/urbannest/assets/images/img1.png" class="un-brand-mark" height=100>
             <span class="un-brand-text">Urban<span>Nest</span></span>
         </a>
 
