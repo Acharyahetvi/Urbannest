@@ -11,6 +11,6 @@ if (!$con) {
     die("Database connection failed: " . mysqli_connect_error());
 }
 
-echo "Database connected successfully!";
+//echo "Database connected successfully!";
 
 ?>

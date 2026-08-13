@@ -28,19 +28,24 @@ if (isset($_POST['save'])) {
 
     <title>Add Category | UrbanNest</title>
 
-    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/subcategory.css">
 </head>
 
 <body>
 
-    <div class="container">
+    <div class="subcategory-container">
 
-        <h1>Add Category</h1>
+        <h2>Add Category</h2>
+
 
         <form action="" method="POST">
 
-            <div>
-                <label for="category_name">Category Name</label>
+            <div class="form-group">
+
+                <label for="category_name">
+                    Category Name
+                </label>
+
                 <input
                     type="text"
                     id="category_name"
@@ -48,29 +53,50 @@ if (isset($_POST['save'])) {
                     placeholder="Enter category name"
                     required
                 >
+
             </div>
 
-            <div>
-                <label for="description">Description</label>
+
+            <div class="form-group">
+
+                <label for="description">
+                    Description
+                </label>
+
                 <textarea
                     id="description"
                     name="description"
                     placeholder="Enter category description"
                 ></textarea>
+
             </div>
 
-            <div>
-                <label for="status">Status</label>
 
-                <select id="status" name="status">
+            <div class="form-group">
+
+                <label for="status">
+                    Status
+                </label>
+
+                <select
+                    id="status"
+                    name="status"
+                >
                     <option value="Active">Active</option>
                     <option value="Inactive">Inactive</option>
                 </select>
+
             </div>
 
-            <button type="submit" name="save">
+
+            <button
+                type="submit"
+                name="save"
+                class="submit-btn"
+            >
                 Save Category
             </button>
+
 
         </form>
 

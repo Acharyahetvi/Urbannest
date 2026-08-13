@@ -1,0 +1,137 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f1ed;
+    color: #242424;
+}
+
+/* Main form area */
+.subcategory-container {
+    width: 92%;
+    max-width: 720px;
+    margin: 55px auto;
+    padding: 40px 45px;
+    background: #ffffff;
+    border: 1px solid #e6e1d9;
+    border-radius: 4px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+}
+
+/* Heading */
+.subcategory-container h2 {
+    margin: 0 0 8px;
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    color: #1f1f1f;
+}
+
+.subcategory-container h2::after {
+    content: "";
+    display: block;
+    width: 45px;
+    height: 3px;
+    margin-top: 14px;
+    margin-bottom: 32px;
+    background: #b08d57;
+}
+
+/* Form groups */
+.form-group {
+    margin-bottom: 23px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 9px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #353535;
+}
+
+/* Inputs */
+.form-group select,
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1px solid #d8d4ce;
+    border-radius: 3px;
+    background: #fff;
+    color: #333;
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.form-group select {
+    cursor: pointer;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #999;
+}
+
+/* Focus */
+.form-group select:focus,
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #b08d57;
+    box-shadow: 0 0 0 3px rgba(176, 141, 87, 0.10);
+}
+
+/* Description */
+.form-group textarea {
+    min-height: 125px;
+    resize: vertical;
+}
+
+/* Button */
+.submit-btn {
+    width: 100%;
+    padding: 14px 20px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 3px;
+    background: #222222;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.submit-btn:hover {
+    background: #b08d57;
+}
+
+/* Success message */
+.success-message {
+    margin-bottom: 25px;
+    padding: 12px 15px;
+    border-left: 3px solid #4c8b62;
+    background: #f0f7f2;
+    color: #356746;
+    font-size: 14px;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+    .subcategory-container {
+        width: 94%;
+        margin: 30px auto;
+        padding: 28px 22px;
+    }
+
+    .subcategory-container h2 {
+        font-size: 25px;
+    }
+}
