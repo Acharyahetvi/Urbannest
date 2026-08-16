@@ -6,12 +6,12 @@ $message = "";
 if (isset($_POST["add_category"])) {
 
     $category_id = $_POST["category_id"];
-    $name = $_POST["name"];
+    $subcategory_name = $_POST["subcategory_name"];
     $description = $_POST["description"];
     $status = $_POST['status'];
 
 
-    $sql = "INSERT INTO sub_categories (category_id, name, description, status) VALUES ('$category_id', '$name', '$description','$status')";
+    $sql = "INSERT INTO sub_categories (category_id, subcategory_name, description, status) VALUES ('$category_id', '$subcategory_name', '$description','$status')";
     //    echo $sql;
     //    exit();
     if (mysqli_query($con, $sql)) {
@@ -64,8 +64,8 @@ if (isset($_POST["add_category"])) {
 
                 <input
                     type="text"
-                    name="name"
-                    id="name"
+                    name="subcategory_name"
+                    id="subcategory_name"
                     placeholder="Enter subcategory name"
                     required
                 >
@@ -80,6 +80,16 @@ if (isset($_POST["add_category"])) {
                     placeholder="Enter description"
                     required
                 ></textarea>
+            </div>
+            
+            <div class="form-group">
+            <label for="status">Status</label>
+
+            <select name="status" id="status" required>
+                <option value="">-- Select Status --</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+            </select>
             </div>
 
             <button type="submit" name="add_category" class="submit-btn">

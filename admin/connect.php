@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database_name = "urbanest";
+$database_name = "urbannest";
 
 $con = mysqli_connect($servername, $username, $password, $database_name);
 

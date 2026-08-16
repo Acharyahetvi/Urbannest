@@ -107,6 +107,145 @@ input:focus-visible{
   flex-direction:column;
 }
 
+/* --------------------------------------------------------------------------
+   4. Sidebar (fixed, desktop)
+-------------------------------------------------------------------------- */
+.un-sidebar{
+  width:var(--un-sidebar-width);
+  position:fixed;
+  top:0;
+  left:0;
+  bottom:0;
+  background:linear-gradient(180deg, var(--un-navy-900) 0%, var(--un-navy-950) 100%);
+  z-index:1030;
+  padding:0 0 20px;
+}
+
+.un-sidebar-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:26px 24px;
+  border-bottom:1px solid rgba(228,206,140,0.12);
+}
+.un-brand-mark {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 11px;
+}
+/*
+.un-logo-mark{
+  width:42px;
+  height:42px;
+  flex:0 0 auto;
+  border-radius:10px;
+  border:1.5px solid var(--un-gold);
+  color:var(--un-gold-light);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  font-size:15px;
+  letter-spacing:.5px;
+}
+*/
+.un-logo-text{
+  display:flex;
+  flex-direction:column;
+  line-height:1.25;
+}
+
+.un-logo-title{
+  color:var(--un-white);
+  font-weight:600;
+  font-size:17px;
+  letter-spacing:.2px;
+}
+
+.un-logo-subtitle{
+  color:var(--un-gold-light);
+  font-size:10.5px;
+  font-weight:500;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  opacity:.85;
+}
+
+.un-sidebar-nav{
+  padding:18px 14px;
+  flex:1 1 auto;
+  overflow-y:auto;
+}
+
+.un-nav-item + .un-nav-item{ margin-top:2px; }
+
+.un-nav-item .un-nav-link{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:11px 14px;
+  border-radius:var(--un-radius-sm);
+  color:#B9C4DA;
+  font-size:14px;
+  font-weight:500;
+  border-left:3px solid transparent;
+  transition:var(--un-transition);
+}
+
+.un-nav-item .un-nav-link i{
+  width:18px;
+  text-align:center;
+  font-size:15px;
+  color:#8592AC;
+  transition:var(--un-transition);
+}
+
+.un-nav-item .un-nav-link:hover{
+  background:rgba(228,206,140,0.07);
+  color:var(--un-white);
+}
+
+.un-nav-item .un-nav-link:hover i{ color:var(--un-gold-light); }
+
+.un-nav-item.active .un-nav-link{
+  background:rgba(228,206,140,0.10);
+  border-left-color:var(--un-gold);
+  color:var(--un-white);
+  font-weight:600;
+}
+
+.un-nav-item.active .un-nav-link i{ color:var(--un-gold); }
+
+.un-sidebar-footer{
+  padding:14px 14px 4px;
+  margin-top:auto;
+  border-top:1px solid rgba(228,206,140,0.12);
+}
+
+.un-logout-link{ color:#B9C4DA; }
+.un-logout-link i{ color:#8592AC; }
+.un-logout-link:hover{ background:rgba(214,82,74,0.12); color:#F3B4AF; }
+.un-logout-link:hover i{ color:#F3B4AF; }
+
+/* --------------------------------------------------------------------------
+   5. Sidebar — Offcanvas (mobile / tablet)
+-------------------------------------------------------------------------- */
+.un-sidebar-offcanvas{
+  width:280px;
+  background:linear-gradient(180deg, var(--un-navy-900) 0%, var(--un-navy-950) 100%);
+  border:none;
+}
+
+.un-sidebar-offcanvas .offcanvas-header{
+  border-bottom:1px solid rgba(228,206,140,0.12);
+  padding:14px 18px;
+}
+
+.un-sidebar-brand--offcanvas{ padding:0; border:none; }
+
+.un-sidebar-offcanvas .btn-close{ opacity:.8; }
+.un-sidebar-offcanvas .offcanvas-body{ padding:14px 14px 20px; }
 
 /* --------------------------------------------------------------------------
    6. Top Navbar
