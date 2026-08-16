@@ -4,6 +4,7 @@ $pageDesc  = 'Discover premium homes, penthouses & investment properties curated
 require_once __DIR__ . '/includes/header.php';
 require_once __DIR__ . '/includes/data.php';
 require_once __DIR__ . '/includes/navbar.php';
+include("./db_connection.php");
 ?>
 
 <!-- ============== HERO ============== -->
