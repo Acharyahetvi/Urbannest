@@ -1,0 +1,152 @@
+/* ==========================================================================
+   UrbanNest — Add Property Form
+   Theme: Modern / Luxury / Minimal — Navy, White & Gold
+   ========================================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #F4F5F9;
+    color: #3B4354;
+}
+
+/* Main container */
+.property-container {
+    width: 100%;
+    max-width: 850px;
+    margin: 40px auto;
+    padding: 32px;
+    background: #FFFFFF;
+    border: 1px solid #EAEBF1;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(14, 31, 61, 0.06);
+}
+
+/* Heading */
+.property-container h2 {
+    margin: 0 0 28px;
+    color: #0E1F3D;
+    font-size: 24px;
+    font-weight: 600;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #EAEBF1;
+}
+
+/* Form layout */
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Each field */
+form > div {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Full-width fields */
+form > div:nth-child(3),
+form > div:nth-child(4),
+form > div:nth-child(10) {
+    grid-column: 1 / -1;
+}
+
+/* Labels */
+label {
+    margin-bottom: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1C2331;
+}
+
+/* Inputs, select and textarea */
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1px solid #DDE0E8;
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: #1C2331;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13.5px;
+    transition: all 0.2s ease;
+}
+
+/* Textareas */
+textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+/* Placeholder */
+input::placeholder,
+textarea::placeholder {
+    color: #9AA1AE;
+}
+
+/* Focus */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #C9A227;
+    box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.12);
+}
+
+/* Success message */
+.success-message {
+    margin-bottom: 20px;
+    padding: 11px 14px;
+    border-radius: 8px;
+    background: #E4F6EE;
+    color: #1E9E6C;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Button */
+button {
+    grid-column: 1 / -1;
+    width: 100%;
+    padding: 13px 20px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 8px;
+    background: #0E1F3D;
+    color: #FFFFFF;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background: #C9A227;
+    color: #0A1628;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+
+    .property-container {
+        margin: 20px 15px;
+        padding: 22px;
+    }
+
+    form {
+        grid-template-columns: 1fr;
+    }
+
+    form > div {
+        grid-column: 1 / -1 !important;
+    }
+}
