@@ -16,7 +16,7 @@
             </div>
             <div class="offcanvas-body">
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
-                    <li class="nav-item"><a class="nav-link <?= is_active('index.php') ?>" href="<?= url('index.php') ?>">Home</a></li>
+                    <li class="nav-item"><a class="nav-link <?= is_active('index.php') ?>" href="<?= url('urbannest/index.php') ?>">Home</a></li>
 
                     <li class="nav-item dropdown un-mega">
                         <a class="nav-link dropdown-toggle <?= is_active('properties') ?>" href="#" data-bs-toggle="dropdown">Properties</a>
