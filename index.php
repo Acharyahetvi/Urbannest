@@ -136,7 +136,7 @@ include("./db_connection.php");
 <section class="section-pad">
     <div class="container">
         <div class="row g-5">
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <span class="eyebrow">Signature Tier</span>
                 <h2 class="section-title mb-3">Premium Properties</h2>
                 <p class="section-lead mb-4">Trophy residences reserved for buyers seeking rarity and provenance.</p>
@@ -146,7 +146,9 @@ include("./db_connection.php");
                     <?php endforeach; ?>
                 </div>
             </div>
-            <div class="col-lg-6">
+                    </div>
+            <div class="row g-5">
+            <div class="col-lg-12">
                 <span class="eyebrow">Approachable</span>
                 <h2 class="section-title mb-3">Affordable Homes</h2>
                 <p class="section-lead mb-4">Well‑designed homes at accessible prices — first‑time buyers welcome.</p>
