@@ -1,26 +1,38 @@
-<?php
-include "../connect.php";
-
-if (isset($_POST['save'])) {
-
-    $category_name = $_POST['category_name'];
-    $description = $_POST['description'];
-    $status = $_POST['status'];
-
-    $sql = "INSERT INTO categories (category_name, description, status)
-            VALUES ('$category_name', '$description', '$status')";
-
-    $result = mysqli_query($con, $sql);
-
-    if ($result) {
-        echo "Category added successfully!";
-    } else {
-        echo "Category not added: " . mysqli_error($con);
-    }
-}
-?>
-
-<!DOCTYPE html>
+<?php  
+include "../connect.php";  
+if (isset($_POST['save'])) {  
+  
+    $category_name = $_POST['category_name'];  
+    $description = $_POST['description'];  
+    $status = $_POST['status']; 
+ 
+    // Photo upload 
+    $photo = $_FILES['photo']['name']; 
+    $photo_tmp = $_FILES['photo']['tmp_name']; 
+ 
+    // Upload location 
+    $upload_folder = "../assets/images/category/"; 
+     
+    // Create unique filename 
+    $photo_name = time() . "_" . $photo; 
+ 
+    // Move photo to folder 
+    move_uploaded_file($photo_tmp, $upload_folder . $photo_name); 
+  
+    $sql = "INSERT INTO categories (category_name, description, status, photo)  
+            VALUES ('$category_name', '$description', '$status', '$photo_name')";  
+  
+    $result = mysqli_query($con, $sql);  
+  
+    if ($result) {  
+        echo "Category added successfully!";  
+    } else {  
+        echo "Category not added: " . mysqli_error($con);  
+    }  
+}  
+?>  
+  
+<!DOCTYPE html>  
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -30,22 +42,21 @@ if (isset($_POST['save'])) {
 
     <link rel="stylesheet" href="../assets/css/subcategory.css">
 </head>
-
+  
 <body>
-
+  
     <div class="subcategory-container">
-
+  
         <h2>Add Category</h2>
-
-
-        <form action="" method="POST">
-
+  
+        <form action="" method="POST" enctype="multipart/form-data">
+  
             <div class="form-group">
-
+  
                 <label for="category_name">
                     Category Name
                 </label>
-
+  
                 <input
                     type="text"
                     id="category_name"
@@ -53,31 +64,45 @@ if (isset($_POST['save'])) {
                     placeholder="Enter category name"
                     required
                 >
-
+  
             </div>
-
-
+  
             <div class="form-group">
-
+  
                 <label for="description">
                     Description
                 </label>
-
+  
                 <textarea
                     id="description"
                     name="description"
                     placeholder="Enter category description"
                 ></textarea>
-
+  
             </div>
-
-
+ 
             <div class="form-group">
-
+ 
+                <label for="photo">
+                    Category Photo
+                </label>
+ 
+                <input
+                    type="file"
+                    id="photo"
+                    name="photo"
+                    accept="image/*"
+                    required
+                >
+ 
+            </div>
+  
+            <div class="form-group">
+  
                 <label for="status">
                     Status
                 </label>
-
+  
                 <select
                     id="status"
                     name="status"
@@ -85,10 +110,9 @@ if (isset($_POST['save'])) {
                     <option value="Active">Active</option>
                     <option value="Inactive">Inactive</option>
                 </select>
-
+  
             </div>
-
-
+  
             <button
                 type="submit"
                 name="save"
@@ -96,11 +120,10 @@ if (isset($_POST['save'])) {
             >
                 Save Category
             </button>
-
-
+  
         </form>
-
+  
     </div>
-
+  
 </body>
 </html>

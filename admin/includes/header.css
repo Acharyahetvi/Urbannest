@@ -1,0 +1,434 @@
+/* =========================================================
+   URBANNEST ADMIN HEADER
+   Extracted from includes.css
+   ========================================================= */
+
+
+/* =========================================================
+   REQUIRED DESIGN VARIABLES
+   ========================================================= */
+
+:root {
+    --un-navy-900: #0E1F3D;
+    --un-navy-800: #14284D;
+    --un-gold: #C9A227;
+    --un-gold-light: #FBF4DE;
+
+    --un-surface: #FFFFFF;
+    --un-surface-2: #F4F5F9;
+
+    --un-text: #1C2331;
+    --un-text-muted: #7B8494;
+
+    --un-border: #EAEBF1;
+
+    --un-white: #FFFFFF;
+}
+
+
+/* =========================================================
+   TOP NAVBAR
+   ========================================================= */
+
+.un-topbar {
+    height: 76px;
+    background: var(--un-surface);
+    border-bottom: 1px solid var(--un-border);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+    padding: 0 28px;
+
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+}
+
+
+/* =========================================================
+   TOPBAR LEFT
+   ========================================================= */
+
+.un-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    min-width: 0;
+}
+
+
+/* Sidebar toggle */
+
+.un-burger {
+    border: 1px solid var(--un-border);
+    background: var(--un-surface);
+
+    color: var(--un-navy-900);
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 auto;
+}
+
+
+/* Page heading */
+
+.un-topbar-heading {
+    min-width: 0;
+}
+
+.un-eyebrow {
+    display: block;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+
+    color: var(--un-gold);
+
+    margin-bottom: 4px;
+}
+
+.un-page-title {
+    font-size: 20px;
+    font-weight: 600;
+
+    color: var(--un-navy-900);
+
+    margin: 0;
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.un-topbar-center {
+    flex: 1 1 auto;
+
+    display: flex;
+    justify-content: center;
+
+    max-width: 420px;
+}
+
+.un-search {
+    position: relative;
+
+    width: 100%;
+    max-width: 380px;
+}
+
+.un-search i {
+    position: absolute;
+
+    left: 16px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: var(--un-text-muted);
+
+    font-size: 13px;
+}
+
+.un-search-input {
+    width: 100%;
+
+    border: 1px solid var(--un-border);
+
+    background: var(--un-surface-2);
+
+    border-radius: 999px;
+
+    padding: 10px 16px 10px 40px;
+
+    font-size: 13.5px;
+
+    color: var(--un-text);
+}
+
+.un-search-input:focus {
+    outline: none;
+
+    border-color: var(--un-gold);
+
+    background: var(--un-surface);
+
+    box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.12);
+}
+
+.un-search-input::placeholder {
+    color: var(--un-text-muted);
+}
+
+
+/* =========================================================
+   TOPBAR RIGHT
+   ========================================================= */
+
+.un-topbar-right {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    flex: 0 0 auto;
+}
+
+
+/* =========================================================
+   ICON BUTTON
+   ========================================================= */
+
+.un-icon-btn {
+    position: relative;
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+
+    border: 1px solid var(--un-border);
+
+    background: var(--un-surface);
+
+    color: var(--un-navy-900);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 15px;
+
+    cursor: pointer;
+}
+
+.un-icon-btn:hover {
+    background: var(--un-navy-900);
+    color: var(--un-white);
+}
+
+
+/* Notification badge */
+
+.un-badge-dot {
+    position: absolute;
+
+    top: -4px;
+    right: -4px;
+
+    min-width: 17px;
+    height: 17px;
+
+    padding: 0 4px;
+
+    border-radius: 999px;
+
+    background: var(--un-gold);
+
+    color: #0A1628;
+
+    font-size: 9.5px;
+    font-weight: 700;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid var(--un-white);
+}
+
+
+/* =========================================================
+   ADMIN PROFILE
+   ========================================================= */
+
+.un-profile-btn {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    background: transparent;
+
+    border: 1px solid transparent;
+
+    border-radius: 999px;
+
+    padding: 4px 10px 4px 4px;
+
+    cursor: pointer;
+}
+
+.un-profile-btn:hover {
+    background: var(--un-surface-2);
+
+    border-color: var(--un-border);
+}
+
+
+/* Avatar */
+
+.un-avatar {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    border: 2px solid var(--un-gold-light);
+}
+
+
+/* Profile information */
+
+.un-profile-info {
+    display: flex;
+
+    flex-direction: column;
+
+    line-height: 1.2;
+
+    text-align: left;
+}
+
+.un-profile-name {
+    font-size: 13px;
+    font-weight: 600;
+
+    color: var(--un-text);
+}
+
+.un-profile-role {
+    font-size: 11px;
+
+    color: var(--un-text-muted);
+}
+
+.un-profile-caret {
+    font-size: 10px;
+
+    color: var(--un-text-muted);
+
+    margin-left: 2px;
+}
+
+
+/* =========================================================
+   DROPDOWN
+   ========================================================= */
+
+.un-dropdown-menu {
+    border: 1px solid var(--un-border);
+
+    border-radius: 12px;
+
+    box-shadow: 0 10px 28px rgba(14, 31, 61, 0.10);
+
+    padding: 8px;
+
+    min-width: 270px;
+
+    margin-top: 12px !important;
+}
+
+
+/* Dropdown heading */
+
+.un-dropdown-header {
+    display: block;
+
+    padding: 8px 10px 6px;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+    color: var(--un-text-muted);
+}
+
+
+/* Dropdown items */
+
+.un-dropdown-item {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 9px 10px;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+
+    color: #3B4354;
+}
+
+.un-dropdown-item:hover {
+    background: var(--un-gold-light);
+
+    color: var(--un-text);
+}
+
+.un-dropdown-item--muted {
+    color: var(--un-text-muted);
+
+    font-size: 12.5px;
+}
+
+
+/* Dropdown icons */
+
+.un-dd-icon {
+    color: #A9841A;
+
+    width: 16px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 991.98px) 
+{
+
+    .un-topbar {
+        padding: 0 16px;
+
+        height: 68px;
+    }
+
+    .un-page-title {
+        font-size: 18px;
+    }
+}
+
+
+@media (max-width: 575.98px) {
+
+    .un-topbar {
+        padding: 0 12px;
+    }
+}

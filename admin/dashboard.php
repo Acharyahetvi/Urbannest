@@ -64,7 +64,7 @@
           </a>
         </li>
         <li class="un-nav-item">
-          <a href="#" class="un-nav-link">
+          <a href="category/view.php" class="un-nav-link">
             <i class="fa-solid fa-layer-group"></i>
             <span>Categories</span>
           </a>
@@ -148,7 +148,7 @@
             </a>
           </li>
           <li class="un-nav-item">
-            <a href="#" class="un-nav-link">
+            <a href="category/view.php" class="un-nav-link">
               <i class="fa-solid fa-layer-group"></i>
               <span>Categories</span>
             </a>
@@ -454,7 +454,7 @@
                 <span class="un-action-icon"><i class="fa-solid fa-house-circle-plus"></i></span>
                 <span class="un-action-label">Add Property</span>
               </a>
-              <a href="#" class="un-action-btn">
+              <a href="category/add.php" class="un-action-btn">
                 <span class="un-action-icon"><i class="fa-solid fa-folder-plus"></i></span>
                 <span class="un-action-label">Add Category</span>
               </a>

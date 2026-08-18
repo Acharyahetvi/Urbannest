@@ -6,6 +6,7 @@ $sql = "SELECT
             s.subcategory_name,
             s.description,
             s.status,
+            s.photo,
             c.category_name
         FROM sub_categories s
         LEFT JOIN categories c 
@@ -47,6 +48,7 @@ $result = mysqli_query($con, $sql);
                 <tr>
                     <th>ID</th>
                     <th>Category</th>
+                    <th>Photo</th>
                     <th>Sub Category</th>
                     <th>Description</th>
                     <th>Status</th>
@@ -64,22 +66,54 @@ $result = mysqli_query($con, $sql);
 
                     <tr>
 
+                        <!-- ID -->
                         <td>
                             <?php echo $row['subcategory_id']; ?>
                         </td>
 
+
+                        <!-- Category -->
                         <td>
                             <?php echo htmlspecialchars($row['category_name']); ?>
                         </td>
 
+
+                        <!-- Photo -->
+                        <td>
+
+                            <?php if (!empty($row['photo'])) { ?>
+
+                                <img
+                                    src="../assets/images/subcategory/<?php echo htmlspecialchars($row['photo']); ?>"
+                                    alt="<?php echo htmlspecialchars($row['subcategory_name']); ?>"
+                                    width="100"
+                                    height="70"
+                                >
+
+                            <?php } else { ?>
+
+                                <span>
+                                    No Image
+                                </span>
+
+                            <?php } ?>
+
+                        </td>
+
+
+                        <!-- Sub Category -->
                         <td>
                             <?php echo htmlspecialchars($row['subcategory_name']); ?>
                         </td>
 
+
+                        <!-- Description -->
                         <td>
                             <?php echo htmlspecialchars($row['description']); ?>
                         </td>
 
+
+                        <!-- Status -->
                         <td>
 
                             <?php if ($row['status'] == 'Active') { ?>
@@ -98,11 +132,19 @@ $result = mysqli_query($con, $sql);
 
                         </td>
 
+
+                        <!-- Action -->
                         <td>
 
                             <a href="edit.php?id=<?php echo $row['subcategory_id']; ?>"
-                               class="edit-btn">
+                             class="edit-btn">
                                 Edit
+                            </a>
+
+                            <a href="delete.php?id=<?php echo $row['subcategory_id']; ?>"
+                            class="delete-btn"
+                            onclick="return confirm('Are you sure you want to delete this subcategory?');">
+                                Delete
                             </a>
 
                         </td>
@@ -116,7 +158,7 @@ $result = mysqli_query($con, $sql);
                 ?>
 
                     <tr>
-                        <td colspan="6" class="no-data">
+                        <td colspan="7" class="no-data">
                             No sub categories found.
                         </td>
                     </tr>
