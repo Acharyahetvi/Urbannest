@@ -1,14 +1,18 @@
 <?php
 
-$servername = "localhost";
-$username   = "root";
-$password   = "";
-$database   = "db_urbannest";
+$host = "127.0.0.1";
+$user = "root";
+$password = "";
+$database = "db_urbannest";
+$port = 3306;
 
-$conn = mysqli_connect($servername, $username, $password, $database);
+$conn = mysqli_connect($host, $user, $password, $database, $port);
 
 if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-} else {
-    echo "Connected successfully";
+    die("Database Connection Failed: " . mysqli_connect_error());
 }
+
+mysqli_set_charset($conn, "utf8mb4");
+
+// Make both variable names available
+$con = $conn;
