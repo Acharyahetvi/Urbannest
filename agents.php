@@ -16,7 +16,7 @@ if ($viewId) {
     $agent = null;
     foreach ($UN_AGENTS_ALL as $a) if ($a['id']===$viewId) { $agent = $a; break; }
     if (!$agent) $agent = $UN_AGENTS_ALL[0];
-    $pageTitle = $agent['name'] . ' — Agent · UrbanNest';
+    $pageTitle = $agent['name'] . ' — Agent · Urbannest';
     require_once __DIR__ . '/includes/navbar.php';
     ?>
     <section class="un-page-head" style="padding: 110px 0 60px;">
