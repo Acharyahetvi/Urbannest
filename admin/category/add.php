@@ -1,5 +1,5 @@
 <?php  
-include "../connect.php";  
+require_once __DIR__ . "/../../db_connection.php";
 if (isset($_POST['save'])) {  
   
     $category_name = $_POST['category_name'];  
@@ -40,7 +40,7 @@ if (isset($_POST['save'])) {
 
     <title>Add Category | UrbanNest</title>
 
-    <link rel="stylesheet" href="../assets/css/subcategory.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
   
 <body>

@@ -1,5 +1,5 @@
 <?php 
-include "../connect.php"; 
+require_once __DIR__ . "/../../db_connection.php"; 
  
 $message = ""; 
  
@@ -87,7 +87,7 @@ if (isset($_POST['update'])) {
  
     <title>Edit Category | UrbanNest</title> 
  
-    <link rel="stylesheet" href="../assets/css/subcategory.css"> 
+    <link rel="stylesheet" href="../assets/css/style.css"> 
  
 </head> 
  
