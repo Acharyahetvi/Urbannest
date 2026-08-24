@@ -22,7 +22,7 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <!-- <li class="un-nav-item">
+            <li class="un-nav-item">
                         <a href="#" class="un-nav-link">
                             <i class="fa-solid fa-building"></i>
                             <span>Properties</span>
@@ -35,11 +35,11 @@
                         </a>
                     </li>
                     <li class="un-nav-item">
-                        <a href="#" class="un-nav-link">
+                        <a href="" class="un-nav-link">
                             <i class="fa-solid fa-sitemap"></i>
                             <span>Sub Categories</span>
                         </a>
-                    </li> -->
+                    </li>
             <li class="un-nav-item">
                 <a href="user.php" class="un-nav-link">
                     <i class="fa-solid fa-users"></i>
