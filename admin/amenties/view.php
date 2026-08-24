@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../../includes/db.php';
 
-$sql = "SELECT * FROM amenities ORDER BY amentiy_id ASC";
+$sql = "SELECT * FROM amenities ORDER BY amenity_id ASC";
 
 $result = mysqli_query($con, $sql);
 
@@ -20,7 +20,11 @@ if (!$result) {
 
     <meta charset="UTF-8">
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>View Amenities - UrbanNest</title>
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
 
 </head>
 
@@ -55,23 +59,23 @@ if (!$result) {
                     <tr>
 
                         <td>
-                            <?= (int) $row['amentiy_id'] ?>
+                            <?= (int) $row['amenity_id'] ?>
                         </td>
 
                         <td>
-                            <?= htmlspecialchars($row['amentiy_name']) ?>
+                            <?= htmlspecialchars($row['amenity_name']) ?>
                         </td>
 
                         <td>
 
-                            <a href="edit.php?id=<?= (int) $row['amentiy_id'] ?>">
+                            <a href="edit.php?id=<?= (int) $row['amenity_id'] ?>">
                                 Edit
                             </a>
 
                             |
 
                             <a
-                                href="delete.php?id=<?= (int) $row['amentiy_id'] ?>"
+                                href="delete.php?id=<?= (int) $row['amenity_id'] ?>"
                                 onclick="return confirm('Are you sure you want to delete this amenity?');">
                                 Delete
                             </a>
