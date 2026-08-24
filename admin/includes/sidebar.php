@@ -31,7 +31,11 @@
                     <span>Dashboard</span>
                 </a>
             </li>
+<<<<<<< HEAD
              <li class="un-nav-item">
+=======
+            <!-- <li class="un-nav-item">
+>>>>>>> cae5641adcef5bf7390ca1da3082c7d76734bef5
                         <a href="#" class="un-nav-link">
                             <i class="fa-solid fa-building"></i>
                             <span>Properties</span>
@@ -48,14 +52,22 @@
                             <i class="fa-solid fa-sitemap"></i>
                             <span>Sub Categories</span>
                         </a>
+<<<<<<< HEAD
                     </li> 
+=======
+                    </li> -->
+>>>>>>> cae5641adcef5bf7390ca1da3082c7d76734bef5
             <li class="un-nav-item">
                 <a href="user.php" class="un-nav-link">
                     <i class="fa-solid fa-users"></i>
                     <span>Users</span>
                 </a>
             </li>
+<<<<<<< HEAD
             <li class="un-nav-item">
+=======
+            <!-- <li class="un-nav-item">
+>>>>>>> cae5641adcef5bf7390ca1da3082c7d76734bef5
                         <a href="#" class="un-nav-link">
                             <i class="fa-solid fa-swimming-pool"></i>
                             <span>Amenities</span>
@@ -78,7 +90,11 @@
                             <i class="fa-solid fa-gear"></i>
                             <span>Settings</span>
                         </a>
+<<<<<<< HEAD
                     </li> 
+=======
+                    </li> -->
+>>>>>>> cae5641adcef5bf7390ca1da3082c7d76734bef5
         </ul>
     </nav>
 
@@ -115,7 +131,11 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
+<<<<<<< HEAD
                 <li class="un-nav-item">
+=======
+                <!-- <li class="un-nav-item">
+>>>>>>> cae5641adcef5bf7390ca1da3082c7d76734bef5
                             <a href="#" class="un-nav-link">
                                 <i class="fa-solid fa-building"></i>
                                 <span>Properties</span>
@@ -132,14 +152,22 @@
                                 <i class="fa-solid fa-sitemap"></i>
                                 <span>Sub Categories</span>
                             </a>
+<<<<<<< HEAD
                         </li> 
+=======
+                        </li> -->
+>>>>>>> cae5641adcef5bf7390ca1da3082c7d76734bef5
                 <li class="un-nav-item">
                     <a href="#" class="un-nav-link">
                         <i class="fa-solid fa-users"></i>
                         <span>Users</span>
                     </a>
                 </li>
+<<<<<<< HEAD
                  <li class="un-nav-item">
+=======
+                <!-- <li class="un-nav-item">
+>>>>>>> cae5641adcef5bf7390ca1da3082c7d76734bef5
                             <a href="#" class="un-nav-link">
                                 <i class="fa-solid fa-swimming-pool"></i>
                                 <span>Amenities</span>
@@ -162,7 +190,11 @@
                                 <i class="fa-solid fa-gear"></i>
                                 <span>Settings</span>
                             </a>
+<<<<<<< HEAD
                         </li> 
+=======
+                        </li> -->
+>>>>>>> cae5641adcef5bf7390ca1da3082c7d76734bef5
             </ul>
         </nav>
         <div class="un-sidebar-footer mt-auto">
@@ -172,6 +204,10 @@
             </a>
         </div>
     </div>
+<<<<<<< HEAD
 </div>
 </body>
 </html>
+=======
+</div>
+>>>>>>> cae5641adcef5bf7390ca1da3082c7d76734bef5
