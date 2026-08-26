@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../includes/db.php';
+require_once __DIR__ . "/../../db_connection.php";
 
 $message = "";
 
@@ -11,16 +11,14 @@ if (isset($_POST['add'])) {
     if ($amenity_name == "") {
 
         $message = "Please enter an amenity name.";
-
     } else {
 
-        $sql = "INSERT INTO amenities (amentiy_name)
+        $sql = "INSERT INTO amenities (amenity_name)
                 VALUES ('$amenity_name')";
 
         if (mysqli_query($con, $sql)) {
 
             $message = "Amenity added successfully!";
-
         } else {
 
             $message = "Error adding amenity: " . mysqli_error($con);
@@ -41,6 +39,9 @@ if (isset($_POST['add'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Add Amenity - UrbanNest</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css">
 
 </head>
 
@@ -70,27 +71,21 @@ if (isset($_POST['add'])) {
                 id="amenity_name"
                 name="amenity_name"
                 placeholder="Enter amenity name"
-                required
-            >
+                required>
 
         </div>
 
-
         <br>
-
 
         <button
             type="submit"
-            name="add"
-        >
+            name="add">
             Add Amenity
         </button>
 
     </form>
 
-
     <br>
-
 
     <a href="view.php">
         Back to Amenities

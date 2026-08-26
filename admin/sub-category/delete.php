@@ -1,5 +1,5 @@
 <?php
-include "../connect.php";
+require_once __DIR__ . '/../../includes/db.php';
 
 // Check subcategory ID
 if (!isset($_GET['id'])) {

@@ -109,12 +109,10 @@ if (!$con) {
 
                                         <?php if (!empty($row['photo'])) { ?>
 
-                                            <img
-                                                src="../../assets/images/category/<?php echo htmlspecialchars($row['photo']); ?>"
+                                            <img src="/urbannest/admin/assets/images/category/<?php echo htmlspecialchars($row['photo']); ?>"
                                                 alt="<?php echo htmlspecialchars($row['category_name']); ?>"
-                                                width="100"
-                                                height="70">
-
+                                                width="80"
+                                                height="55">
                                         <?php } else { ?>
 
                                             <span>No Image</span>

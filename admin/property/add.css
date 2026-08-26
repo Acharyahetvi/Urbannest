@@ -1,0 +1,701 @@
+/* =========================================================
+   UrbanNest - Add Property
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f6f8;
+    color: #172033;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
+
+.property-container {
+    width: min(1100px, 92%);
+    margin: 45px auto;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 35px 45px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.page-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.page-header h2 {
+    margin: 0 0 8px;
+    font-size: 30px;
+    font-weight: 600;
+    color: #14213d;
+}
+
+.page-header p {
+    margin: 0;
+    color: #737b89;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   STEPPER
+   ========================================================= */
+
+.property-stepper {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 45px;
+}
+
+
+/* Individual step */
+
+.property-stepper .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 75px;
+    position: relative;
+}
+
+
+/* Circle */
+
+.step-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #e5e7eb;
+    color: #6b7280;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    border: 2px solid #e5e7eb;
+
+    transition: 0.2s ease;
+}
+
+
+/* Step label */
+
+.property-stepper .step span {
+    margin-top: 9px;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    color: #737b89;
+
+    white-space: nowrap;
+}
+
+
+/* Active step */
+
+.property-stepper .step.active .step-circle {
+    background: #14213d;
+    border-color: #14213d;
+    color: #ffffff;
+}
+
+.property-stepper .step.active span {
+    color: #14213d;
+    font-weight: 600;
+}
+
+
+/* Completed step */
+
+.property-stepper .step.completed .step-circle {
+    background: #d4a72c;
+    border-color: #d4a72c;
+    color: #ffffff;
+}
+
+.property-stepper .step.completed span {
+    color: #14213d;
+}
+
+
+/* Connecting line */
+
+.step-line {
+    flex: 1;
+    height: 2px;
+
+    background: #e5e7eb;
+
+    margin-top: 19px;
+    min-width: 20px;
+}
+
+
+/* =========================================================
+   PROPERTY STEPS
+   ========================================================= */
+
+/*
+   Important:
+   Only the active section is displayed.
+*/
+
+.property-step {
+    display: none;
+}
+
+.property-step.active {
+    display: block;
+}
+
+
+/* =========================================================
+   STEP CONTENT
+   ========================================================= */
+
+.step-content {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+
+/* Step heading */
+
+.step-heading {
+    margin-bottom: 30px;
+}
+
+.step-number {
+    display: inline-block;
+
+    margin-bottom: 10px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    color: #d4a72c;
+
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.step-heading h3 {
+    margin: 0 0 8px;
+
+    font-size: 23px;
+    font-weight: 600;
+
+    color: #14213d;
+}
+
+.step-heading p {
+    margin: 0;
+
+    color: #737b89;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   FORM GROUP
+   ========================================================= */
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #263247;
+}
+
+
+/* Select */
+
+.form-group select,
+.form-group input,
+.form-group textarea {
+    width: 100%;
+
+    border: 1px solid #d9dde5;
+    border-radius: 8px;
+
+    padding: 13px 14px;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    background: #ffffff;
+    color: #172033;
+
+    outline: none;
+
+    transition: 0.2s ease;
+}
+
+
+/* Focus */
+
+.form-group select:focus,
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #14213d;
+
+    box-shadow:
+        0 0 0 3px rgba(20, 33, 61, 0.08);
+}
+
+
+/* Textarea */
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.step-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+
+    margin-top: 35px;
+}
+
+
+/* Back */
+
+.back-btn,
+.next-btn,
+.save-btn {
+    border: none;
+    border-radius: 8px;
+
+    padding: 12px 24px;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+/* Continue / Save */
+
+.next-btn,
+.save-btn {
+    background: #14213d;
+    color: #ffffff;
+}
+
+.next-btn:hover,
+.save-btn:hover {
+    background: #0e172b;
+}
+
+
+/* Back */
+
+.back-btn {
+    background: #eef0f3;
+    color: #263247;
+}
+
+.back-btn:hover {
+    background: #e1e4e8;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+    .property-container {
+        width: 95%;
+        padding: 30px 25px;
+    }
+
+    .property-stepper {
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+
+    .property-stepper .step {
+        min-width: 70px;
+    }
+
+    .step-line {
+        min-width: 15px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .property-container {
+        margin: 20px auto;
+        padding: 25px 18px;
+    }
+
+    .page-header h2 {
+        font-size: 25px;
+    }
+
+    .step-circle {
+        width: 34px;
+        height: 34px;
+    }
+
+    .property-stepper .step span {
+        font-size: 11px;
+    }
+
+    .step-line {
+        margin-top: 17px;
+    }
+
+    .step-actions {
+        flex-direction: column-reverse;
+    }
+
+    .back-btn,
+    .next-btn,
+    .save-btn {
+        width: 100%;
+    }
+
+}
+
+/* =========================================================
+   PROPERTY SUBHEADING
+   ========================================================= */
+
+.property-subheading {
+    margin-top: 35px;
+    margin-bottom: 22px;
+    padding-top: 25px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.property-subheading h4 {
+    margin: 0 0 6px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #14213d;
+}
+
+.property-subheading p {
+    margin: 0;
+    font-size: 13px;
+    color: #737b89;
+}
+
+/* =========================================================
+   PROPERTY PHOTOS
+   ========================================================= */
+
+.photo-upload-area {
+    margin-bottom: 25px;
+}
+
+#property_photos {
+    display: none;
+}
+
+.photo-upload-box {
+    min-height: 180px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    border: 2px dashed #d8dde5;
+    border-radius: 12px;
+
+    background: #fafbfc;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.photo-upload-box:hover {
+    border-color: #14213d;
+    background: #f7f8fa;
+}
+
+.upload-icon {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 28px;
+    font-weight: 300;
+
+    background: #eef1f5;
+    color: #14213d;
+}
+
+.photo-upload-box strong {
+    font-size: 15px;
+    color: #263247;
+}
+
+.photo-upload-box small {
+    font-size: 12px;
+    color: #7b8492;
+}
+
+
+/* =========================================================
+   PHOTO PREVIEW
+   ========================================================= */
+
+.photo-preview {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 30px;
+}
+
+.photo-preview-item {
+    position: relative;
+
+    height: 160px;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    background: #f1f3f5;
+}
+
+.photo-preview-item img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+.remove-photo {
+    position: absolute;
+
+    top: 8px;
+    right: 8px;
+
+    width: 28px;
+    height: 28px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.65);
+    color: white;
+
+    font-size: 20px;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.remove-photo:hover {
+    background: rgba(0, 0, 0, 0.85);
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .photo-preview {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+/* =========================================================
+   REVIEW
+   ========================================================= */
+
+.review-section {
+    padding: 22px 0;
+
+    border-bottom: 1px solid #e8ebef;
+}
+
+.review-section:last-of-type {
+    border-bottom: none;
+}
+
+.review-section h4 {
+    margin: 0 0 18px;
+
+    font-size: 17px;
+
+    color: #14213d;
+}
+
+.review-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 14px;
+}
+
+.review-item {
+    padding: 14px 16px;
+
+    border: 1px solid #e3e6eb;
+
+    border-radius: 8px;
+
+    background: #fafbfc;
+}
+
+.review-item span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 12px;
+
+    color: #7b8492;
+}
+
+.review-item strong {
+    font-size: 14px;
+
+    color: #1e2a3d;
+
+    word-break: break-word;
+}
+
+.review-description {
+    margin: 0;
+
+    padding: 15px;
+
+    border-radius: 8px;
+
+    background: #fafbfc;
+
+    color: #4f5b6d;
+
+    line-height: 1.6;
+}
+
+.review-tags {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.review-tag {
+    padding: 8px 12px;
+
+    border-radius: 20px;
+
+    background: #eef1f5;
+
+    color: #263247;
+
+    font-size: 13px;
+}
+
+.other-amenities-review {
+    margin-top: 15px;
+
+    font-size: 14px;
+
+    color: #4f5b6d;
+}
+
+.review-photos {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+}
+
+.review-photos img {
+    width: 100%;
+    height: 150px;
+
+    object-fit: cover;
+
+    border-radius: 9px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .review-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .review-photos {
+        grid-template-columns: 1fr;
+    }
+
+}

@@ -5,8 +5,8 @@ require_once __DIR__ . '/../includes/db.php';
 
 // If admin is already logged in
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
-    header("Location: dashboard.php");
-    exit;
+  header("Location: dashboard.php");
+  exit;
 }
 
 $error = "";
@@ -14,54 +14,58 @@ $error = "";
 // Login form submitted
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $email = trim($_POST['email'] ?? '');
-    $password = trim($_POST['password'] ?? '');
+  $email = trim($_POST['email'] ?? '');
+  $password = trim($_POST['password'] ?? '');
 
-    // Check empty fields
-    if ($email === "" || $password === "") {
+  // Check empty fields
+  if ($email === "" || $password === "") {
 
-        $error = "Please enter email and password.";
+    $error = "Please enter email and password.";
+  } else {
 
-    } else {
-
-        // Check admin from users table
-        $sql = "SELECT * FROM users
-                WHERE email = '$email'
-                AND password = '$password'
+    // Check admin from users table
+    $sql = "SELECT * FROM users 
+                WHERE email = ?
+                AND password = ?
                 AND role_id = 1
                 LIMIT 1";
 
-        $result = mysqli_query($con, $sql);
+    $stmt = mysqli_prepare($con, $sql);
 
-        if (!$result) {
-            die("Database Error: " . mysqli_error($con));
-        }
-
-        // User found
-        if (mysqli_num_rows($result) > 0) {
-
-            $user = mysqli_fetch_assoc($result);
-
-            // Create admin session
-            $_SESSION['admin_logged_in'] = true;
-            $_SESSION['admin_id'] = $user['id'];
-            $_SESSION['admin_name'] = $user['name'];
-            $_SESSION['admin_email'] = $user['email'];
-            $_SESSION['admin_role'] = $user['role_id'];
-
-            // Redirect to dashboard
-            header("Location: dashboard.php");
-            exit;
-
-        } else {
-
-            $error = "Invalid email or password.";
-        }
+    if (!$stmt) {
+      die("Database Error: " . mysqli_error($con));
     }
+
+    mysqli_stmt_bind_param($stmt, "ss", $email, $password);
+
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+
+    // User found
+    if (mysqli_num_rows($result) > 0) {
+
+      $user = mysqli_fetch_assoc($result);
+
+      // Create admin session
+      $_SESSION['admin_logged_in'] = true;
+      $_SESSION['admin_id'] = $user['id'];
+      $_SESSION['admin_name'] = $user['name'];
+      $_SESSION['admin_email'] = $user['email'];
+      $_SESSION['admin_role'] = $user['role_id'];
+
+      // Redirect to dashboard
+      header("Location: dashboard.php");
+      exit;
+    } else {
+
+      $error = "Invalid email or password.";
+    }
+
+    mysqli_stmt_close($stmt);
+  }
 }
 ?>
-
-
 
 
 <!DOCTYPE html>

@@ -1,5 +1,6 @@
 <?php
-include "../connect.php";
+require_once __DIR__ . "/../../db_connection.php";
+
 
 $message = "";
 
@@ -77,7 +78,6 @@ if (isset($_POST['update'])) {
         );
 
         $subcategory = mysqli_fetch_assoc($result);
-
     } else {
 
         $message = "Error updating subcategory: " . mysqli_error($con);
@@ -93,234 +93,224 @@ if (isset($_POST['update'])) {
 
     <title>Edit Subcategory</title>
 
-    <link rel="stylesheet" href="../assets/css/subcategory.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 
 </head>
 
 
 <body>
 
-<div class="subcategory-container">
+    <div class="subcategory-container">
 
-    <h2>Edit Subcategory</h2>
-
-
-    <?php if ($message != "") { ?>
-
-        <div class="success-message">
-            <?php echo $message; ?>
-        </div>
-
-    <?php } ?>
+        <h2>Edit Subcategory</h2>
 
 
-    <form method="POST" enctype="multipart/form-data">
+        <?php if ($message != "") { ?>
+
+            <div class="success-message">
+                <?php echo $message; ?>
+            </div>
+
+        <?php } ?>
 
 
-        <!-- Select Category -->
-
-        <div class="form-group">
-
-            <label for="category">
-                Select Category
-            </label>
+        <form method="POST" enctype="multipart/form-data">
 
 
-            <select
-                name="category_id"
-                id="category"
-                required
-            >
+            <!-- Select Category -->
 
-                <option value="">
-                    -- Select Category --
-                </option>
+            <div class="form-group">
+
+                <label for="category">
+                    Select Category
+                </label>
 
 
-                <?php
+                <select
+                    name="category_id"
+                    id="category"
+                    required>
 
-                $fetch_category = mysqli_query(
-                    $con,
-                    "SELECT * FROM categories"
-                );
-
-
-                while ($row = mysqli_fetch_assoc($fetch_category)) {
-
-                ?>
-
-                    <option
-                        value="<?php echo $row['category_id']; ?>"
-                        <?php
-                        if ($row['category_id'] == $subcategory['category_id']) {
-                            echo "selected";
-                        }
-                        ?>
-                    >
-
-                        <?php
-                        echo htmlspecialchars($row['category_name']);
-                        ?>
-
+                    <option value="">
+                        -- Select Category --
                     </option>
+
+
+                    <?php
+
+                    $fetch_category = mysqli_query(
+                        $con,
+                        "SELECT * FROM categories"
+                    );
+
+
+                    while ($row = mysqli_fetch_assoc($fetch_category)) {
+
+                    ?>
+
+                        <option
+                            value="<?php echo $row['category_id']; ?>"
+                            <?php
+                            if ($row['category_id'] == $subcategory['category_id']) {
+                                echo "selected";
+                            }
+                            ?>>
+
+                            <?php
+                            echo htmlspecialchars($row['category_name']);
+                            ?>
+
+                        </option>
+
+                    <?php } ?>
+
+                </select>
+
+            </div>
+
+
+            <!-- Subcategory Name -->
+
+            <div class="form-group">
+
+                <label for="subcategory_name">
+                    Subcategory Name
+                </label>
+
+
+                <input
+                    type="text"
+                    name="subcategory_name"
+                    id="subcategory_name"
+                    value="<?php echo htmlspecialchars($subcategory['subcategory_name']); ?>"
+                    placeholder="Enter subcategory name"
+                    required>
+
+            </div>
+
+
+            <!-- Description -->
+
+            <div class="form-group">
+
+                <label for="description">
+                    Description
+                </label>
+
+
+                <textarea
+                    name="description"
+                    id="description"
+                    placeholder="Enter description"
+                    required><?php echo htmlspecialchars($subcategory['description']); ?></textarea>
+
+            </div>
+
+
+            <!-- Current Photo -->
+
+            <div class="form-group">
+
+                <label>
+                    Current Photo
+                </label>
+
+
+                <?php if (!empty($subcategory['photo'])) { ?>
+
+                    <br>
+
+                    <img
+                        src="../assets/images/subcategory/<?php echo htmlspecialchars($subcategory['photo']); ?>"
+                        alt="Subcategory Photo"
+                        width="150"
+                        height="100">
+
+                <?php } else { ?>
+
+                    <p>No photo uploaded.</p>
 
                 <?php } ?>
 
-            </select>
-
-        </div>
+            </div>
 
 
-        <!-- Subcategory Name -->
+            <!-- Change Photo -->
 
-        <div class="form-group">
+            <div class="form-group">
 
-            <label for="subcategory_name">
-                Subcategory Name
-            </label>
-
-
-            <input
-                type="text"
-                name="subcategory_name"
-                id="subcategory_name"
-                value="<?php echo htmlspecialchars($subcategory['subcategory_name']); ?>"
-                placeholder="Enter subcategory name"
-                required
-            >
-
-        </div>
+                <label for="photo">
+                    Change Photo
+                </label>
 
 
-        <!-- Description -->
-
-        <div class="form-group">
-
-            <label for="description">
-                Description
-            </label>
+                <input
+                    type="file"
+                    name="photo"
+                    id="photo"
+                    accept="image/*">
 
 
-            <textarea
-                name="description"
-                id="description"
-                placeholder="Enter description"
-                required
-            ><?php echo htmlspecialchars($subcategory['description']); ?></textarea>
+                <small>
+                    Leave empty if you want to keep the current photo.
+                </small>
 
-        </div>
+            </div>
 
 
-        <!-- Current Photo -->
+            <!-- Status -->
 
-        <div class="form-group">
+            <div class="form-group">
 
-            <label>
-                Current Photo
-            </label>
-
-
-            <?php if (!empty($subcategory['photo'])) { ?>
-
-                <br>
-
-                <img
-                    src="../assets/images/subcategory/<?php echo htmlspecialchars($subcategory['photo']); ?>"
-                    alt="Subcategory Photo"
-                    width="150"
-                    height="100"
-                >
-
-            <?php } else { ?>
-
-                <p>No photo uploaded.</p>
-
-            <?php } ?>
-
-        </div>
+                <label for="status">
+                    Status 
+                </label>
 
 
-        <!-- Change Photo -->
+                <select
+                    name="status"
+                    id="status"
+                    required>
 
-        <div class="form-group">
-
-            <label for="photo">
-                Change Photo
-            </label>
-
-
-            <input
-                type="file"
-                name="photo"
-                id="photo"
-                accept="image/*"
-            >
-
-
-            <small>
-                Leave empty if you want to keep the current photo.
-            </small>
-
-        </div>
+                    <option
+                        value="Active"
+                        <?php
+                        if ($subcategory['status'] == 'Active') {
+                            echo "selected";
+                        }
+                        ?>>
+                        Active
+                    </option>
 
 
-        <!-- Status -->
+                    <option
+                        value="Inactive"
+                        <?php
+                        if ($subcategory['status'] == 'Inactive') {
+                            echo "selected";
+                        }
+                        ?>>
+                        Inactive
+                    </option>
 
-        <div class="form-group">
+                </select>
 
-            <label for="status">
-                Status
-            </label>
-
-
-            <select
-                name="status"
-                id="status"
-                required
-            >
-
-                <option
-                    value="Active"
-                    <?php
-                    if ($subcategory['status'] == 'Active') {
-                        echo "selected";
-                    }
-                    ?>
-                >
-                    Active
-                </option>
+            </div>
 
 
-                <option
-                    value="Inactive"
-                    <?php
-                    if ($subcategory['status'] == 'Inactive') {
-                        echo "selected";
-                    }
-                    ?>
-                >
-                    Inactive
-                </option>
+            <!-- Update Button -->
 
-            </select>
-
-        </div>
+            <button
+                type="submit"
+                name="update"
+                class="submit-btn">
+                Update Subcategory
+            </button>
 
 
-        <!-- Update Button -->
+        </form>
 
-        <button
-            type="submit"
-            name="update"
-            class="submit-btn"
-        >
-            Update Subcategory
-        </button>
-
-
-    </form>
-
-</div>
+    </div>
 
 </body>
 

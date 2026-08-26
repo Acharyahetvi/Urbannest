@@ -1,5 +1,5 @@
 <?php
-include "../connect.php";
+require_once __DIR__ . "/../db_connection.php";
 
 $message = "";
 
@@ -41,7 +41,6 @@ if (isset($_POST["add_category"])) {
     if (mysqli_query($con, $sql)) {
 
         $message = "Subcategory added successfully";
-
     } else {
 
         $message = "Error adding subcategory: " . mysqli_error($con);
@@ -56,169 +55,163 @@ if (isset($_POST["add_category"])) {
 
     <title>Add Subcategory</title>
 
-    <link rel="stylesheet" href="../assets/css/subcategory.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 
 </head>
 
 <body>
 
-<div class="subcategory-container">
+    <div class="subcategory-container">
 
-    <h2>Add Subcategory</h2>
-
-
-    <?php if ($message != "") { ?>
-
-        <div class="success-message">
-            <?php echo $message; ?>
-        </div>
-
-    <?php } ?>
+        <h2>Add Subcategory</h2>
 
 
-    <form method="POST" enctype="multipart/form-data">
+        <?php if ($message != "") { ?>
+
+            <div class="success-message">
+                <?php echo $message; ?>
+            </div>
+
+        <?php } ?>
 
 
-        <!-- Category -->
-
-        <div class="form-group">
-
-            <label for="category">
-                Select Category
-            </label>
-
-            <select
-                name="category_id"
-                id="category"
-                required
-            >
-
-                <option value="">
-                    -- Select Category --
-                </option>
-
-                <?php
-
-                $fetch_category = mysqli_query(
-                    $con,
-                    "SELECT * FROM categories"
-                );
-
-                while ($row = mysqli_fetch_assoc($fetch_category)) {
-
-                    echo "<option value='" . $row['category_id'] . "'>"
-                        . htmlspecialchars($row['category_name'])
-                        . "</option>";
-                }
-
-                ?>
-
-            </select>
-
-        </div>
+        <form method="POST" enctype="multipart/form-data">
 
 
-        <!-- Subcategory Name -->
+            <!-- Category -->
 
-        <div class="form-group">
+            <div class="form-group">
 
-            <label for="subcategory_name">
-                Subcategory Name
-            </label>
+                <label for="category">
+                    Select Category
+                </label>
 
-            <input
-                type="text"
-                name="subcategory_name"
-                id="subcategory_name"
-                placeholder="Enter subcategory name"
-                required
-            >
+                <select
+                    name="category_id"
+                    id="category"
+                    required>
 
-        </div>
+                    <option value="">
+                        -- Select Category --
+                    </option>
 
+                    <?php
 
-        <!-- Description -->
+                    $fetch_category = mysqli_query(
+                        $con,
+                        "SELECT * FROM categories"
+                    );
 
-        <div class="form-group">
+                    while ($row = mysqli_fetch_assoc($fetch_category)) {
 
-            <label for="description">
-                Description
-            </label>
+                        echo "<option value='" . $row['category_id'] . "'>"
+                            . htmlspecialchars($row['category_name'])
+                            . "</option>";
+                    }
 
-            <textarea
-                name="description"
-                id="description"
-                placeholder="Enter description"
-                required
-            ></textarea>
+                    ?>
 
-        </div>
+                </select>
 
-
-        <!-- Status -->
-
-        <div class="form-group">
-
-            <label for="status">
-                Status
-            </label>
-
-            <select
-                name="status"
-                id="status"
-                required
-            >
-
-                <option value="">
-                    -- Select Status --
-                </option>
-
-                <option value="Active">
-                    Active
-                </option>
-
-                <option value="Inactive">
-                    Inactive
-                </option>
-
-            </select>
-
-        </div>
+            </div>
 
 
-        <!-- Photo -->
+            <!-- Subcategory Name -->
 
-        <div class="form-group">
+            <div class="form-group">
 
-            <label for="photo">
-                Subcategory Photo
-            </label>
+                <label for="subcategory_name">
+                    Subcategory Name
+                </label>
 
-            <input
-                type="file"
-                name="photo"
-                id="photo"
-                accept="image/*"
-                required
-            >
+                <input
+                    type="text"
+                    name="subcategory_name"
+                    id="subcategory_name"
+                    placeholder="Enter subcategory name"
+                    required>
 
-        </div>
-
-
-        <!-- Submit -->
-
-        <button
-            type="submit"
-            name="add_category"
-            class="submit-btn"
-        >
-            Add Subcategory
-        </button>
+            </div>
 
 
-    </form>
+            <!-- Description -->
 
-</div>
+            <div class="form-group">
+
+                <label for="description">
+                    Description
+                </label>
+
+                <textarea
+                    name="description"
+                    id="description"
+                    placeholder="Enter description"
+                    required></textarea>
+
+            </div>
+
+
+            <!-- Status -->
+
+            <div class="form-group">
+
+                <label for="status">
+                    Status
+                </label>
+
+                <select
+                    name="status"
+                    id="status"
+                    required>
+
+                    <option value="">
+                        -- Select Status --
+                    </option>
+
+                    <option value="Active">
+                        Active
+                    </option>
+
+                    <option value="Inactive">
+                        Inactive
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Photo -->
+
+            <div class="form-group">
+
+                <label for="photo">
+                    Subcategory Photo
+                </label>
+
+                <input
+                    type="file"
+                    name="photo"
+                    id="photo"
+                    accept="image/*"
+                    required>
+
+            </div>
+
+
+            <!-- Submit -->
+
+            <button
+                type="submit"
+                name="add_category"
+                class="submit-btn">
+                Add Subcategory
+            </button>
+
+
+        </form>
+
+    </div>
 
 </body>
 

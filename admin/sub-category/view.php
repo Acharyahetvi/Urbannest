@@ -83,11 +83,10 @@ $result = mysqli_query($con, $sql);
 
                                     <?php if (!empty($row['photo'])) { ?>
 
-                                        <img
-                                            src="../assets/images/subcategory/<?php echo htmlspecialchars($row['photo']); ?>"
-                                            alt="<?php echo htmlspecialchars($row['subcategory_name']); ?>"
-                                            width="100"
-                                            height="70">
+                                        <img src="/urbannest/admin/assets/images/subcategory/<?php echo htmlspecialchars($row['photo']); ?>"
+                                            alt="<?php echo htmlspecialchars($row['category_name']); ?>"
+                                            width="80"
+                                            height="55">
 
                                     <?php } else { ?>
 

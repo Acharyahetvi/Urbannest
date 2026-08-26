@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../includes/db.php';
+require_once __DIR__ . "/../../db_connection.php";
 
 $sql = "SELECT * FROM amenities ORDER BY amenity_id ASC";
 
