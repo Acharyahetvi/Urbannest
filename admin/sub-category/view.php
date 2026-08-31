@@ -1,21 +1,21 @@
 <?php
-
 require_once __DIR__ . "/../../db_connection.php";
 
 $sql = "SELECT 
-    s.subcategory_id, 
-    s.subcategory_name, 
-    s.description, 
-    s.status, 
-    s.photo, 
-    c.category_name 
-FROM sub_categories s 
-LEFT JOIN categories c 
-    ON s.category_id = c.category_id 
-ORDER BY s.subcategory_id ASC";
+            s.subcategory_id,
+            s.subcategory_name,
+            s.description,
+            s.status,
+            s.photo,
+            c.category_name
+        FROM sub_categories s
+        LEFT JOIN categories c 
+        ON s.category_id = c.category_id
+        ORDER BY s.subcategory_id ASC";
 
-$result = mysqli_query($con, $sql);
+                    $result = mysqli_query($con, $sql);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,7 +25,7 @@ $result = mysqli_query($con, $sql);
 
     <title>View Sub Categories</title>
 
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/view.css">
 </head>
 
 <body>
@@ -83,10 +83,11 @@ $result = mysqli_query($con, $sql);
 
                                     <?php if (!empty($row['photo'])) { ?>
 
-                                        <img src="/urbannest/admin/assets/images/subcategory/<?php echo htmlspecialchars($row['photo']); ?>"
-                                            alt="<?php echo htmlspecialchars($row['category_name']); ?>"
-                                            width="80"
-                                            height="55">
+                                        <img
+                                            src="../assets/images/subcategory/<?php echo htmlspecialchars($row['photo']); ?>"
+                                            alt="<?php echo htmlspecialchars($row['subcategory_name']); ?>"
+                                            width="100"
+                                            height="70">
 
                                     <?php } else { ?>
 

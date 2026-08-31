@@ -1,0 +1,137 @@
+/* =========================
+   UrbanNest Admin View
+   ========================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #222;
+}
+
+/* Sidebar */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 230px;
+  height: 100vh;
+  background-color: #0b1f3a;
+  padding: 25px 15px;
+}
+
+.sidebar h2 {
+  text-align: center;
+  color: #d4af37;
+  margin-bottom: 5px;
+}
+
+.sidebar p {
+  text-align: center;
+  color: #ddd;
+  margin-bottom: 30px;
+}
+
+.sidebar a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 12px 15px;
+  margin: 7px 0;
+  border-radius: 5px;
+}
+
+.sidebar a:hover {
+  background-color: #d4af37;
+  color: #0b1f3a;
+}
+
+/* Main */
+
+.main {
+  margin-left: 230px;
+  padding: 35px;
+}
+
+.main h1 {
+  color: #0b1f3a;
+  margin-bottom: 8px;
+}
+
+.welcome {
+  color: #777;
+  margin-bottom: 30px;
+}
+
+/* Cards */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.card {
+  background-color: white;
+  padding: 25px;
+  border-radius: 8px;
+  border-left: 5px solid #d4af37;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+  color: #0b1f3a;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.card h2 {
+  color: #d4af37;
+  font-size: 32px;
+  margin-bottom: 18px;
+}
+
+.card a {
+  display: inline-block;
+  background-color: #0b1f3a;
+  color: white;
+  text-decoration: none;
+  padding: 9px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.card a:hover {
+  background-color: #d4af37;
+  color: #0b1f3a;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+  .main {
+    margin-left: 0;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
