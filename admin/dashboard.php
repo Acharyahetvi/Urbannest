@@ -77,22 +77,22 @@ $admin_name = $_SESSION['admin_name'] ?? 'Admin';
                     Categories
                 </a>
 
-                <a href="#" class="un-nav-link">
+                <a href=" /urbannest/admin/sub-category/view.php" class="un-nav-link">
                     <i class="fa-solid fa-sitemap"></i>
                     Sub Categories
                 </a>
 
-                <a href="#" class="un-nav-link">
+                <a href="/urbannest/admin/users/view.php" class="un-nav-link">
                     <i class="fa-solid fa-users"></i>
                     Users
                 </a>
 
-                <a href="#" class="un-nav-link">
+                <a href="/urbannest/admin/amenities/view.php" class="un-nav-link">
                     <i class="fa-solid fa-star"></i>
                     Amenities
                 </a>
 
-                <a href="#" class="un-nav-link">
+                <a href="/urbannest/admin/inquiries/view.php" class="un-nav-link">
                     <i class="fa-solid fa-envelope"></i>
                     Inquiries
                 </a>
