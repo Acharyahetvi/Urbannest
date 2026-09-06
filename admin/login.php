@@ -5,7 +5,7 @@ require_once __DIR__ . '/../includes/db.php';
 
 // If admin is already logged in
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
-  header("Location: dashboard.php");
+  header("Location: view.php");
   exit;
 }
 
@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       $_SESSION['admin_role'] = $user['role_id'];
 
       // Redirect to dashboard
-      header("Location: dashboard.php");
+      header("Location: view.php");
       exit;
     } else {
 
