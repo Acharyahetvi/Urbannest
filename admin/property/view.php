@@ -1,269 +1,278 @@
-<?php
+<?php 
 
-require_once __DIR__ . "/../db_connection.php";
+require_once __DIR__ . "/../db_connection.php"; 
 
-// Get all properties
-$sql = "SELECT * FROM properties ORDER BY property_id DESC";
+// Get all properties 
+$sql = "SELECT * FROM properties ORDER BY property_id DESC"; 
 
-$result = mysqli_query($conn, $sql);
+$result = mysqli_query($conn, $sql); 
 
-if (!$result) {
-    die("Query Error: " . mysqli_error($conn));
-}
+if (!$result) { 
+    die("Query Error: " . mysqli_error($conn)); 
+} 
 
-?>
+?> 
 
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html> 
+<html lang="en"> 
 
-<head>
+<head> 
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 
-    <title>Properties - UrbanNest Admin</title>
+    <title>Properties - UrbanNest Admin</title> 
 
-    <link rel="stylesheet" href="/urbannest/admin/assets/css/style.css">
+    <link rel="stylesheet" href="/urbannest/admin/assets/css/style.css"> 
 
-</head>
+</head> 
 
-<body>
+<body> 
 
-    <div class="admin-container">
+    <div class="admin-container"> 
 
-        <!-- Sidebar -->
-        <div class="sidebar">
+        <!-- Sidebar --> 
+        <div class="sidebar"> 
 
-            <h2>UrbanNest</h2>
+            <h2>UrbanNest</h2> 
 
-            <ul>
+            <ul> 
 
-                <li>
-                    <a href="../view.php">Dashboard</a>
+                <li> 
+                    <a href="../view.php">Dashboard</a> 
+                </li> 
+
+                <li> 
+                    <a href="../user/view.php">Users</a> 
+                </li> 
+
+                <li> 
+                    <a href="view.php" class="active">Properties</a> 
+                </li> 
+
+                <li> 
+                    <a href="../category/view.php">Categories</a> 
+                </li> 
+
+                <li> 
+                    <a href="../sub-category/view.php">Sub-Categories</a> 
+                </li> 
+
+                <li> 
+                    <a href="../amenity/view.php">Amenities</a> 
                 </li>
 
-                <li>
-                    <a href="../user/view.php">Users</a>
+                <!-- Logout -->
+                <li class="logout-menu"> 
+                    <a href="../logout.php"
+                       onclick="return confirm('Are you sure you want to logout?');">
+                        Logout
+                    </a>
                 </li>
 
-                <li>
-                    <a href="view.php" class="active">Properties</a>
-                </li>
+            </ul> 
 
-                <li>
-                    <a href="../category/view.php">Categories</a>
-                </li>
+        </div> 
 
-                <li>
-                    <a href="../sub-category/view.php">Sub-Categories</a>
-                </li>
 
-                <li>
-                    <a href="../amenity/view.php">Amenities</a>
-                </li>
+        <!-- Main Content --> 
+        <div class="main-content"> 
 
-            </ul>
+            <!-- Header --> 
+            <div class="page-header"> 
 
-        </div>
+                <h1>Properties</h1> 
 
+                <a href="add.php" class="btn btn-primary"> 
+                    + Add Property 
+                </a> 
 
-        <!-- Main Content -->
-        <div class="main-content">
+            </div> 
 
-            <!-- Header -->
-            <div class="page-header">
 
-                <h1>Properties</h1>
+            <!-- Table --> 
+            <div class="table-container"> 
 
-                <a href="add.php" class="btn btn-primary">
-                    + Add Property
-                </a>
+                <table> 
 
-            </div>
+                    <thead> 
 
+                        <tr> 
 
-            <!-- Table -->
-            <div class="table-container">
+                            <th>ID</th> 
 
-                <table>
+                            <th>Title</th> 
 
-                    <thead>
+                            <th>Location</th> 
 
-                        <tr>
+                            <th>Price</th> 
 
-                            <th>ID</th>
+                            <th>Category</th> 
 
-                            <th>Title</th>
+                            <th>Status</th> 
 
-                            <th>Location</th>
+                            <th>Action</th> 
 
-                            <th>Price</th>
+                        </tr> 
 
-                            <th>Category</th>
+                    </thead> 
 
-                            <th>Status</th>
 
-                            <th>Action</th>
+                    <tbody> 
 
-                        </tr>
+                        <?php 
 
-                    </thead>
+                        if (mysqli_num_rows($result) > 0) { 
 
+                            while ($property = mysqli_fetch_assoc($result)) { 
 
-                    <tbody>
+                                // Location 
+                                if (isset($property['location'])) { 
+                                    $location = $property['location']; 
+                                } elseif (isset($property['address'])) { 
+                                    $location = $property['address']; 
+                                } elseif (isset($property['city'])) { 
+                                    $location = $property['city']; 
+                                } else { 
+                                    $location = "-"; 
+                                } 
 
-                        <?php
 
-                        if (mysqli_num_rows($result) > 0) {
+                                // Category 
+                                if (isset($property['category_id'])) { 
+                                    $category = $property['category_id']; 
+                                } elseif (isset($property['subcategory_id'])) { 
+                                    $category = $property['subcategory_id']; 
+                                } else { 
+                                    $category = "-"; 
+                                } 
 
-                            while ($property = mysqli_fetch_assoc($result)) {
 
-                                // Location
-                                if (isset($property['location'])) {
-                                    $location = $property['location'];
-                                } elseif (isset($property['address'])) {
-                                    $location = $property['address'];
-                                } elseif (isset($property['city'])) {
-                                    $location = $property['city'];
-                                } else {
-                                    $location = "-";
-                                }
+                                // Title 
+                                if (isset($property['title'])) { 
+                                    $title = $property['title']; 
+                                } elseif (isset($property['property_title'])) { 
+                                    $title = $property['property_title']; 
+                                } else { 
+                                    $title = "-"; 
+                                } 
 
 
-                                // Category
-                                if (isset($property['category_id'])) {
-                                    $category = $property['category_id'];
-                                } elseif (isset($property['subcategory_id'])) {
-                                    $category = $property['subcategory_id'];
-                                } else {
-                                    $category = "-";
-                                }
+                                // Price 
+                                if (isset($property['price'])) { 
+                                    $price = $property['price']; 
+                                } else { 
+                                    $price = 0; 
+                                } 
 
 
-                                // Title
-                                if (isset($property['title'])) {
-                                    $title = $property['title'];
-                                } elseif (isset($property['property_title'])) {
-                                    $title = $property['property_title'];
-                                } else {
-                                    $title = "-";
-                                }
+                                // Status 
+                                if (isset($property['status'])) { 
+                                    $status = $property['status']; 
+                                } else { 
+                                    $status = "-"; 
+                                } 
 
+                        ?> 
 
-                                // Price
-                                if (isset($property['price'])) {
-                                    $price = $property['price'];
-                                } else {
-                                    $price = 0;
-                                }
+                                <tr> 
 
+                                    <!-- ID --> 
+                                    <td> 
+                                        <?php echo $property['property_id']; ?> 
+                                    </td> 
 
-                                // Status
-                                if (isset($property['status'])) {
-                                    $status = $property['status'];
-                                } else {
-                                    $status = "-";
-                                }
 
-                        ?>
+                                    <!-- Title --> 
+                                    <td> 
+                                        <?php echo htmlspecialchars($title); ?> 
+                                    </td> 
 
-                                <tr>
 
-                                    <!-- ID -->
-                                    <td>
-                                        <?php echo $property['property_id']; ?>
-                                    </td>
+                                    <!-- Location --> 
+                                    <td> 
+                                        <?php echo htmlspecialchars($location); ?> 
+                                    </td> 
 
 
-                                    <!-- Title -->
-                                    <td>
-                                        <?php echo htmlspecialchars($title); ?>
-                                    </td>
+                                    <!-- Price --> 
+                                    <td> 
+                                        ₹<?php echo number_format($price); ?> 
+                                    </td> 
 
 
-                                    <!-- Location -->
-                                    <td>
-                                        <?php echo htmlspecialchars($location); ?>
-                                    </td>
+                                    <!-- Category --> 
+                                    <td> 
+                                        <?php echo htmlspecialchars($category); ?> 
+                                    </td> 
 
 
-                                    <!-- Price -->
-                                    <td>
-                                        ₹<?php echo number_format($price); ?>
-                                    </td>
+                                    <!-- Status --> 
+                                    <td> 
+                                        <?php echo htmlspecialchars($status); ?> 
+                                    </td> 
 
 
-                                    <!-- Category -->
-                                    <td>
-                                        <?php echo htmlspecialchars($category); ?>
-                                    </td>
+                                    <!-- Action --> 
+                                    <td> 
 
+                                        <a 
+                                            href="view-single.php?id=<?php echo $property['property_id']; ?>" 
+                                            class="btn btn-view"> 
+                                            View 
+                                        </a> 
 
-                                    <!-- Status -->
-                                    <td>
-                                        <?php echo htmlspecialchars($status); ?>
-                                    </td>
 
+                                        <a 
+                                            href="edit.php?id=<?php echo $property['property_id']; ?>" 
+                                            class="btn btn-edit"> 
+                                            Edit 
+                                        </a> 
 
-                                    <!-- Action -->
-                                    <td>
 
-                                        <a
-                                            href="view_single.php?id=<?php echo $property['property_id']; ?>"
-                                            class="btn btn-view">
-                                            View
-                                        </a>
+                                        <a 
+                                            href="delete.php?id=<?php echo $property['property_id']; ?>" 
+                                            class="btn btn-delete" 
+                                            onclick="return confirm('Are you sure you want to delete this property?');"> 
+                                            Delete 
+                                        </a> 
 
+                                    </td> 
 
-                                        <a
-                                            href="edit.php?id=<?php echo $property['property_id']; ?>"
-                                            class="btn btn-edit">
-                                            Edit
-                                        </a>
+                                </tr> 
 
+                            <?php 
 
-                                        <a
-                                            href="delete.php?id=<?php echo $property['property_id']; ?>"
-                                            class="btn btn-delete"
-                                            onclick="return confirm('Are you sure you want to delete this property?');">
-                                            Delete
-                                        </a>
+                            } 
 
-                                    </td>
+                        } else { 
 
-                                </tr>
+                            ?> 
 
-                            <?php
+                            <tr> 
 
-                            }
-                        } else {
+                                <td colspan="7" style="text-align:center;"> 
+                                    No Properties Found 
+                                </td> 
 
-                            ?>
+                            </tr> 
 
-                            <tr>
+                        <?php 
 
-                                <td colspan="7" style="text-align:center;">
-                                    No Properties Found
-                                </td>
+                        } 
 
-                            </tr>
+                        ?> 
 
-                        <?php
+                    </tbody> 
 
-                        }
+                </table> 
 
-                        ?>
+            </div> 
 
-                    </tbody>
+        </div> 
 
-                </table>
+    </div> 
 
-            </div>
-
-        </div>
-
-    </div>
-
-</body>
+</body> 
 
 </html>

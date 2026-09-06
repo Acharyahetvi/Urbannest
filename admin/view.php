@@ -1,55 +1,150 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once __DIR__ . "/../db_connection.php";
 
-// Total Users
-$user_sql = "SELECT COUNT(*) AS total FROM users";
-$user_result = mysqli_query($conn, $user_sql);
-$user_data = mysqli_fetch_assoc($user_result);
-$total_users = $user_data['total'];
 
-// Total Properties
-$property_sql = "SELECT COUNT(*) AS total FROM properties";
-$property_result = mysqli_query($conn, $property_sql);
-$property_data = mysqli_fetch_assoc($property_result);
-$total_properties = $property_data['total'];
+// ================= TOTAL USERS =================
 
-// Total Categories
-$category_sql = "SELECT COUNT(*) AS total FROM categories";
-$category_result = mysqli_query($conn, $category_sql);
-$category_data = mysqli_fetch_assoc($category_result);
-$total_categories = $category_data['total'];
+$sql = "SELECT COUNT(*) AS total FROM users";
+$result = mysqli_query($conn, $sql);
 
-// Total Sub Categories
-$subcategory_sql = "SELECT COUNT(*) AS total FROM sub_categories";
-$subcategory_result = mysqli_query($conn, $subcategory_sql);
-$subcategory_data = mysqli_fetch_assoc($subcategory_result);
-$total_subcategories = $subcategory_data['total'];
+if (!$result) {
+    die("Users Error: " . mysqli_error($conn));
+}
 
-// Total Amenities
-$amenity_sql = "SELECT COUNT(*) AS total FROM amenities";
-$amenity_result = mysqli_query($conn, $amenity_sql);
-$amenity_data = mysqli_fetch_assoc($amenity_result);
-$total_amenities = $amenity_data['total'];
+$data = mysqli_fetch_assoc($result);
+$total_users = $data['total'];
+
+
+// ================= TOTAL PROPERTIES =================
+
+$sql = "SELECT COUNT(*) AS total FROM properties";
+$result = mysqli_query($conn, $sql);
+
+if (!$result) {
+    die("Properties Error: " . mysqli_error($conn));
+}
+
+$data = mysqli_fetch_assoc($result);
+$total_properties = $data['total'];
+
+
+// ================= TOTAL CATEGORIES =================
+
+$sql = "SELECT COUNT(*) AS total FROM categories";
+$result = mysqli_query($conn, $sql);
+
+if (!$result) {
+    die("Categories Error: " . mysqli_error($conn));
+}
+
+$data = mysqli_fetch_assoc($result);
+$total_categories = $data['total'];
+
+
+// ================= TOTAL SUB CATEGORIES =================
+
+$sql = "SELECT COUNT(*) AS total FROM sub_categories";
+$result = mysqli_query($conn, $sql);
+
+if (!$result) {
+    die("Sub Categories Error: " . mysqli_error($conn));
+}
+
+$data = mysqli_fetch_assoc($result);
+$total_subcategories = $data['total'];
+
+
+// ================= TOTAL AMENITIES =================
+
+$sql = "SELECT COUNT(*) AS total FROM amenities";
+$result = mysqli_query($conn, $sql);
+
+if (!$result) {
+    die("Amenities Error: " . mysqli_error($conn));
+}
+
+$data = mysqli_fetch_assoc($result);
+$total_amenities = $data['total'];
 
 ?>
 
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
 
-    <meta charset="UTF-8">
+    <title>UrbanNest Admin Dashboard</title>
 
-    <title>Admin Dashboard - UrbanNest</title>
+    <link rel="stylesheet" href="assets/css/view.css">
 
-    <!-- Common CSS -->
-    <link rel="stylesheet" href="/urbannest/admin/assets/css/view.css">
 </head>
+
 
 <body>
 
-    <!-- Sidebar -->
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="admin-header">
+
+        <!-- Logo -->
+
+        <div class="header-logo">
+            UrbanNest
+        </div>
+
+
+        <!-- Search Bar -->
+
+        <div class="search-box">
+
+            <input type="text"
+                placeholder="Search properties, users...">
+
+        </div>
+
+
+        <!-- Profile -->
+
+        <div class="profile-section">
+
+            <div class="profile-icon">
+                AU
+            </div>
+
+
+            <!-- Profile Dropdown -->
+
+            <div class="profile-menu">
+
+                <h4>Admin User</h4>
+
+                <a href="profile.php">
+                    My Profile
+                </a>
+
+                <a href="settings.php">
+                    Account Settings
+                </a>
+
+                <a href="logout.php">
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ================= SIDEBAR ================= -->
 
     <div class="sidebar">
 
@@ -57,26 +152,52 @@ $total_amenities = $amenity_data['total'];
 
         <p>Admin Panel</p>
 
-        <a href="view.php">Dashboard</a>
 
-        <a href="user/view.php">Users</a>
+        <a href="view.php">
+            Home
+        </a>
 
-        <a href="property/view.php">Properties</a>
 
-        <a href="category/view.php">Categories</a>
+        <a href="users/view.php">
+            Users
+        </a>
 
-        <a href="sub-category/view.php">Sub Categories</a>
 
-        <a href="amenity/view.php">Amenities</a>
+        <a href="property/view.php">
+            Properties
+        </a>
+
+
+        <a href="category/view.php">
+            Categories
+        </a>
+
+
+        <a href="sub-category/view.php">
+            Sub Categories
+        </a>
+
+
+        <a href="amenities/view.php">
+            Amenities
+        </a>
+
+
+        <a href="logout.php">
+            Logout
+        </a>
 
     </div>
 
 
-    <!-- Main Content -->
+
+    <!-- ================= MAIN CONTENT ================= -->
 
     <div class="main">
 
+
         <h1>Admin Dashboard</h1>
+
 
         <p class="welcome">
             Welcome to UrbanNest Admin Panel
@@ -87,7 +208,8 @@ $total_amenities = $amenity_data['total'];
 
         <div class="cards">
 
-            <!-- Users -->
+
+            <!-- USERS -->
 
             <div class="card">
 
@@ -97,14 +219,15 @@ $total_amenities = $amenity_data['total'];
                     <?php echo $total_users; ?>
                 </h2>
 
-                <a href="user/view.php">
+                <a href="users/view.php">
                     View Users
                 </a>
 
             </div>
 
 
-            <!-- Properties -->
+
+            <!-- PROPERTIES -->
 
             <div class="card">
 
@@ -121,7 +244,8 @@ $total_amenities = $amenity_data['total'];
             </div>
 
 
-            <!-- Categories -->
+
+            <!-- CATEGORIES -->
 
             <div class="card">
 
@@ -138,7 +262,8 @@ $total_amenities = $amenity_data['total'];
             </div>
 
 
-            <!-- Sub Categories -->
+
+            <!-- SUB CATEGORIES -->
 
             <div class="card">
 
@@ -155,7 +280,8 @@ $total_amenities = $amenity_data['total'];
             </div>
 
 
-            <!-- Amenities -->
+
+            <!-- AMENITIES -->
 
             <div class="card">
 
@@ -165,15 +291,17 @@ $total_amenities = $amenity_data['total'];
                     <?php echo $total_amenities; ?>
                 </h2>
 
-                <a href="amenity/view.php">
+                <a href="amenities/view.php">
                     View Amenities
                 </a>
 
             </div>
 
+
         </div>
 
     </div>
+
 
 </body>
 
