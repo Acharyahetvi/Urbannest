@@ -1,26 +1,25 @@
 <?php
 
-require_once __DIR__ . "/../db_connection.php";
+include "../db_connection.php";
 
-if (!isset($_GET['id'])) {
-    die("User ID not found.");
-}
+$sql = "
+    SELECT
+        u.user_id,
+        u.full_name,
+        u.email,
+        r.role_name,
+        u.status
+    FROM users u
+    LEFT JOIN roles r
+        ON u.role_id = r.role_id
+    ORDER BY u.user_id ASC
+";
 
-$user_id = $_GET['id'];
-
-$sql = "SELECT * FROM users WHERE user_id = '$user_id'";
-
-$result = mysqli_query($conn, $sql);
+$result = mysqli_query($con, $sql);
 
 if (!$result) {
-    die("Query Error: " . mysqli_error($conn));
+    die("Unable to fetch users: " . mysqli_error($con));
 }
-
-if (mysqli_num_rows($result) == 0) {
-    die("User not found.");
-}
-
-$user = mysqli_fetch_assoc($result);
 
 ?>
 
@@ -31,76 +30,122 @@ $user = mysqli_fetch_assoc($result);
 
     <meta charset="UTF-8">
 
-    <title>View User - UrbanNest</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="/urbannest/admin/assets/css/style.css">
+    <title>Users | UrbanNest</title>
 
 </head>
 
 <body>
 
-    <div class="container">
+    <h2>Users</h2>
 
-        <div class="user-card">
+    <p>
+        View registered UrbanNest users.
+    </p>
 
-            <div class="user-icon">
-                👤
-            </div>
 
-            <h2>
-                <?php echo $user['full_name']; ?>
-            </h2>
+    <table border="1">
 
-            <p class="role">
-                UrbanNest User
-            </p>
+        <thead>
 
-            <div class="info">
+            <tr>
 
-                <div class="info-row">
-                    <span>User ID</span>
-                    <strong>
-                        <?php echo $user['user_id']; ?>
-                    </strong>
-                </div>
+                <th>User ID</th>
 
-                <div class="info-row">
-                    <span>Name</span>
-                    <strong>
-                        <?php echo $user['full_name']; ?>
-                    </strong>
-                </div>
+                <th>Name</th>
 
-                <div class="info-row">
-                    <span>Email</span>
-                    <strong>
-                        <?php echo $user['email']; ?>
-                    </strong>
-                </div>
+                <th>Email</th>
 
-                <div class="info-row">
-                    <span>Phone</span>
-                    <strong>
-                        <?php echo $user['phoneno']; ?>
-                    </strong>
-                </div>
+                <th>Role</th>
 
-                <div class="info-row">
-                    <span>Status</span>
-                    <strong class="status">
-                        <?php echo $user['status']; ?>
-                    </strong>
-                </div>
+                <th>Status</th>
 
-            </div>
+                <th>Action</th>
 
-            <a href="view.php" class="back-btn">
-                ← Back to Users
-            </a>
+            </tr>
 
-        </div>
+        </thead>
 
-    </div>
+
+        <tbody>
+
+            <?php if (mysqli_num_rows($result) > 0): ?>
+
+                <?php while ($user = mysqli_fetch_assoc($result)): ?>
+
+                    <tr>
+
+                        <td>
+                            <?php
+                            echo (int) $user["user_id"];
+                            ?>
+                        </td>
+
+                        <td>
+                            <?php
+                            echo htmlspecialchars(
+                                $user["full_name"]
+                            );
+                            ?>
+                        </td>
+
+                        <td>
+                            <?php
+                            echo htmlspecialchars(
+                                $user["email"]
+                            );
+                            ?>
+                        </td>
+
+                        <td>
+                            <?php
+                            echo htmlspecialchars(
+                                $user["role_name"] ?? "Unknown"
+                            );
+                            ?>
+                        </td>
+
+                        <td>
+                            <?php
+                            echo htmlspecialchars(
+                                $user["status"]
+                            );
+                            ?>
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="profile.php?id=<?php echo (int) $user["user_id"]; ?>"
+                            >
+                                View Details
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                <?php endwhile; ?>
+
+            <?php else: ?>
+
+                <tr>
+
+                    <td colspan="6">
+                        No users found.
+                    </td>
+
+                </tr>
+
+            <?php endif; ?>
+
+        </tbody>
+
+    </table>
 
 </body>
 

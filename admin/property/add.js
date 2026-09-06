@@ -466,6 +466,10 @@ function hideDynamicFields() {
 |--------------------------------------------------------------------------
 | Amenity Configuration
 |--------------------------------------------------------------------------
+|
+| These names must match the amenities table.
+|
+|--------------------------------------------------------------------------
 */
 
 const amenityConfig = {
@@ -726,15 +730,33 @@ function showAmenities(
         );
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Clear Previous Amenities
+    |--------------------------------------------------------------------------
+    */
+
     container.innerHTML =
         "";
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get Allowed Amenities
+    |--------------------------------------------------------------------------
+    */
 
     const allowedAmenities =
         amenityConfig[
             subcategoryId
         ];
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | No Configuration
+    |--------------------------------------------------------------------------
+    */
 
     if (
         !allowedAmenities ||
@@ -753,12 +775,18 @@ function showAmenities(
     }
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Create Amenity Checkboxes
+    |--------------------------------------------------------------------------
+    */
+
     amenities.forEach(
         function (amenity) {
 
             if (
                 allowedAmenities.includes(
-                    amenity.amentiy_name
+                    amenity.amenity_name
                 )
             ) {
 
@@ -783,11 +811,11 @@ function showAmenities(
                     "amenities[]";
 
                 checkbox.value =
-                    amenity.amentiy_id;
+                    amenity.amenity_id;
 
                 checkbox.id =
                     "amenity-" +
-                    amenity.amentiy_id;
+                    amenity.amenity_id;
 
 
                 const label =
@@ -799,7 +827,7 @@ function showAmenities(
                     checkbox.id;
 
                 label.textContent =
-                    amenity.amentiy_name;
+                    amenity.amenity_name;
 
 
                 wrapper.appendChild(
@@ -971,8 +999,6 @@ function showStep(
     });
 
 }
-
-
 /*
 |--------------------------------------------------------------------------
 | Validate Current Step
@@ -1128,7 +1154,7 @@ function validateCurrentStep() {
         ) {
 
             alert(
-                "Please enter a property description."
+                "Please enter the property description."
             );
 
             description.focus();
@@ -1264,6 +1290,9 @@ function validateCurrentStep() {
     |--------------------------------------------------------------------------
     | STEP 5 — AMENITIES
     |--------------------------------------------------------------------------
+    |
+    | Amenities are optional.
+    |
     */
 
     if (
@@ -1271,15 +1300,37 @@ function validateCurrentStep() {
     ) {
 
         /*
-        |--------------------------------------------------------------------------
-        | Amenities are optional.
-        |--------------------------------------------------------------------------
-        |
-        | A property does not have to have every amenity.
-        | "Other Amenities" can also be used.
-        |
-        |--------------------------------------------------------------------------
+        | No validation required.
         */
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | STEP 6 — PHOTOS
+    |--------------------------------------------------------------------------
+    |
+    | A main photo must be explicitly chosen. It is never inferred
+    | automatically from the additional photos.
+    |
+    */
+
+    if (
+        currentStep === 6
+    ) {
+
+        if (
+            !selectedMainPhoto
+        ) {
+
+            alert(
+                "Please select a main property photo."
+            );
+
+            return false;
+
+        }
 
     }
 
@@ -1343,7 +1394,210 @@ function previousStep() {
 
 /*
 |--------------------------------------------------------------------------
-| Property Photo Preview
+| Main Property Photo Preview
+|--------------------------------------------------------------------------
+*/
+
+const mainPhotoInput =
+    document.getElementById(
+        "main_property_photo"
+    );
+
+const mainPhotoPreview =
+    document.getElementById(
+        "main-photo-preview"
+    );
+
+
+let selectedMainPhoto = null;
+
+
+/*
+|--------------------------------------------------------------------------
+| Main Photo Selection
+|--------------------------------------------------------------------------
+*/
+
+if (
+    mainPhotoInput
+) {
+
+    mainPhotoInput.addEventListener(
+        "change",
+        function () {
+
+            const file =
+                this.files &&
+                this.files[0]
+                    ? this.files[0]
+                    : null;
+
+
+            if (
+                file
+            ) {
+
+                selectedMainPhoto =
+                    file;
+
+            }
+
+
+            displayMainPhotoPreview();
+
+        }
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Display Main Photo Preview
+|--------------------------------------------------------------------------
+*/
+
+function displayMainPhotoPreview() {
+
+    if (
+        !mainPhotoPreview
+    ) {
+
+        return;
+
+    }
+
+
+    mainPhotoPreview.innerHTML =
+        "";
+
+
+    if (
+        !selectedMainPhoto
+    ) {
+
+        return;
+
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function (event) {
+
+            const photoBox =
+                document.createElement(
+                    "div"
+                );
+
+            photoBox.className =
+                "photo-preview-item main-photo-preview-item";
+
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+            image.src =
+                event.target.result;
+
+
+            const badge =
+                document.createElement(
+                    "span"
+                );
+
+            badge.className =
+                "main-photo-badge";
+
+            badge.textContent =
+                "MAIN";
+
+
+            const removeButton =
+                document.createElement(
+                    "button"
+                );
+
+            removeButton.type =
+                "button";
+
+            removeButton.className =
+                "remove-photo";
+
+            removeButton.textContent =
+                "×";
+
+
+            removeButton.onclick =
+                function () {
+
+                    removeMainPhoto();
+
+                };
+
+
+            photoBox.appendChild(
+                image
+            );
+
+            photoBox.appendChild(
+                badge
+            );
+
+            photoBox.appendChild(
+                removeButton
+            );
+
+
+            mainPhotoPreview.appendChild(
+                photoBox
+            );
+
+        };
+
+
+    reader.readAsDataURL(
+        selectedMainPhoto
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Remove Main Photo
+|--------------------------------------------------------------------------
+*/
+
+function removeMainPhoto() {
+
+    selectedMainPhoto =
+        null;
+
+
+    if (
+        mainPhotoInput
+    ) {
+
+        mainPhotoInput.value =
+            "";
+
+    }
+
+
+    displayMainPhotoPreview();
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Property Photo Preview (Additional Photos)
 |--------------------------------------------------------------------------
 */
 
@@ -1367,60 +1621,93 @@ let selectedPhotos = [];
 |--------------------------------------------------------------------------
 */
 
-photoInput.addEventListener(
-    "change",
-    function () {
+if (
+    photoInput
+) {
 
-        const newPhotos =
-            Array.from(
-                this.files
+    photoInput.addEventListener(
+        "change",
+        function () {
+
+            const newPhotos =
+                Array.from(
+                    this.files
+                );
+
+
+            newPhotos.forEach(
+                function (file) {
+
+                    const alreadyExists =
+                        selectedPhotos.some(
+                            function (existingFile) {
+
+                                return (
+                                    existingFile.name ===
+                                    file.name &&
+                                    existingFile.size ===
+                                    file.size &&
+                                    existingFile.lastModified ===
+                                    file.lastModified
+                                );
+
+                            }
+                        );
+
+
+                    if (
+                        !alreadyExists
+                    ) {
+
+                        selectedPhotos.push(
+                            file
+                        );
+
+                    }
+
+                }
             );
 
 
-        newPhotos.forEach(
-            function (file) {
-
-                const alreadyExists =
-                    selectedPhotos.some(
-                        function (existingFile) {
-
-                            return (
-                                existingFile.name === file.name &&
-                                existingFile.size === file.size &&
-                                existingFile.lastModified === file.lastModified
-                            );
-
-                        }
-                    );
+            displayPhotoPreviews();
 
 
-                if (
-                    !alreadyExists
-                ) {
+            /*
+            |--------------------------------------------------------------------------
+            | Re-sync Input With Accumulated Selection
+            |--------------------------------------------------------------------------
+            |
+            | Resetting with this.value = "" also empties the FileList that
+            | gets submitted with the form, so only the last batch (or
+            | nothing) would reach PHP. Rebuilding the input's files from
+            | the full selectedPhotos array keeps every batch attached to
+            | property_photos[] while still allowing another batch to be
+            | picked afterward.
+            |--------------------------------------------------------------------------
+            */
 
-                    selectedPhotos.push(
+            const dataTransfer =
+                new DataTransfer();
+
+
+            selectedPhotos.forEach(
+                function (file) {
+
+                    dataTransfer.items.add(
                         file
                     );
 
                 }
-
-            }
-        );
+            );
 
 
-        displayPhotoPreviews();
+            this.files =
+                dataTransfer.files;
 
+        }
+    );
 
-        /*
-        |--------------------------------------------------------------------------
-        | Reset input
-        |--------------------------------------------------------------------------
-        */
-
-        this.value = "";
-
-    }
-);
+}
 
 
 /*
@@ -1430,6 +1717,15 @@ photoInput.addEventListener(
 */
 
 function displayPhotoPreviews() {
+
+    if (
+        !photoPreview
+    ) {
+
+        return;
+
+    }
+
 
     photoPreview.innerHTML =
         "";
@@ -1536,6 +1832,21 @@ function removePhoto(
     displayPhotoPreviews();
 
 
+    if (
+        !photoInput
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Update File Input
+    |--------------------------------------------------------------------------
+    */
+
     const dataTransfer =
         new DataTransfer();
 
@@ -1559,7 +1870,46 @@ function removePhoto(
 
 /*
 |--------------------------------------------------------------------------
-| Build Property Review
+| Photo Count Helper
+|--------------------------------------------------------------------------
+*/
+
+function getSelectedPhotoCount() {
+
+    return selectedPhotos.length;
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Clear Selected Photos
+|--------------------------------------------------------------------------
+*/
+
+function clearSelectedPhotos() {
+
+    selectedPhotos = [];
+
+
+    if (
+        photoInput
+    ) {
+
+        photoInput.value =
+            "";
+
+    }
+
+
+    displayPhotoPreviews();
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Property Review — Basic Information
 |--------------------------------------------------------------------------
 */
 
@@ -1576,15 +1926,28 @@ function buildPropertyReview() {
             "user_id"
         );
 
+
     const ownerText =
         ownerSelect.options[
             ownerSelect.selectedIndex
-        ]?.text || "—";
+        ]?.text ||
+        "—";
 
-    document.getElementById(
-        "review-owner"
-    ).textContent =
-        ownerText;
+
+    const reviewOwner =
+        document.getElementById(
+            "review-owner"
+        );
+
+
+    if (
+        reviewOwner
+    ) {
+
+        reviewOwner.textContent =
+            ownerText;
+
+    }
 
 
     /*
@@ -1598,81 +1961,169 @@ function buildPropertyReview() {
             "subcategory_id"
         );
 
+
     const typeText =
         subcategorySelect.options[
             subcategorySelect.selectedIndex
-        ]?.text || "—";
+        ]?.text ||
+        "—";
 
-    document.getElementById(
-        "review-type"
-    ).textContent =
-        typeText;
+
+    const reviewType =
+        document.getElementById(
+            "review-type"
+        );
+
+
+    if (
+        reviewType
+    ) {
+
+        reviewType.textContent =
+            typeText;
+
+    }
 
 
     /*
     |--------------------------------------------------------------------------
-    | Basic Details
+    | Title
     |--------------------------------------------------------------------------
     */
 
-    document.getElementById(
-        "review-title"
-    ).textContent =
+    const reviewTitle =
         document.getElementById(
-            "title"
-        ).value || "—";
+            "review-title"
+        );
 
 
-    document.getElementById(
-        "review-listing"
-    ).textContent =
-        document.getElementById(
-            "listing_type"
-        ).value || "—";
+    if (
+        reviewTitle
+    ) {
 
+        reviewTitle.textContent =
+            document.getElementById(
+                "title"
+            ).value ||
+            "—";
 
-    document.getElementById(
-        "review-price"
-    ).textContent =
-        document.getElementById(
-            "price"
-        ).value
-            ? "₹ " +
-              Number(
-                  document.getElementById(
-                      "price"
-                  ).value
-              ).toLocaleString(
-                  "en-IN"
-              )
-            : "—";
-
-
-    document.getElementById(
-        "review-area"
-    ).textContent =
-        document.getElementById(
-            "area_sqft"
-        ).value
-            ? document.getElementById(
-                  "area_sqft"
-              ).value +
-              " sq.ft."
-            : "—";
+    }
 
 
     /*
     |--------------------------------------------------------------------------
-    | Property Condition
+    | Listing Type
     |--------------------------------------------------------------------------
     */
 
-    document.getElementById(
-        "review-condition"
-    ).textContent =
+    const reviewListing =
         document.getElementById(
-            "property_condition"
-        ).value || "—";
+            "review-listing"
+        );
+
+
+    if (
+        reviewListing
+    ) {
+
+        reviewListing.textContent =
+            document.getElementById(
+                "listing_type"
+            ).value ||
+            "—";
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Price
+    |--------------------------------------------------------------------------
+    */
+
+    const reviewPrice =
+        document.getElementById(
+            "review-price"
+        );
+
+
+    if (
+        reviewPrice
+    ) {
+
+        const price =
+            document.getElementById(
+                "price"
+            ).value;
+
+
+        reviewPrice.textContent =
+            price
+                ? "₹ " +
+                  Number(
+                      price
+                  ).toLocaleString(
+                      "en-IN"
+                  )
+                : "—";
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Area
+    |--------------------------------------------------------------------------
+    */
+
+    const reviewArea =
+        document.getElementById(
+            "review-area"
+        );
+
+
+    if (
+        reviewArea
+    ) {
+
+        const area =
+            document.getElementById(
+                "area_sqft"
+            ).value;
+
+
+        reviewArea.textContent =
+            area
+                ? area +
+                  " sq.ft."
+                : "—";
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Condition
+    |--------------------------------------------------------------------------
+    */
+
+    const reviewCondition =
+        document.getElementById(
+            "review-condition"
+        );
+
+
+    if (
+        reviewCondition
+    ) {
+
+        reviewCondition.textContent =
+            document.getElementById(
+                "property_condition"
+            ).value ||
+            "—";
+
+    }
 
 
     /*
@@ -1681,12 +2132,23 @@ function buildPropertyReview() {
     |--------------------------------------------------------------------------
     */
 
-    document.getElementById(
-        "review-description"
-    ).textContent =
+    const reviewDescription =
         document.getElementById(
-            "description"
-        ).value || "—";
+            "review-description"
+        );
+
+
+    if (
+        reviewDescription
+    ) {
+
+        reviewDescription.textContent =
+            document.getElementById(
+                "description"
+            ).value ||
+            "—";
+
+    }
 
 
     /*
@@ -1695,28 +2157,61 @@ function buildPropertyReview() {
     |--------------------------------------------------------------------------
     */
 
-    document.getElementById(
-        "review-address"
-    ).textContent =
+    const reviewAddress =
         document.getElementById(
-            "address"
-        ).value || "—";
+            "review-address"
+        );
 
 
-    document.getElementById(
-        "review-city"
-    ).textContent =
+    if (
+        reviewAddress
+    ) {
+
+        reviewAddress.textContent =
+            document.getElementById(
+                "address"
+            ).value ||
+            "—";
+
+    }
+
+
+    const reviewCity =
         document.getElementById(
-            "city"
-        ).value || "—";
+            "review-city"
+        );
 
 
-    document.getElementById(
-        "review-state"
-    ).textContent =
+    if (
+        reviewCity
+    ) {
+
+        reviewCity.textContent =
+            document.getElementById(
+                "city"
+            ).value ||
+            "—";
+
+    }
+
+
+    const reviewState =
         document.getElementById(
-            "state"
-        ).value || "—";
+            "review-state"
+        );
+
+
+    if (
+        reviewState
+    ) {
+
+        reviewState.textContent =
+            document.getElementById(
+                "state"
+            ).value ||
+            "—";
+
+    }
 
 
     /*
@@ -1725,10 +2220,60 @@ function buildPropertyReview() {
     |--------------------------------------------------------------------------
     */
 
+    buildSpecificationReview();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Amenities
+    |--------------------------------------------------------------------------
+    */
+
+    buildAmenityReview();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Other Amenities
+    |--------------------------------------------------------------------------
+    */
+
+    buildOtherAmenityReview();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Photos
+    |--------------------------------------------------------------------------
+    */
+
+    buildPhotoReview();
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Specification Review
+|--------------------------------------------------------------------------
+*/
+
+function buildSpecificationReview() {
+
     const specifications =
         document.getElementById(
             "review-specifications"
         );
+
+
+    if (
+        !specifications
+    ) {
+
+        return;
+
+    }
+
 
     specifications.innerHTML =
         "";
@@ -1836,17 +2381,30 @@ function buildPropertyReview() {
         }
     );
 
+}
 
-    /*
-    |--------------------------------------------------------------------------
-    | Amenities
-    |--------------------------------------------------------------------------
-    */
+
+/*
+|--------------------------------------------------------------------------
+| Amenity Review
+|--------------------------------------------------------------------------
+*/
+
+function buildAmenityReview() {
 
     const reviewAmenities =
         document.getElementById(
             "review-amenities"
         );
+
+
+    if (
+        !reviewAmenities
+    ) {
+
+        return;
+
+    }
 
 
     reviewAmenities.innerHTML =
@@ -1866,69 +2424,97 @@ function buildPropertyReview() {
         reviewAmenities.textContent =
             "No predefined amenities selected.";
 
-    } else {
-
-        selectedAmenities.forEach(
-            function (checkbox) {
-
-                const label =
-                    document.querySelector(
-                        'label[for="' +
-                        checkbox.id +
-                        '"]'
-                    );
-
-
-                if (
-                    !label
-                ) {
-
-                    return;
-
-                }
-
-
-                const tag =
-                    document.createElement(
-                        "span"
-                    );
-
-                tag.className =
-                    "review-tag";
-
-                tag.textContent =
-                    label.textContent;
-
-                reviewAmenities.appendChild(
-                    tag
-                );
-
-            }
-        );
+        return;
 
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Other Amenities
-    |--------------------------------------------------------------------------
-    */
+    selectedAmenities.forEach(
+        function (checkbox) {
 
-    const otherAmenities =
+            const label =
+                document.querySelector(
+                    'label[for="' +
+                    checkbox.id +
+                    '"]'
+                );
+
+
+            if (
+                !label
+            ) {
+
+                return;
+
+            }
+
+
+            const tag =
+                document.createElement(
+                    "span"
+                );
+
+
+            tag.className =
+                "review-tag";
+
+
+            tag.textContent =
+                label.textContent;
+
+
+            reviewAmenities.appendChild(
+                tag
+            );
+
+        }
+    );
+
+}
+/*
+|--------------------------------------------------------------------------
+| Other Amenities Review
+|--------------------------------------------------------------------------
+*/
+
+function buildOtherAmenityReview() {
+
+    const otherInput =
         document.getElementById(
             "other_amenities"
-        ).value.trim();
+        );
 
 
-    const otherReview =
+    const reviewOther =
         document.getElementById(
             "review-other-amenities"
         );
 
 
-    otherReview.innerHTML =
+    if (
+        !reviewOther
+    ) {
+
+        return;
+
+    }
+
+
+    reviewOther.innerHTML =
         "";
+
+
+    if (
+        !otherInput
+    ) {
+
+        return;
+
+    }
+
+
+    const otherAmenities =
+        otherInput.value.trim();
 
 
     if (
@@ -1940,6 +2526,7 @@ function buildPropertyReview() {
                 "strong"
             );
 
+
         label.textContent =
             "Other Amenities: ";
 
@@ -1949,26 +2536,32 @@ function buildPropertyReview() {
                 "span"
             );
 
+
         text.textContent =
             otherAmenities;
 
 
-        otherReview.appendChild(
+        reviewOther.appendChild(
             label
         );
 
-        otherReview.appendChild(
+
+        reviewOther.appendChild(
             text
         );
 
     }
 
+}
 
-    /*
-    |--------------------------------------------------------------------------
-    | Photos
-    |--------------------------------------------------------------------------
-    */
+
+/*
+|--------------------------------------------------------------------------
+| Photo Review
+|--------------------------------------------------------------------------
+*/
+
+function buildPhotoReview() {
 
     const reviewPhotos =
         document.getElementById(
@@ -1976,11 +2569,21 @@ function buildPropertyReview() {
         );
 
 
+    if (
+        !reviewPhotos
+    ) {
+
+        return;
+
+    }
+
+
     reviewPhotos.innerHTML =
         "";
 
 
     if (
+        !selectedMainPhoto &&
         selectedPhotos.length === 0
     ) {
 
@@ -1991,6 +2594,85 @@ function buildPropertyReview() {
 
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Main Photo
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        selectedMainPhoto
+    ) {
+
+        const mainReader =
+            new FileReader();
+
+
+        mainReader.onload =
+            function (event) {
+
+                const wrapper =
+                    document.createElement(
+                        "div"
+                    );
+
+                wrapper.className =
+                    "main-photo-preview-item";
+
+
+                const image =
+                    document.createElement(
+                        "img"
+                    );
+
+                image.src =
+                    event.target.result;
+
+                image.alt =
+                    "Main Property Photo";
+
+
+                const badge =
+                    document.createElement(
+                        "span"
+                    );
+
+                badge.className =
+                    "main-photo-badge";
+
+                badge.textContent =
+                    "MAIN";
+
+
+                wrapper.appendChild(
+                    image
+                );
+
+                wrapper.appendChild(
+                    badge
+                );
+
+
+                reviewPhotos.appendChild(
+                    wrapper
+                );
+
+            };
+
+
+        mainReader.readAsDataURL(
+            selectedMainPhoto
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Additional Photos
+    |--------------------------------------------------------------------------
+    */
 
     selectedPhotos.forEach(
         function (file) {
@@ -2007,8 +2689,10 @@ function buildPropertyReview() {
                             "img"
                         );
 
+
                     image.src =
                         event.target.result;
+
 
                     image.alt =
                         "Property Photo";
@@ -2033,8 +2717,983 @@ function buildPropertyReview() {
 
 /*
 |--------------------------------------------------------------------------
-| Start
+| Review Refresh Helper
 |--------------------------------------------------------------------------
 */
 
-showStep(1);
+function refreshPropertyReview() {
+
+    if (
+        currentStep === 7
+    ) {
+
+        buildPropertyReview();
+
+    }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Review Data Helpers
+|--------------------------------------------------------------------------
+*/
+
+function getInputValue(
+    elementId
+) {
+
+    const element =
+        document.getElementById(
+            elementId
+        );
+
+
+    if (
+        !element
+    ) {
+
+        return "";
+
+    }
+
+
+    return element.value;
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Selected Subcategory Helper
+|--------------------------------------------------------------------------
+*/
+
+function getSelectedSubcategory() {
+
+    const select =
+        document.getElementById(
+            "subcategory_id"
+        );
+
+
+    if (
+        !select ||
+        !select.value
+    ) {
+
+        return null;
+
+    }
+
+
+    return subcategories.find(
+        function (subcategory) {
+
+            return String(
+                subcategory.subcategory_id
+            ) ===
+            String(
+                select.value
+            );
+
+        }
+    ) || null;
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Selected Category Helper
+|--------------------------------------------------------------------------
+*/
+
+function getSelectedCategory() {
+
+    const select =
+        document.getElementById(
+            "category_id"
+        );
+
+
+    if (
+        !select ||
+        !select.value
+    ) {
+
+        return null;
+
+    }
+
+
+    return categories.find(
+        function (category) {
+
+            return String(
+                category.category_id
+            ) ===
+            String(
+                select.value
+            );
+
+        }
+    ) || null;
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Scroll To Top
+|--------------------------------------------------------------------------
+*/
+
+function scrollToTop() {
+
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+    });
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Step Indicator Helper
+|--------------------------------------------------------------------------
+*/
+
+function updateStepIndicators(
+    stepNumber
+) {
+
+    const indicators =
+        document.querySelectorAll(
+            ".property-stepper .step"
+        );
+
+
+    indicators.forEach(
+        function (
+            indicator,
+            index
+        ) {
+
+            const number =
+                index + 1;
+
+
+            indicator.classList.remove(
+                "active",
+                "completed"
+            );
+
+
+            if (
+                number ===
+                stepNumber
+            ) {
+
+                indicator.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            if (
+                number <
+                stepNumber
+            ) {
+
+                indicator.classList.add(
+                    "completed"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Direct Step Navigation
+|--------------------------------------------------------------------------
+*/
+
+function goToStep(
+    stepNumber
+) {
+
+    if (
+        stepNumber < 1 ||
+        stepNumber > totalSteps
+    ) {
+
+        return;
+
+    }
+
+
+    showStep(
+        stepNumber
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Step Validation Helper
+|--------------------------------------------------------------------------
+*/
+
+function isStepValid(
+    stepNumber
+) {
+
+    const originalStep =
+        currentStep;
+
+
+    currentStep =
+        stepNumber;
+
+
+    const valid =
+        validateCurrentStep();
+
+
+    currentStep =
+        originalStep;
+
+
+    return valid;
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Form Submit Protection
+|--------------------------------------------------------------------------
+*/
+
+const propertyForm =
+    document.getElementById(
+        "propertyForm"
+    );
+
+
+if (
+    propertyForm
+) {
+
+    propertyForm.addEventListener(
+        "submit",
+        function (event) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Make sure the form is complete enough before submission.
+            |--------------------------------------------------------------------------
+            */
+
+            const owner =
+                document.getElementById(
+                    "user_id"
+                );
+
+
+            const subcategory =
+                document.getElementById(
+                    "subcategory_id"
+                );
+
+
+            if (
+                !owner ||
+                !owner.value
+            ) {
+
+                event.preventDefault();
+
+
+                alert(
+                    "Please select a property owner."
+                );
+
+
+                showStep(1);
+
+
+                return;
+
+            }
+
+
+            if (
+                !subcategory ||
+                !subcategory.value
+            ) {
+
+                event.preventDefault();
+
+
+                alert(
+                    "Please select a property subcategory."
+                );
+
+
+                showStep(2);
+
+
+                return;
+
+            }
+
+        }
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Dynamic Details — Preserve Selected Values
+|--------------------------------------------------------------------------
+*/
+
+function refreshDynamicDetails() {
+
+    const selectedSubcategory =
+        getSelectedSubcategory();
+
+
+    if (
+        !selectedSubcategory
+    ) {
+
+        hideDynamicFields();
+
+        clearAmenities();
+
+        return;
+
+    }
+
+
+    showDynamicFields(
+        selectedSubcategory.subcategory_id,
+        selectedSubcategory.subcategory_name
+    );
+
+
+    showAmenities(
+        selectedSubcategory.subcategory_id
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Amenity Search / Matching Helper
+|--------------------------------------------------------------------------
+|
+| This does not alter database values.
+| It only makes matching safer when capitalization or spaces differ.
+|--------------------------------------------------------------------------
+*/
+
+function normalizeAmenityName(
+    name
+) {
+
+    return String(
+        name ?? ""
+    )
+        .trim()
+        .toLowerCase();
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Improved Amenity Renderer
+|--------------------------------------------------------------------------
+|
+| Kept as a separate function so the existing showAmenities()
+| remains compatible with the current form.
+|--------------------------------------------------------------------------
+*/
+
+function renderAmenitiesForSubcategory(
+    subcategoryId
+) {
+
+    const container =
+        document.getElementById(
+            "amenities-container"
+        );
+
+
+    if (
+        !container
+    ) {
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    const allowedAmenities =
+        amenityConfig[
+            subcategoryId
+        ];
+
+
+    if (
+        !allowedAmenities ||
+        allowedAmenities.length === 0
+    ) {
+
+        const message =
+            document.createElement(
+                "p"
+            );
+
+
+        message.id =
+            "amenities-message";
+
+
+        message.textContent =
+            "No predefined amenities available.";
+
+
+        container.appendChild(
+            message
+        );
+
+
+        return;
+
+    }
+
+
+    const normalizedAllowed =
+        allowedAmenities.map(
+            function (name) {
+
+                return normalizeAmenityName(
+                    name
+                );
+
+            }
+        );
+
+
+    let matchFound =
+        false;
+
+
+    amenities.forEach(
+        function (amenity) {
+
+            const amenityName =
+                normalizeAmenityName(
+                    amenity.amenity_name
+                );
+
+
+            if (
+                !normalizedAllowed.includes(
+                    amenityName
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            matchFound =
+                true;
+
+
+            const wrapper =
+                document.createElement(
+                    "div"
+                );
+
+
+            wrapper.className =
+                "amenity-option";
+
+
+            const checkbox =
+                document.createElement(
+                    "input"
+                );
+
+
+            checkbox.type =
+                "checkbox";
+
+
+            checkbox.name =
+                "amenities[]";
+
+
+            checkbox.value =
+                amenity.amenity_id;
+
+
+            checkbox.id =
+                "amenity-" +
+                amenity.amenity_id;
+
+
+            const label =
+                document.createElement(
+                    "label"
+                );
+
+
+            label.htmlFor =
+                checkbox.id;
+
+
+            label.textContent =
+                amenity.amenity_name;
+
+
+            wrapper.appendChild(
+                checkbox
+            );
+
+
+            wrapper.appendChild(
+                label
+            );
+
+
+            container.appendChild(
+                wrapper
+            );
+
+        }
+    );
+
+
+    if (
+        !matchFound
+    ) {
+
+        const message =
+            document.createElement(
+                "p"
+            );
+
+
+        message.id =
+            "amenities-message";
+
+
+        message.textContent =
+            "No predefined amenities available for this property type.";
+
+
+        container.appendChild(
+            message
+        );
+
+    }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Re-render Amenities When Needed
+|--------------------------------------------------------------------------
+*/
+
+function refreshAmenities() {
+
+    const selectedSubcategory =
+        getSelectedSubcategory();
+
+
+    if (
+        !selectedSubcategory
+    ) {
+
+        clearAmenities();
+
+        return;
+
+    }
+
+
+    renderAmenitiesForSubcategory(
+        selectedSubcategory.subcategory_id
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Review Edit Helpers
+|--------------------------------------------------------------------------
+|
+| These are ready for the V2 Edit buttons.
+| They do not change the current V1 UI.
+|--------------------------------------------------------------------------
+*/
+
+function editOwnerStep() {
+
+    showStep(1);
+
+}
+
+
+function editTypeStep() {
+
+    showStep(2);
+
+}
+
+
+function editDetailsStep() {
+
+    showStep(3);
+
+}
+
+
+function editLocationStep() {
+
+    showStep(4);
+
+}
+
+
+function editAmenitiesStep() {
+
+    showStep(5);
+
+}
+
+
+function editPhotosStep() {
+
+    showStep(6);
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Keyboard Safety
+|--------------------------------------------------------------------------
+*/
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Prevent accidental Enter submission while editing fields.
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            event.key !== "Enter"
+        ) {
+
+            return;
+
+        }
+
+
+        const target =
+            event.target;
+
+
+        if (
+            !target
+        ) {
+
+            return;
+
+        }
+
+
+        const tagName =
+            target.tagName
+                .toLowerCase();
+
+
+        if (
+            tagName === "textarea"
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            tagName === "input" ||
+            tagName === "select"
+        ) {
+
+            event.preventDefault();
+
+        }
+
+    }
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| Initial State
+|--------------------------------------------------------------------------
+*/
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Make sure Step 1 is displayed.
+        |--------------------------------------------------------------------------
+        */
+
+        showStep(1);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Make sure the subcategory is initially disabled.
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            subcategorySelect
+        ) {
+
+            subcategorySelect.disabled =
+                true;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Clear dynamic sections.
+        |--------------------------------------------------------------------------
+        */
+
+        hideDynamicFields();
+
+        clearAmenities();
+
+    }
+);
+/*
+|--------------------------------------------------------------------------
+| Final Initialization
+|--------------------------------------------------------------------------
+|
+| Keep the form in a clean initial state when the page loads.
+|--------------------------------------------------------------------------
+*/
+
+(function initializePropertyForm() {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Category / Subcategory
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        categorySelect
+    ) {
+
+        /*
+        | If a category is already selected by PHP,
+        | populate its subcategories.
+        */
+
+        if (
+            categorySelect.value
+        ) {
+
+            categorySelect.dispatchEvent(
+                new Event("change")
+            );
+
+        }
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Initial Step
+    |--------------------------------------------------------------------------
+    */
+
+    showStep(1);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Initial Dynamic Details
+    |--------------------------------------------------------------------------
+    */
+
+    hideDynamicFields();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Initial Amenities
+    |--------------------------------------------------------------------------
+    */
+
+    clearAmenities();
+
+})();
+
+
+/*
+|--------------------------------------------------------------------------
+| Expose Functions
+|--------------------------------------------------------------------------
+|
+| The HTML buttons can call these functions directly:
+|
+|   nextStep()
+|   previousStep()
+|   showStep()
+|
+| Keeping them on window makes them available to inline onclick handlers.
+|--------------------------------------------------------------------------
+*/
+
+window.nextStep =
+    nextStep;
+
+
+window.previousStep =
+    previousStep;
+
+
+window.showStep =
+    showStep;
+
+
+window.goToStep =
+    goToStep;
+
+
+window.buildPropertyReview =
+    buildPropertyReview;
+
+
+window.showDynamicFields =
+    showDynamicFields;
+
+
+window.showAmenities =
+    showAmenities;
+
+
+window.clearAmenities =
+    clearAmenities;
+
+
+window.displayPhotoPreviews =
+    displayPhotoPreviews;
+
+
+window.removePhoto =
+    removePhoto;
+
+
+window.displayMainPhotoPreview =
+    displayMainPhotoPreview;
+
+
+window.removeMainPhoto =
+    removeMainPhoto;
+
+
+/*
+|--------------------------------------------------------------------------
+| Final Safety Check
+|--------------------------------------------------------------------------
+*/
+
+if (
+    typeof subcategories === "undefined"
+) {
+
+    console.error(
+        "UrbanNest: subcategories data was not loaded from PHP."
+    );
+
+}
+
+
+if (
+    typeof amenities === "undefined"
+) {
+
+    console.error(
+        "UrbanNest: amenities data was not loaded from PHP."
+    );
+
+}
+
+
+if (
+    typeof amenityConfig === "undefined"
+) {
+
+    console.error(
+        "UrbanNest: amenity configuration was not loaded."
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| END OF ADD PROPERTY JAVASCRIPT
+|--------------------------------------------------------------------------
+*/
