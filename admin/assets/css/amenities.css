@@ -1,0 +1,164 @@
+```css
+/* =========================================================
+   URBANNEST - AMENITY MANAGEMENT CSS
+   Pages: View | Add | Edit | Delete
+   Note: Common styling is handled by style.css
+========================================================= */
+
+
+/* =========================================================
+   1. AMENITY VIEW PAGE
+========================================================= */
+
+/* Page Header */
+.amenity-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    gap: 15px;
+}
+
+/* Add Amenity Button */
+.amenity-add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: #d4af37;
+    color: #0b1f3a;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.amenity-add-btn:hover {
+    background: #b89428;
+    color: #ffffff;
+}
+
+/* Table Wrapper */
+.amenity-table-wrapper {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+/* Amenity Table */
+.amenity-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.amenity-table th {
+    padding: 14px;
+    text-align: left;
+    background: #0b1f3a;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.amenity-table td {
+    padding: 13px 14px;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: middle;
+}
+
+.amenity-table tbody tr {
+    transition: 0.2s;
+}
+
+.amenity-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+/* Amenity Icon/Image */
+.amenity-icon {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+/* Action Buttons */
+.amenity-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.amenity-edit-btn,
+.amenity-delete-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 11px;
+    border-radius: 5px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Edit */
+.amenity-edit-btn {
+    background: #0b1f3a;
+    color: #ffffff;
+}
+
+.amenity-edit-btn:hover {
+    background: #162f54;
+}
+
+/* Delete */
+.amenity-delete-btn {
+    background: #dc3545;
+    color: #ffffff;
+}
+
+.amenity-delete-btn:hover {
+    background: #b02a37;
+}
+
+
+/* =========================================================
+   2. AMENITY ADD PAGE
+========================================================= */
+
+.amenity-add-container {
+    max-width: 650px;
+    margin: 30px auto;
+}
+
+.amenity-add-card {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.amenity-add-card h2 {
+    color: #0b1f3a;
+    margin-bottom: 25px;
+}
+
+.amenity-form-group {
+    margin-bottom: 20px;
+}
+
+.amenity-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #0b1f3a;
+}
+
+/* Add Button */
+.amenity-submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100
+```

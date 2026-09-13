@@ -1,0 +1,404 @@
+/*===================================================================================================================
+                                            SUB-CATEGORY CSS
+===================================================================================================================*/
+
+/* =========================
+   EDIT SUB CATEGORY
+========================= */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f6fa;
+  color: #222;
+}
+
+.subcategory-container {
+  width: 600px;
+  margin: 40px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.subcategory-container h2 {
+  margin-bottom: 25px;
+  color: #0b1f3a;
+  font-size: 28px;
+}
+
+/* Form */
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 7px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group input[type="text"],
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.form-group textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+/* File input */
+
+.form-group input[type="file"] {
+  padding: 8px 0;
+}
+
+/* Current Photo */
+
+.form-group img {
+  margin-top: 10px;
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.form-group small {
+  display: block;
+  margin-top: 5px;
+  color: #777;
+}
+
+/* Button */
+
+.submit-btn {
+  display: inline-block;
+  background: #0b1f3a;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.submit-btn:hover {
+  background: #163b6d;
+}
+
+/* Success Message */
+
+.success-message {
+  background: #d1fae5;
+  color: #047857;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+/* =========================
+   NO DATA
+========================= */
+
+.no-data {
+  text-align: center;
+  padding: 30px;
+  color: #777;
+}
+
+/* =========================================
+   NO DATA
+========================================= */
+
+.no-data {
+  text-align: center !important;
+  padding: 35px !important;
+  color: #7a8494 !important;
+}
+
+/* =========================================
+   SUB-CATEGORY ADD CSS
+========================================= */
+
+.category-container,
+.subcategory-container {
+  width: 94%;
+  max-width: 700px;
+  margin: 40px auto;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(11, 29, 58, 0.08);
+}
+
+.category-container h2,
+.subcategory-container h2 {
+  margin-top: 0;
+  margin-bottom: 25px;
+  color: #0b1d3a;
+  font-size: 25px;
+}
+
+/* =========================================
+   FORM GROUP
+========================================= */
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 7px;
+  color: #27344a;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* =========================================
+   INPUT / SELECT / TEXTAREA
+========================================= */
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid #d8dde6;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #27344a;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.form-group textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
+}
+
+/* =========================================
+   SUBMIT BUTTON
+========================================= */
+
+.submit-btn {
+  border: none;
+  padding: 11px 20px;
+  background: #0b1d3a;
+  color: #ffffff;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.submit-btn:hover {
+  background: #172d50;
+}
+
+/* =========================================
+   SUCCESS MESSAGE
+========================================= */
+
+.success-message {
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  background: #e2f6e9;
+  color: #218838;
+  border-radius: 7px;
+  font-size: 14px;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+  .subcategory-view-container {
+    width: 96%;
+    margin: 20px auto;
+  }
+
+  .subcategory-container {
+    width: 94%;
+    padding: 22px;
+    margin: 25px auto;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+}
+
+/*---------------------------------------------------------------------------------------
+                             SUB-CATEGORY CSS
+---------------------------------------------------------------------------------------*/
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f1ed;
+  color: #242424;
+}
+
+/* Main form area */
+
+.subcategory-container {
+  width: 92%;
+  max-width: 720px;
+  margin: 55px auto;
+  padding: 40px 45px;
+  background: #ffffff;
+  border: 1px solid #e6e1d9;
+  border-radius: 4px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+}
+
+/* Heading */
+
+.subcategory-container h2 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: #1f1f1f;
+}
+
+.subcategory-container h2::after {
+  content: "";
+  display: block;
+  width: 45px;
+  height: 3px;
+  margin-top: 14px;
+  margin-bottom: 32px;
+  background: #b08d57;
+}
+
+/* Form groups */
+
+.form-group {
+  margin-bottom: 23px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #353535;
+}
+
+/* Inputs */
+
+.form-group select,
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 13px 15px;
+  border: 1px solid #d8d4ce;
+  border-radius: 3px;
+  background: #fff;
+  color: #333;
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.form-group select {
+  cursor: pointer;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #999;
+}
+
+/* Focus */
+
+.form-group select:focus,
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #b08d57;
+  box-shadow: 0 0 0 3px rgba(176, 141, 87, 0.1);
+}
+
+/* Description */
+
+.form-group textarea {
+  min-height: 125px;
+  resize: vertical;
+}
+
+/* Button */
+
+.submit-btn {
+  width: 100%;
+  padding: 14px 20px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 3px;
+  background: #222222;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.submit-btn:hover {
+  background: #b08d57;
+}
+
+/* Success message */
+
+.success-message {
+  margin-bottom: 25px;
+  padding: 12px 15px;
+  border-left: 3px solid #4c8b62;
+  background: #f0f7f2;
+  color: #356746;
+  font-size: 14px;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .subcategory-container {
+    width: 94%;
+    margin: 30px auto;
+    padding: 28px 22px;
+  }
+
+  .subcategory-container h2 {
+    font-size: 25px;
+  }
+}

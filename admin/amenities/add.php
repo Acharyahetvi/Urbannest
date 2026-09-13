@@ -41,7 +41,9 @@ if (isset($_POST['add'])) {
     <title>Add Amenity - UrbanNest</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="../assets/css/style.css">
+
+
+    <link rel="stylesheet" href="/urbannest/admin/assets/css-new/amenities.css">
 
 </head>
 

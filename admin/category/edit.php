@@ -134,8 +134,8 @@ if (isset($_POST['update'])) {
 
     <title>Edit Category | UrbanNest</title>
 
-    <link rel="stylesheet"
-        href="../assets/css/style.css">
+    
+        <link rel="stylesheet" href="../assets/css-new/category.css">
 
 </head>
 

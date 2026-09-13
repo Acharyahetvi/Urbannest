@@ -18,7 +18,7 @@ if (!$con) {
 
     <title>View Categories</title>
 
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css-new/category.css">
 
 </head>
 

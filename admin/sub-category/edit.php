@@ -93,7 +93,7 @@ if (isset($_POST['update'])) {
 
     <title>Edit Subcategory</title>
 
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css-new/sub-category.css">
 
 </head>
 
@@ -263,7 +263,7 @@ if (isset($_POST['update'])) {
             <div class="form-group">
 
                 <label for="status">
-                    Status 
+                    Status
                 </label>
 
 

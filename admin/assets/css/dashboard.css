@@ -1,0 +1,88 @@
+/* ================================
+URBANNEST ADMIN - DASHBOARD CSS
+================================ */
+
+/* ---------- WELCOME TEXT ---------- */
+
+.welcome {
+color: #777;
+margin-bottom: 25px;
+}
+
+/* ---------- DASHBOARD CARDS ---------- */
+
+.cards {
+display: flex;
+flex-wrap: wrap;
+gap: 20px;
+}
+
+/* ---------- SINGLE CARD ---------- */
+
+.card {
+width: 250px;
+
+```
+background-color: white;
+
+padding: 20px;
+
+border-radius: 8px;
+
+border-top: 4px solid #d4af37;
+
+box-shadow: 0 2px 8px #ddd;
+```
+
+}
+
+/* ---------- CARD TITLE ---------- */
+
+.card h3 {
+color: #555;
+
+```
+margin-bottom: 15px;
+```
+
+}
+
+/* ---------- CARD NUMBER ---------- */
+
+.card h2 {
+color: #0b1f3a;
+
+```
+font-size: 30px;
+
+margin-bottom: 15px;
+```
+
+}
+
+/* ---------- CARD LINK ---------- */
+
+.card a {
+color: #0b1f3a;
+
+```
+text-decoration: none;
+```
+
+}
+
+.card a:hover {
+color: #d4af37;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 768px) {
+
+```
+.card {
+    width: 100%;
+}
+```
+
+}

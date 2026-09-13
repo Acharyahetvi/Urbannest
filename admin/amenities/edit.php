@@ -71,7 +71,7 @@ if (isset($_POST['update'])) {
     <meta charset="UTF-8">
     <title>Edit Amenity</title>
 
-    <link rel="stylesheet" href="/urbannest/admin/assets/css/style.css">
+    <link rel="stylesheet" href="/urbannest/admin/assets/css-new/amenities.css">
 </head>
 
 <body>

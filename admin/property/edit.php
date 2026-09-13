@@ -1,4 +1,3 @@
-```php
 <?php
 
 require_once __DIR__ . "/../db_connection.php";
@@ -53,11 +52,9 @@ if (isset($_POST['update'])) {
                 alert('Property updated successfully!');
                 window.location.href='index.php';
               </script>";
-
     } else {
 
         echo "Update Error: " . mysqli_error($conn);
-
     }
 }
 
@@ -75,120 +72,119 @@ if (isset($_POST['update'])) {
     <title>Edit Property</title>
 
     <!-- CSS Link -->
-    <link rel="stylesheet" href="urbannest/admin/assets/css/property_edit.css">
+    <link rel="stylesheet" href="../assets/css/property_edit.css">
 
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h2>Edit Property</h2>
+        <h2>Edit Property</h2>
 
-    <form method="POST">
+        <form method="POST">
 
-        <label>Property Title:</label>
+            <label>Property Title:</label>
 
-        <input type="text"
-               name="title"
-               value="<?php echo htmlspecialchars($property['title']); ?>"
-               required>
-
-
-        <label>Description:</label>
-
-        <textarea name="description" required><?php
-            echo htmlspecialchars($property['description']);
-        ?></textarea>
+            <input type="text"
+                name="title"
+                value="<?php echo htmlspecialchars($property['title'] ?? ''); ?>"
+                required>
 
 
-        <label>Price:</label>
+            <label>Description:</label>
 
-        <input type="number"
-               name="price"
-               value="<?php echo htmlspecialchars($property['price']); ?>"
-               required>
-
-
-        <label>Address:</label>
-
-        <textarea name="address" required><?php
-            echo htmlspecialchars($property['address']);
-        ?></textarea>
+            <textarea name="description" required><?php
+                                                    echo htmlspecialchars($property['description'] ?? ''); ?>
+                 </textarea>
 
 
-        <label>City ID:</label>
+            <label>Price:</label>
 
-        <input type="number"
-               name="city_id"
-               value="<?php echo htmlspecialchars($property['city_id']); ?>"
-               required>
-
-
-        <label>Category ID:</label>
-
-        <input type="number"
-               name="category_id"
-               value="<?php echo htmlspecialchars($property['category_id']); ?>"
-               required>
+            <input type="number"
+                name="price"
+                value="<?php echo htmlspecialchars($property['price'] ?? ''); ?>"
+                required>
 
 
-        <label>Subcategory ID:</label>
+            <label>Address:</label>
 
-        <input type="number"
-               name="subcategory_id"
-               value="<?php echo htmlspecialchars($property['subcategory_id']); ?>"
-               required>
-
-
-        <label>Status:</label>
-
-        <select name="status" required>
-
-            <option value="Available"
-                <?php
-                if ($property['status'] == 'Available') {
-                    echo 'selected';
-                }
-                ?>>
-                Available
-            </option>
-
-            <option value="Sold"
-                <?php
-                if ($property['status'] == 'Sold') {
-                    echo 'selected';
-                }
-                ?>>
-                Sold
-            </option>
-
-            <option value="Pending"
-                <?php
-                if ($property['status'] == 'Pending') {
-                    echo 'selected';
-                }
-                ?>>
-                Pending
-            </option>
-
-        </select>
+            <textarea name="address" required><?php
+                                                echo htmlspecialchars($property['address'] ?? '');
+                                                ?></textarea>
 
 
-        <button type="submit" name="update">
-            Update Property
-        </button>
+            <label>City ID:</label>
 
-    </form>
+            <input type="number"
+                name="city_id"
+                value="<?php echo htmlspecialchars($property['city_id'] ?? ''); ?>"
+                required>
 
 
-    <a href="view.php" class="back">
-        ← Back to Properties
-    </a>
+            <label>Category ID:</label>
 
-</div>
+            <input type="number"
+                name="category_id"
+                value="<?php echo htmlspecialchars($property['category_id'] ?? ''); ?>"
+                required>
+
+
+            <label>Subcategory ID:</label>
+
+            <input type="number"
+                name="subcategory_id"
+                value="<?php echo htmlspecialchars($property['subcategory_id'] ?? ''); ?>"
+                required>
+
+
+            <label>Status:</label>
+
+            <select name="status" required>
+
+                <option value="Available"
+                    <?php
+                    if (($property['status'] ?? '') == 'Available') {
+                        echo 'selected';
+                    }
+                    ?>>
+                    Available
+                </option>
+
+                <option value="Sold"
+                    <?php
+                    if (($property['status'] ?? '') == 'Sold') {
+                        echo 'selected';
+                    }
+                    ?>>
+                    Sold
+                </option>
+
+                <option value="Pending"
+                    <?php
+                    if (($property['status'] ?? '') == 'Pending') {
+                        echo 'selected';
+                    }
+                    ?>>
+                    Pending
+                </option>
+
+            </select>
+
+
+            <button type="submit" name="update">
+                Update Property
+            </button>
+
+        </form>
+
+
+        <a href="view.php" class="back">
+            ← Back to Properties
+        </a>
+
+    </div>
 
 </body>
 
 </html>
-```

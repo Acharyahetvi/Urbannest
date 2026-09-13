@@ -25,7 +25,7 @@ $sql = "SELECT
 
     <title>View Sub Categories</title>
 
-    <link rel="stylesheet" href="../assets/css/view.css">
+    <link rel="stylesheet" href="../assets/css-new/sub-category.css">
 </head>
 
 <body>
