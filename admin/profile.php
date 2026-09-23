@@ -1,11 +1,111 @@
 <?php
-
 session_start();
+
+// =====================================
+// DATABASE CONNECTION
+// =====================================
+
+require_once __DIR__ . "/../includes/db.php";
+
+
+// =====================================
+// CHECK ADMIN LOGIN
+// =====================================
+
+if (
+    !isset($_SESSION['admin_logged_in']) ||
+    $_SESSION['admin_logged_in'] !== true ||
+    !isset($_SESSION['admin_id'])
+) {
+    header("Location: /urbannest/admin/login.php");
+    exit;
+}
+
+
+// =====================================
+// GET ADMIN ID
+// =====================================
+
+$admin_id = (int) $_SESSION['admin_id'];
+
+
+// =====================================
+// GET ADMIN DETAILS
+// =====================================
+
+$sql = "SELECT user_id, full_name, email, phoneno, role_id, status
+        FROM users
+        WHERE user_id = ?
+        AND role_id = 1";
+
+$stmt = mysqli_prepare($con, $sql);
+
+if (!$stmt) {
+    die("Database query failed: " . mysqli_error($con));
+}
+
+mysqli_stmt_bind_param($stmt, "i", $admin_id);
+
+mysqli_stmt_execute($stmt);
+
+$result = mysqli_stmt_get_result($stmt);
+
+$admin = mysqli_fetch_assoc($result);
+
+mysqli_stmt_close($stmt);
+
+
+// =====================================
+// CHECK ADMIN DETAILS
+// =====================================
+
+if (!$admin) {
+    die("Admin details not found. Please login again.");
+}
+
+
+// =====================================
+// CREATE ADMIN INITIALS
+// =====================================
+
+$initials = "";
+
+if (!empty($admin['full_name'])) {
+
+    $name_parts = preg_split(
+        '/\s+/',
+        trim($admin['full_name'])
+    );
+
+    foreach ($name_parts as $part) {
+
+        if (!empty($part)) {
+            $initials .= strtoupper(substr($part, 0, 1));
+        }
+    }
+}
+
+$initials = substr($initials, 0, 2);
+
+
+// =====================================
+// ADMIN DETAILS
+// =====================================
+
+$full_name = $admin['full_name'] ?? '';
+$email = $admin['email'] ?? '';
+$phone = $admin['phoneno'] ?? '';
+$status = $admin['status'] ?? '';
+
+
+// Update session details
+
+$_SESSION['admin_name'] = $full_name;
+$_SESSION['admin_email'] = $email;
 
 ?>
 
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -18,268 +118,161 @@ session_start();
     <title>My Profile - UrbanNest</title>
 
 
-    <!-- ================= GOOGLE FONT ================= -->
+    <!-- CSS FILES -->
 
-    <link rel="preconnect"
-        href="https://fonts.googleapis.com">
+    <link rel="stylesheet"
+        href="/urbannest/admin/assets/css/style.css">
 
-    <link rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap"
-        rel="stylesheet">
-
-
-
-    <!-- ================= PROFILE CSS ================= -->
+    <link rel="stylesheet"
+        href="/urbannest/admin/assets/css/admin.css">
 
     <link rel="stylesheet"
         href="/urbannest/admin/assets/css/profile.css">
 
-
-    <!-- ================= FONT AWESOME ================= -->
-
+    <!-- FONT AWESOME -->
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-
 </head>
-
 
 <body>
 
 
-    <!-- ================= HEADER ================= -->
+    <!-- HEADER -->
 
-    <header class="header">
+    <?php
+    include __DIR__ . "/includes/header.php";
+    ?>
 
 
-        <!-- LOGO + WEBSITE NAME -->
+    <!-- SIDEBAR -->
 
-        <div class="logo">
+    <?php
+    include __DIR__ . "/includes/sidebar.php";
+    ?>
 
 
-            <!-- LOGO IMAGE -->
+    <!-- MAIN WRAPPER -->
 
-            <img src="/urbannest/assets/images/img1.png"
-                alt="UrbanNest Logo">
+    <div class="un-main-wrapper">
 
+        <main class="main-content">
 
-            <!-- WEBSITE NAME -->
+            <div class="profile-page">
 
-            <h2>
 
-                <span class="urban">Urban</span><span class="nest">Nest</span>
+                <!-- PAGE HEADING -->
 
-            </h2>
+                <h1>My Profile</h1>
 
+                <p class="profile-text">
+                    Admin account information
+                </p>
 
-        </div>
 
+                <!-- PROFILE CARD -->
 
-        <!-- ADMIN PROFILE ICON -->
+                <div class="profile-card">
 
-        <div class="admin">
 
-            AU
+                    <!-- ADMIN INITIALS -->
 
-        </div>
+                    <div class="profile-image">
+                        <?php
+                        echo htmlspecialchars($initials);
+                        ?>
+                    </div>
 
 
-    </header>
+                    <!-- ADMIN INFORMATION -->
 
+                    <div class="profile-info">
 
 
-    <!-- ================= SIDEBAR ================= -->
+                        <!-- NAME -->
 
-    <div class="sidebar">
+                        <h2>
+                            <?php
+                            echo htmlspecialchars($full_name);
+                            ?>
+                        </h2>
 
 
-        <!-- ADMIN PANEL TITLE -->
+                        <!-- EMAIL -->
 
-        <p>
+                        <p>
+                            <b>Email:</b>
 
-            Admin Panel
+                            <span>
+                                <?php
+                                echo htmlspecialchars($email);
+                                ?>
+                            </span>
+                        </p>
 
-        </p>
 
+                        <!-- PHONE -->
 
-        <!-- DASHBOARD -->
+                        <p>
+                            <b>Phone:</b>
 
-        <a href="/urbannest/admin/view.php">
+                            <span>
+                                <?php
+                                echo htmlspecialchars($phone);
+                                ?>
+                            </span>
+                        </p>
 
-            <i class="fa-solid fa-chart-line"></i>
 
-            Dashboard
+                        <!-- ROLE -->
 
-        </a>
+                        <p>
+                            <b>Role:</b>
 
+                            <span>Administrator</span>
+                        </p>
 
-        <!-- USERS -->
 
-        <a href="/urbannest/admin/users/view.php">
+                        <!-- STATUS -->
 
-            <i class="fa-solid fa-users"></i>
+                        <p>
+                            <b>Status:</b>
 
-            Users
+                            <span>
+                                <?php
+                                echo htmlspecialchars($status);
+                                ?>
+                            </span>
+                        </p>
 
-        </a>
 
+                        <!-- BACK TO DASHBOARD -->
 
-        <!-- PROPERTIES -->
+                        <a href="/urbannest/admin/dashboard.php"
+                            class="profile-back-btn">
 
-        <a href="/urbannest/admin/property/view.php">
+                            Back to Dashboard
 
-            <i class="fa-solid fa-house"></i>
+                        </a>
 
-            Properties
 
-        </a>
+                    </div>
 
+                </div>
 
-        <!-- CATEGORIES -->
+            </div>
 
-        <a href="/urbannest/admin/category/view.php">
+        </main>
 
-            <i class="fa-solid fa-list"></i>
 
-            Categories
+        <!-- FOOTER -->
 
-        </a>
-
-
-        <!-- SUB CATEGORIES -->
-
-        <a href="/urbannest/admin/sub-category/view.php">
-
-            <i class="fa-solid fa-list-check"></i>
-
-            Sub Categories
-
-        </a>
-
-
-        <!-- AMENITIES -->
-
-        <a href="/urbannest/admin/amenity/view.php">
-
-            <i class="fa-solid fa-star"></i>
-
-            Amenities
-
-        </a>
-
-
-        <!-- LOGOUT -->
-
-        <a href="/urbannest/admin/logout.php">
-
-             <i class="fa-solid fa-arrow-left"></i>
-
-            Logout
-
-        </a>
+        <?php
+        include __DIR__ . "/includes/footer.php";
+        ?>
 
 
     </div>
-
-
-
-    <!-- ================= MAIN CONTENT ================= -->
-
-    <main class="main">
-
-
-        <!-- PAGE TITLE -->
-
-        <h1>
-
-            My Profile
-
-        </h1>
-
-
-        <!-- DESCRIPTION -->
-
-        <p class="profile-text">
-
-            Admin account information
-
-        </p>
-
-
-
-        <!-- ================= PROFILE CARD ================= -->
-
-        <div class="profile-card">
-
-
-            <!-- PROFILE INITIAL -->
-
-            <div class="profile-image">
-
-                AU
-
-            </div>
-
-
-
-            <!-- ================= PROFILE INFORMATION ================= -->
-
-            <div class="profile-info">
-
-
-                <!-- ADMIN NAME -->
-
-                <h2>
-
-                    Admin User
-
-                </h2>
-
-
-                <!-- ROLE -->
-
-                <p>
-
-                    <b>Role:</b>
-
-                    Administrator
-
-                </p>
-
-
-                <!-- STATUS -->
-
-                <p>
-
-                    <b>Status:</b>
-
-                    Active
-
-                </p>
-
-
-                <!-- BACK BUTTON -->
-
-                <a href="/urbannest/admin/view.php">
-
-                    <i class="fa-solid fa-arrow-left"></i>
-
-                    Back to Dashboard
-
-                </a>
-
-
-            </div>
-
-
-        </div>
-
-
-    </main>
-
 
 </body>
 

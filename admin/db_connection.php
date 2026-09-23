@@ -17,4 +17,4 @@ mysqli_set_charset($conn, "utf8mb4");
 // Make both variable names available
 $con = $conn;
 
-echo "Database connection established successfully.";
+// echo "Database connection established successfully.";

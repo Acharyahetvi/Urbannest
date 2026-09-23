@@ -1,219 +1,280 @@
-/* =========================================
-   CATEGORY VIEW CSS
-========================================= */
+/* =====================================================
+   URBANNEST - CATEGORY MANAGEMENT
+   Theme: Navy Blue, Mustard, White
+   Pages: View | Add | Edit
+===================================================== */
 
-/*-----------------------------------------------------------------------------------------------
-                                          CATEGOTY CSS
-------------------------------------------------------------------------------------------------*/
+/* =====================================================
+   1. MAIN PAGE
+===================================================== */
 
-* {
-  margin: 0;
-  padding: 0;
+.category-page {
+  padding: 25px;
+  background: #f5f7fb;
+  min-height: calc(100vh - 100px);
+  color: #0b1f3a;
   box-sizing: border-box;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f6fa;
-  color: #222;
+.category-page * {
+  box-sizing: border-box;
 }
 
-/* =========================
-   CATEGORY PAGE
-========================= */
+/* =====================================================
+   2. PAGE HEADER
+===================================================== */
 
-.category-page {
-  padding: 30px;
-}
-
-/* =========================
-   HEADER
-========================= */
-
-.page-header {
+.page-header,
+.category-page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 15px;
   margin-bottom: 25px;
 }
 
-.eyebrow {
-  font-size: 14px;
+.page-header h2,
+.category-page-header h2 {
+  margin: 0 0 7px;
+  font-size: 25px;
+  font-weight: 700;
+  color: #0b1f3a;
+}
+
+.page-header p,
+.category-page-header p {
+  margin: 0;
   color: #777;
+  font-size: 14px;
 }
 
-.page-header h2 {
-  font-size: 30px;
-  margin: 5px 0;
-  color: #111827;
-}
+/* =====================================================
+   3. HEADER BUTTONS
+===================================================== */
 
-.page-header p {
-  color: #666;
+.add-btn,
+.back-btn {
+  display: inline-block;
+  text-decoration: none;
+  padding: 11px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.2s;
 }
-
-/* =========================
-   ADD BUTTON
-========================= */
 
 .add-btn {
   background: #d4af37;
-  color: white;
-  text-decoration: none;
-  padding: 12px 18px;
-  border-radius: 6px;
-  font-weight: bold;
+  color: #0b1f3a;
+  border: 1px solid #d4af37;
 }
 
 .add-btn:hover {
-  background: #b8941f;
+  background: #c29b24;
+  color: #0b1f3a;
 }
 
-/* =========================
-   CATEGORY CARD
-========================= */
+.back-btn {
+  background: #fff;
+  color: #0b1f3a;
+  border: 1px solid #0b1f3a;
+}
+
+.back-btn:hover {
+  background: #17375f;
+  color: #fff;
+}
+
+/* =====================================================
+   4. CATEGORY CARD
+===================================================== */
+
+.category-card,
+.category-form-card {
+  background: #fff;
+  border: 1px solid #e7eaf0;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(11, 31, 58, 0.06);
+}
 
 .category-card {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
 }
 
+.category-form-card {
+  width: 100%;
+  max-width: 850px;
+  padding: 25px;
+  margin: 0 auto;
+}
+
+.category-form-card h3 {
+  margin: 0 0 25px;
+  color: #0b1f3a;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* =====================================================
+   5. TABLE HEADER
+===================================================== */
+
 .table-header {
-  margin-bottom: 15px;
+  padding: 18px 22px;
+  border-bottom: 1px solid #e7eaf0;
 }
 
 .table-header h3 {
-  color: #111827;
+  margin: 0;
+  font-size: 18px;
+  color: #0b1f3a;
 }
 
-/* =========================
-   TABLE
-========================= */
+/* =====================================================
+   6. CATEGORY TABLE
+===================================================== */
 
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
 }
 
-table {
+.category-page table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 750px;
 }
 
-table th {
+.category-page thead {
   background: #0b1f3a;
-  color: white;
-  padding: 12px;
-  text-align: left;
+  color: #fff;
 }
 
-table td {
-  padding: 12px;
-  border-bottom: 1px solid #ddd;
+.category-page th {
+  padding: 15px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.category-page td {
+  padding: 14px 15px;
+  border-bottom: 1px solid #e7eaf0;
+  font-size: 14px;
+  color: #333;
   vertical-align: middle;
 }
 
-table tr:hover {
-  background: #f8f9fa;
+.category-page tbody tr:hover {
+  background: #f9fafc;
 }
 
-/* =========================
-   CATEGORY IMAGE
-========================= */
+/* =====================================================
+   7. CATEGORY IMAGE
+===================================================== */
 
-.category-image img {
-  width: 80px;
-  height: 55px;
+.category-photo {
+  width: 65px;
+  height: 50px;
   object-fit: cover;
-  border-radius: 5px;
+  border-radius: 6px;
+  border: 1px solid #e5e5e5;
 }
 
-/* =========================
-   STATUS
-========================= */
-
-.status {
-  padding: 5px 10px;
-  border-radius: 15px;
-  font-size: 13px;
-  font-weight: bold;
+.current-photo {
+  display: block;
+  width: 130px;
+  height: 95px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-top: 8px;
 }
 
-.status.active {
-  background: #d1fae5;
-  color: #047857;
+/* =====================================================
+   8. STATUS BADGE
+===================================================== */
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 11px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
-.status.inactive {
-  background: #fee2e2;
-  color: #dc2626;
+.status-badge.active {
+  background: #e5f7ed;
+  color: #16834a;
 }
 
-/* =========================
-   ACTION BUTTONS
-========================= */
+.status-badge.inactive {
+  background: #fdeaea;
+  color: #c0392b;
+}
 
-.actions {
+/* =====================================================
+   9. ACTION BUTTONS
+===================================================== */
+
+.action-buttons {
   display: flex;
+  align-items: center;
   gap: 8px;
 }
 
 .edit-btn,
 .delete-btn {
-  text-decoration: none;
+  display: inline-block;
   padding: 7px 12px;
   border-radius: 5px;
-  color: white;
-  font-size: 13px;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  transition: 0.2s;
 }
 
+/* Edit Button */
+
 .edit-btn {
-  background: #0b1f3a;
+  background-color: #0b1f3a !important;
+  color: #ffffff !important;
+  border: 1px solid #0b1f3a !important;
 }
 
 .edit-btn:hover {
-  background: #163b6d;
+  background-color: #17375f !important;
+  color: #ffffff !important;
 }
 
+/* Delete Button */
+
 .delete-btn {
-  background: #dc3545;
+  background: #fff;
+  color: #dc3545;
+  border: 1px solid #dc3545;
 }
 
 .delete-btn:hover {
-  background: #b02a37;
+  background: #dc3545;
+  color: #fff;
 }
 
+/* =====================================================
+   10. NO DATA
+===================================================== */
 
-/* =========================================
-   CATEGORY ADD CSS
-========================================= */
-
-/* =========================================
-   FORM CONTAINER
-========================================= */
-
-.category-container {
-  width: 94%;
-  max-width: 700px;
-  margin: 40px auto;
-  background: #ffffff;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 18px rgba(11, 29, 58, 0.08);
+.no-data {
+  text-align: center;
+  padding: 30px !important;
+  color: #777 !important;
 }
 
-.category-container h2 {
-  margin-top: 0;
-  margin-bottom: 25px;
-  color: #0b1d3a;
-  font-size: 25px;
-}
-
-/* =========================================
-   FORM GROUP
-========================================= */
+/* =====================================================
+   11. FORM GROUPS
+===================================================== */
 
 .form-group {
   margin-bottom: 20px;
@@ -221,125 +282,256 @@ table tr:hover {
 
 .form-group label {
   display: block;
-  margin-bottom: 7px;
-  color: #27344a;
+  margin-bottom: 8px;
   font-size: 14px;
   font-weight: 600;
+  color: #0b1f3a;
 }
 
-/* =========================================
-   INPUT / SELECT / TEXTAREA
-========================================= */
-
 .form-group input,
-.form-group select,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
+  display: block;
   width: 100%;
   padding: 11px 13px;
   border: 1px solid #d8dde6;
-  border-radius: 7px;
-  background: #ffffff;
-  color: #27344a;
+  border-radius: 6px;
+  background: #fff;
+  color: #333;
   font-family: inherit;
   font-size: 14px;
   outline: none;
-}
-
-.form-group textarea {
-  min-height: 110px;
-  resize: vertical;
+  transition: 0.2s;
 }
 
 .form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
   border-color: #d4af37;
-  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
 }
 
-/* =========================================
-   SUBMIT BUTTON
-========================================= */
+.form-group textarea {
+  resize: vertical;
+}
 
-.submit-btn {
-  border: none;
+.form-group input[type="file"] {
+  padding: 9px;
+  cursor: pointer;
+}
+
+/* =====================================================
+   12. FORM BUTTONS
+===================================================== */
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+.save-btn,
+.cancel-btn {
+  display: inline-block;
   padding: 11px 20px;
-  background: #0b1d3a;
-  color: #ffffff;
-  border-radius: 7px;
-  font-family: inherit;
+  border-radius: 6px;
   font-size: 14px;
   font-weight: 600;
+  text-decoration: none;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: 0.2s;
 }
 
-.submit-btn:hover {
-  background: #172d50;
+/* Save Button */
+
+.save-btn {
+  background: #d4af37;
+  color: #0b1f3a;
+  border: 1px solid #d4af37;
 }
 
-/* =========================================
-   SUCCESS MESSAGE
-========================================= */
+.save-btn:hover {
+  background: #c29b24;
+  color: #0b1f3a;
+}
 
-.success-message {
+/* Cancel Button */
+
+.cancel-btn {
+  background: #fff;
+  color: #0b1f3a;
+  border: 1px solid #0b1f3a;
+}
+
+.cancel-btn:hover {
+  background: #0b1f3a;
+  color: #fff;
+}
+
+/* =====================================================
+   13. FORM MESSAGE
+===================================================== */
+
+.form-message {
   padding: 12px 15px;
   margin-bottom: 20px;
-  background: #e2f6e9;
-  color: #218838;
-  border-radius: 7px;
+  background: #fdeaea;
+  color: #b42318;
+  border: 1px solid #f5c2c7;
+  border-radius: 6px;
   font-size: 14px;
 }
 
+/* =====================================================
+   14. ADD CATEGORY PAGE
+   Uses: page-header, form-group, save-btn
+===================================================== */
 
-/* =========================================
-   CATEGORY EDIT CSS
-========================================= */
+.category-page .category-form-card .form-group {
+  margin-bottom: 20px;
+}
 
-/* Category Edit uses the same form CSS:
-   .category-container
-   .form-group
-   .submit-btn
-*/
+.category-page .category-form-card .form-group label {
+  color: #0b1f3a;
+}
 
+.category-page .category-form-card .form-group input,
+.category-page .category-form-card .form-group textarea,
+.category-page .category-form-card .form-group select {
+  width: 100%;
+}
 
-/* =========================================
-   CATEGORY DELETE CSS
-========================================= */
+.category-page .category-form-card .form-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
 
-/* Category Delete uses:
-   .delete-btn
-   .delete-btn:hover
-*/
+/* =====================================================
+   15. EDIT CATEGORY PAGE
+   Matches current edit.php classes
+===================================================== */
 
+.category-page .category-form-card .mb-3 {
+  margin-bottom: 20px !important;
+}
 
-/* =========================================
-   MOBILE
-========================================= */
+.category-page .category-form-card .form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0b1f3a;
+}
+
+.category-page .category-form-card .form-control {
+  display: block;
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid #d8dde6;
+  border-radius: 6px;
+  background: #fff;
+  color: #333;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  box-shadow: none;
+}
+
+.category-page .category-form-card .form-control:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+.category-page .category-form-card textarea {
+  resize: vertical;
+}
+
+/* Edit Current Photo */
+
+.category-page .category-form-card img {
+  display: block;
+  width: 130px;
+  height: 95px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-top: 8px;
+}
+
+/* Edit Update Button */
+
+.category-page .category-form-card .btn-primary {
+  background: #d4af37;
+  color: #0b1f3a;
+  border: 1px solid #d4af37;
+  padding: 11px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.category-page .category-form-card .btn-primary:hover {
+  background: #c29b24;
+  color: #0b1f3a;
+  border-color: #c29b24;
+}
+
+/* Edit Back and Cancel Buttons */
+
+.category-page .category-page-header .btn-secondary,
+.category-page .category-form-card .btn-secondary {
+  background: #fff;
+  color: #0b1f3a;
+  border: 1px solid #0b1f3a;
+  padding: 11px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.category-page .category-page-header .btn-secondary:hover,
+.category-page .category-form-card .btn-secondary:hover {
+  background: #17375f;
+  color: #fff;
+  border-color: #17375f;
+}
+
+/* =====================================================
+   16. RESPONSIVE
+===================================================== */
 
 @media (max-width: 768px) {
-
   .category-page {
-    padding: 20px;
+    padding: 15px;
   }
 
-  .page-header {
+  .page-header,
+  .category-page-header {
     align-items: flex-start;
-    gap: 15px;
     flex-direction: column;
   }
 
-  .page-header h2 {
-    font-size: 23px;
+  .category-form-card {
+    padding: 18px;
   }
 
-  .category-container {
-    width: 94%;
-    padding: 22px;
-    margin: 25px auto;
+  .category-page .category-form-card {
+    padding: 18px;
   }
 
-  .table-container {
-    overflow-x: auto;
+  .form-actions {
+    flex-wrap: wrap;
+  }
+
+  .category-page .category-form-card .form-actions {
+    flex-wrap: wrap;
   }
 }

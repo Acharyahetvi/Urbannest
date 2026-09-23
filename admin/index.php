@@ -60,7 +60,7 @@ $total_amenities = $amenity_data['total'];
 
         <p>Admin Panel</p>
 
-        <a href="view.php">Dashboard</a>
+        <a href="dashboard.php">Dashboard</a>
 
         <a href="user/view.php">Users</a>
 

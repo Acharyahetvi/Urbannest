@@ -1,164 +1,1045 @@
-```css
 /* =========================================================
    URBANNEST - AMENITY MANAGEMENT CSS
    Pages: View | Add | Edit | Delete
-   Note: Common styling is handled by style.css
+   Theme: Navy Blue, Mustard, White
 ========================================================= */
-
 
 /* =========================================================
-   1. AMENITY VIEW PAGE
+   1. COMMON PAGE LAYOUT
 ========================================================= */
 
-/* Page Header */
-.amenity-page-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 25px;
-    gap: 15px;
+.amenity-view-page,
+.amenity-add-page,
+.amenity-edit-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px;
+  box-sizing: border-box;
 }
 
-/* Add Amenity Button */
+/* Main content - sidebar spacing */
+
+main.main-content {
+  margin-left: 250px;
+  width: calc(100% - 250px);
+  min-height: 100vh;
+  padding: 25px;
+  background: #f5f6f8;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   2. PAGE HEADER
+========================================================= */
+
+.amenity-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.amenity-eyebrow {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: #d4af37;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.amenity-page-header h1 {
+  margin: 0;
+  color: #0b1f3a;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.amenity-page-header p {
+  margin: 6px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   3. ADD AMENITY BUTTON
+========================================================= */
+
 .amenity-add-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 18px;
-    background: #d4af37;
-    color: #0b1f3a;
-    text-decoration: none;
-    font-weight: 600;
-    border-radius: 6px;
-    transition: 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 11px 20px;
+
+  background: #0b1f3a;
+  color: #ffffff;
+
+  border: 2px solid #0b1f3a;
+  border-radius: 6px;
+
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+
+  transition: 0.3s ease;
 }
 
 .amenity-add-btn:hover {
-    background: #b89428;
-    color: #ffffff;
+  background: #d4af37;
+  color: #0b1f3a;
+  border-color: #d4af37;
 }
 
-/* Table Wrapper */
+.amenity-add-btn i {
+  font-size: 13px;
+}
+
+/* =========================================================
+   4. SUCCESS / ERROR MESSAGES
+========================================================= */
+
+.amenity-success-message,
+.amenity-success,
+.amenity-error {
+  margin-bottom: 20px;
+  padding: 13px 16px;
+
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.amenity-success-message,
+.amenity-success {
+  color: #166534;
+  background: #dcfce7;
+  border: 1px solid #bbf7d0;
+}
+
+.amenity-error {
+  color: #991b1b;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+}
+
+/* =========================================================
+   5. TABLE WRAPPER
+========================================================= */
+
 .amenity-table-wrapper {
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 20px;
-    overflow-x: auto;
+  width: 100%;
+  overflow-x: auto;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
 }
 
-/* Amenity Table */
+/* =========================================================
+   6. AMENITY TABLE
+========================================================= */
+
 .amenity-table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  min-width: 600px;
+
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+.amenity-table thead {
+  background: #0b1f3a;
+  color: #ffffff;
 }
 
 .amenity-table th {
-    padding: 14px;
-    text-align: left;
-    background: #0b1f3a;
-    color: #ffffff;
-    white-space: nowrap;
+  padding: 15px 18px;
+
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+
+  white-space: nowrap;
 }
 
 .amenity-table td {
-    padding: 13px 14px;
-    border-bottom: 1px solid #e5e7eb;
-    vertical-align: middle;
-}
+  padding: 14px 18px;
 
-.amenity-table tbody tr {
-    transition: 0.2s;
+  color: #374151;
+  font-size: 14px;
+
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
 }
 
 .amenity-table tbody tr:hover {
-    background: #f8fafc;
+  background: #f9fafb;
 }
 
-/* Amenity Icon/Image */
-.amenity-icon {
-    width: 45px;
-    height: 45px;
-    object-fit: cover;
-    border-radius: 6px;
+.amenity-table tbody tr:last-child td {
+  border-bottom: none;
 }
 
-/* Action Buttons */
+/* ID column */
+
+.amenity-table th:first-child,
+.amenity-table td:first-child {
+  width: 70px;
+  white-space: nowrap;
+}
+
+/* Amenity name */
+
+.amenity-name {
+  color: #0b1f3a;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   7. ACTION COLUMN - EDIT / DELETE
+========================================================= */
+
+/* Action column only takes required space */
+
+.amenity-action-cell {
+  width: 1%;
+  white-space: nowrap;
+}
+
+/* Buttons stay in one line */
+
 .amenity-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+
+  width: max-content;
+  max-width: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+/* Common button style */
+
+.amenity-edit-btn,
+.amenity-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  min-width: 75px;
+  height: 34px;
+
+  margin: 0;
+  padding: 7px 12px;
+
+  box-sizing: border-box;
+
+  border: 1px solid transparent;
+  border-radius: 5px;
+
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+
+  text-decoration: none;
+  white-space: nowrap;
+
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+/* Edit button */
+
+.amenity-edit-btn {
+  background: #e8f1ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.amenity-edit-btn:hover {
+  background: #1d4ed8;
+  color: #ffffff;
+  border-color: #1d4ed8;
+}
+
+/* Delete button */
+
+.amenity-delete-btn {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+.amenity-delete-btn:hover {
+  background: #b91c1c;
+  color: #ffffff;
+  border-color: #b91c1c;
+}
+
+/* Icons */
+
+.amenity-edit-btn i,
+.amenity-delete-btn i {
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* =========================================================
+   8. EMPTY TABLE MESSAGE
+========================================================= */
+
+.amenity-empty {
+  padding: 25px !important;
+  text-align: center;
+  color: #6b7280 !important;
+  font-size: 14px;
+}
+
+/* =========================================================
+   9. ADD / EDIT FORM CONTAINER
+========================================================= */
+
+.amenity-add-container,
+.amenity-edit-container {
+  width: 100%;
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.amenity-add-card,
+.amenity-edit-card {
+  width: 100%;
+  padding: 30px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.amenity-add-card h2,
+.amenity-edit-card h2 {
+  margin: 0 0 25px;
+
+  color: #0b1f3a;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   10. FORM GROUP
+========================================================= */
+
+.amenity-form-group {
+  margin-bottom: 22px;
+}
+
+.amenity-form-group label {
+  display: block;
+  margin-bottom: 8px;
+
+  color: #0b1f3a;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.amenity-form-group input,
+.amenity-form-group select,
+.amenity-form-group textarea {
+  display: block;
+  width: 100%;
+
+  padding: 12px 14px;
+
+  color: #1f2937;
+  background: #ffffff;
+
+  font-size: 14px;
+  font-family: inherit;
+
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+
+  outline: none;
+  transition: 0.3s ease;
+}
+
+.amenity-form-group input:focus,
+.amenity-form-group select:focus,
+.amenity-form-group textarea:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+.amenity-form-group textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* =========================================================
+   11. SUBMIT BUTTON
+========================================================= */
+
+.amenity-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  padding: 13px 20px;
+
+  background: #0b1f3a;
+  color: #ffffff;
+
+  border: 2px solid #0b1f3a;
+  border-radius: 6px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.amenity-submit-btn:hover {
+  background: #d4af37;
+  color: #0b1f3a;
+  border-color: #d4af37;
+}
+
+/* =========================================================
+   12. RESPONSIVE DESIGN
+========================================================= */
+
+@media (max-width: 992px) {
+  main.main-content {
+    padding: 20px;
+  }
+
+  .amenity-page-header h1 {
+    font-size: 24px;
+  }
+
+  .amenity-add-card,
+  .amenity-edit-card {
+    padding: 25px;
+  }
+}
+
+@media (max-width: 768px) {
+  main.main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 15px;
+  }
+
+  .amenity-view-page,
+  .amenity-add-page,
+  .amenity-edit-page {
+    padding: 5px;
+  }
+
+  .amenity-page-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .amenity-page-header h1 {
+    font-size: 22px;
+  }
+
+  .amenity-add-btn {
+    width: 100%;
+  }
+
+  .amenity-add-card,
+  .amenity-edit-card {
+    padding: 20px;
+  }
+
+  .amenity-table {
+    min-width: 600px;
+  }
+}
+
+@media (max-width: 480px) {
+  main.main-content {
+    padding: 12px;
+  }
+
+  .amenity-add-card,
+  .amenity-edit-card {
+    padding: 15px;
+  }
+
+  .amenity-table th,
+  .amenity-table td {
+    padding: 11px 12px;
+  }
+
+  .amenity-edit-btn,
+  .amenity-delete-btn {
+    min-width: 65px;
+    height: 32px;
+    padding: 6px 9px;
+    font-size: 12px;
+  }
+
+  .amenity-actions {
+    gap: 6px;
+  }
+}
+
+/* =========================================================
+   URBANNEST - AMENITY MANAGEMENT CSS
+   Pages: View | Add | Edit
+   Theme: Navy Blue | Mustard | White
+========================================================= */
+
+/* =========================================================
+   COMMON PAGE LAYOUT
+========================================================= */
+
+.amenity-view-page,
+.amenity-add-page,
+.amenity-edit-page {
+  width: 100%;
+  padding: 25px;
+  box-sizing: border-box;
+  color: #0b1f3a;
+}
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.amenity-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.amenity-eyebrow {
+  display: block;
+  color: #b18b18;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+.amenity-page-header h1 {
+  color: #0b1f3a;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.amenity-page-header p {
+  color: #6b7280;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* =========================================================
+   ADD BUTTON
+========================================================= */
+
+.amenity-add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 18px;
+  background: #0b1f3a;
+  color: #ffffff;
+  border: 1px solid #0b1f3a;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+.amenity-add-btn:hover {
+  background: #d4af37;
+  border-color: #d4af37;
+  color: #0b1f3a;
+}
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+.amenity-back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  background: #ffffff;
+  color: #0b1f3a;
+  border: 1px solid #d9dee7;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+.amenity-back-btn:hover {
+  background: #0b1f3a;
+  color: #ffffff;
+  border-color: #0b1f3a;
+}
+
+/* =========================================================
+   SUCCESS AND ERROR MESSAGES
+========================================================= */
+
+.amenity-success-message {
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  color: #166534;
+  background: #dcfce7;
+  border: 1px solid #bbf7d0;
+  border-radius: 7px;
+  font-size: 14px;
+}
+
+.amenity-error-message {
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  color: #991b1b;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 7px;
+  font-size: 14px;
+}
+
+/* =========================================================
+   TABLE WRAPPER
+========================================================= */
+
+.amenity-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(11, 31, 58, 0.05);
+}
+
+/* =========================================================
+   AMENITY TABLE
+========================================================= */
+
+.amenity-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+.amenity-table thead {
+  background: #0b1f3a;
+  color: #ffffff;
+}
+
+.amenity-table th {
+  padding: 15px 18px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.amenity-table td {
+  padding: 14px 18px;
+  color: #374151;
+  font-size: 14px;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+.amenity-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.amenity-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.amenity-name {
+  color: #0b1f3a;
+  font-weight: 600;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.amenity-action-cell {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.amenity-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
 }
 
 .amenity-edit-btn,
 .amenity-delete-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 11px;
-    border-radius: 5px;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: 0.3s ease;
 }
 
-/* Edit */
 .amenity-edit-btn {
-    background: #0b1f3a;
-    color: #ffffff;
+  background-color: #0b1f3a !important;
+  color: #ffffff !important;
+  border: 1px solid #0b1f3a !important;
 }
 
 .amenity-edit-btn:hover {
-    background: #162f54;
+  background-color: #d4af37 !important;
+  color: #0b1f3a !important;
+  border-color: #d4af37 !important;
 }
 
-/* Delete */
 .amenity-delete-btn {
-    background: #dc3545;
-    color: #ffffff;
+  background-color: #ffffff !important;
+  color: #dc3545 !important;
+  border: 1px solid #dc3545 !important;
 }
 
 .amenity-delete-btn:hover {
-    background: #b02a37;
+  background-color: #dc3545 !important;
+  color: #ffffff !important;
+  border-color: #dc3545 !important;
 }
-
 
 /* =========================================================
-   2. AMENITY ADD PAGE
+   EMPTY TABLE MESSAGE
 ========================================================= */
 
-.amenity-add-container {
-    max-width: 650px;
-    margin: 30px auto;
+.amenity-empty {
+  padding: 30px !important;
+  text-align: center;
+  color: #6b7280 !important;
 }
 
-.amenity-add-card {
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
+/* =========================================================
+   EDIT FORM CONTAINER
+========================================================= */
+
+.amenity-edit-container {
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
 }
 
-.amenity-add-card h2 {
-    color: #0b1f3a;
-    margin-bottom: 25px;
+.amenity-edit-card {
+  background: #ffffff;
+  padding: 30px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(11, 31, 58, 0.06);
 }
+
+/* =========================================================
+   FORM HEADING
+========================================================= */
+
+.amenity-form-heading {
+  margin-bottom: 25px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.amenity-form-heading h2 {
+  margin: 0 0 8px;
+  color: #0b1f3a;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.amenity-form-heading p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* =========================================================
+   FORM GROUP
+========================================================= */
 
 .amenity-form-group {
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-bottom: 22px;
 }
 
 .amenity-form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #0b1f3a;
+  color: #0b1f3a;
+  font-size: 14px;
+  font-weight: 600;
 }
 
-/* Add Button */
+.amenity-form-group input {
+  width: 100%;
+  padding: 12px 14px;
+  color: #0b1f3a;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: 0.3s ease;
+}
+
+.amenity-form-group input:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+.amenity-form-group input::placeholder {
+  color: #9ca3af;
+}
+
+/* =========================================================
+   FORM ACTION BUTTONS
+========================================================= */
+
+.amenity-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .amenity-submit-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100
-```
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 20px;
+  color: #ffffff;
+  background: #0b1f3a;
+  border: 1px solid #0b1f3a;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.amenity-submit-btn:hover {
+  color: #0b1f3a;
+  background: #d4af37;
+  border-color: #d4af37;
+}
+
+.amenity-cancel-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 20px;
+  color: #374151;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+.amenity-cancel-btn:hover {
+  background: #e5e7eb;
+  color: #0b1f3a;
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN
+========================================================= */
+
+@media (max-width: 768px) {
+  .amenity-view-page,
+  .amenity-add-page,
+  .amenity-edit-page {
+    padding: 15px;
+  }
+
+  .amenity-page-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .amenity-page-header h1 {
+    font-size: 24px;
+  }
+
+  .amenity-edit-card {
+    padding: 20px;
+  }
+
+  .amenity-table th,
+  .amenity-table td {
+    padding: 12px;
+  }
+
+  .amenity-actions {
+    gap: 5px;
+  }
+
+  .amenity-edit-btn,
+  .amenity-delete-btn {
+    padding: 6px 9px;
+    font-size: 12px;
+  }
+}
+
+/* =====================================
+   URBANNEST - AMENITY ADD PAGE
+   Theme: Navy, Mustard, White
+===================================== */
+
+/* Main Page */
+.amenity-add-page {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+/* Form Card */
+.amenity-add-card {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Heading */
+.amenity-add-heading {
+  color: #0b1f3a;
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+/* Form Group */
+.amenity-form-group {
+  margin-bottom: 20px;
+}
+
+.amenity-form-group label {
+  display: block;
+  color: #0b1f3a;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* Input */
+.amenity-form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.amenity-form-group input:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
+}
+
+/* Buttons */
+.amenity-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.amenity-submit-btn {
+  background: #0b1f3a;
+  color: #ffffff;
+  border: none;
+  padding: 11px 22px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.amenity-submit-btn:hover {
+  background: #d4af37;
+  color: #0b1f3a;
+}
+
+.amenity-cancel-btn {
+  background: #eeeeee;
+  color: #0b1f3a;
+  padding: 11px 22px;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.amenity-cancel-btn:hover {
+  background: #dddddd;
+}
+
+/* Error Message */
+.amenity-error-message {
+  color: #b00020;
+  background: #ffeaea;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .amenity-add-page {
+    padding: 12px;
+  }
+
+  .amenity-add-card {
+    padding: 20px;
+  }
+
+  .amenity-form-actions {
+    flex-direction: column;
+  }
+}

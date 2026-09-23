@@ -1,166 +1,138 @@
-<!-- ============================================================
-       SIDEBAR (Desktop / Tablet landscape — fixed, always visible)
-        ============================================================= -->
-<aside class="un-sidebar d-none d-lg-flex flex-column">
+<?php
+// Current page and folder
+$current_page = basename($_SERVER['PHP_SELF']);
+$current_folder = basename(dirname($_SERVER['PHP_SELF']));
 
-    <!-- Brand / Logo -->
+// Active menu conditions
+$dashboard_active = ($current_page === "dashboard.php");
+
+$users_active = (
+    $current_folder === "users" &&
+    $current_page === "view.php"
+);
+
+$property_active = (
+    $current_folder === "property" &&
+    $current_page === "view.php"
+);
+
+$category_active = (
+    $current_folder === "category" &&
+    $current_page === "view.php"
+);
+
+$subcategory_active = (
+    $current_folder === "sub-category" &&
+    $current_page === "view.php"
+);
+
+$amenity_active = (
+    $current_folder === "amenities" &&
+    $current_page === "view.php"
+);
+?>
+
+<!-- SIDEBAR -->
+<aside class="un-sidebar">
+
+    <!-- BRAND -->
     <div class="un-sidebar-brand">
-        <!-- <span class="un-logo-mark">UN</span>-->
-        <img src="./assets/images/logo.png" class="un-logo-mark">
-        <div class="un-logo-text">
-            <span class="un-logo-title">UrbanNest</span>
-            <span class="un-logo-subtitle">Admin Panel</span>
+
+        <div class="un-brand-icon">
+            <img src="/urbannest/assets/images/img1.png" alt="UrbanNest Logo">
         </div>
+
+        <div class="un-brand-text">
+            <span class="un-urban">Urban</span>
+            <span class="un-nest">Nest</span>
+        </div>
+
     </div>
 
-    <!-- Navigation -->
+    <!-- SIDEBAR TITLE -->
+    <div class="un-sidebar-title">
+        Admin Panel
+    </div>
+
+    <!-- NAVIGATION -->
     <nav class="un-sidebar-nav">
+
         <ul class="un-nav-list">
-            <li class="un-nav-item active">
-                <a href="#" class="un-nav-link">
+
+            <!-- DASHBOARD -->
+            <li class="un-nav-item">
+                <a
+                    href="/urbannest/admin/dashboard.php"
+                    class="un-nav-link <?= $dashboard_active ? 'active' : ''; ?>">
                     <i class="fa-solid fa-gauge-high"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
+
+            <!-- USERS -->
             <li class="un-nav-item">
-                        <a href="#" class="un-nav-link">
-                            <i class="fa-solid fa-building"></i>
-                            <span>Properties</span>
-                        </a>
-                    </li>
-                    <li class="un-nav-item">
-                        <a href="#" class="un-nav-link">
-                            <i class="fa-solid fa-layer-group"></i>
-                            <span>Categories</span>
-                        </a>
-                    </li>
-                    <li class="un-nav-item">
-                        <a href="" class="un-nav-link">
-                            <i class="fa-solid fa-sitemap"></i>
-                            <span>Sub Categories</span>
-                        </a>
-                    </li>
-            <li class="un-nav-item">
-                <a href="user.php" class="un-nav-link">
+                <a
+                    href="/urbannest/admin/users/view.php"
+                    class="un-nav-link <?= $users_active ? 'active' : ''; ?>">
                     <i class="fa-solid fa-users"></i>
                     <span>Users</span>
                 </a>
             </li>
-            <!-- <li class="un-nav-item">
-                        <a href="#" class="un-nav-link">
-                            <i class="fa-solid fa-swimming-pool"></i>
-                            <span>Amenities</span>
-                        </a>
-                    </li>
-                    <li class="un-nav-item">
-                        <a href="#" class="un-nav-link">
-                            <i class="fa-solid fa-star"></i>
-                            <span>Reviews</span>
-                        </a>
-                    </li>
-                    <li class="un-nav-item">
-                        <a href="#" class="un-nav-link">
-                            <i class="fa-solid fa-envelope-open-text"></i>
-                            <span>Inquiries</span>
-                        </a>
-                    </li>
-                    <li class="un-nav-item">
-                        <a href="#" class="un-nav-link">
-                            <i class="fa-solid fa-gear"></i>
-                            <span>Settings</span>
-                        </a>
-                    </li> -->
+
+            <!-- PROPERTIES -->
+            <li class="un-nav-item">
+                <a
+                    href="/urbannest/admin/property/view.php"
+                    class="un-nav-link <?= $property_active ? 'active' : ''; ?>">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Properties</span>
+                </a>
+            </li>
+
+            <!-- CATEGORIES -->
+            <li class="un-nav-item">
+                <a
+                    href="/urbannest/admin/category/view.php"
+                    class="un-nav-link <?= $category_active ? 'active' : ''; ?>">
+                    <i class="fa-solid fa-list"></i>
+                    <span>Categories</span>
+                </a>
+            </li>
+
+            <!-- SUB CATEGORIES -->
+            <li class="un-nav-item">
+                <a
+                    href="/urbannest/admin/sub-category/view.php"
+                    class="un-nav-link <?= $subcategory_active ? 'active' : ''; ?>">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>Sub Categories</span>
+                </a>
+            </li>
+
+            <!-- AMENITIES -->
+            <li class="un-nav-item">
+                <a
+                    href="/urbannest/admin/amenities/view.php"
+                    class="un-nav-link <?= $amenity_active ? 'active' : ''; ?>">
+                    <i class="fa-solid fa-star"></i>
+                    <span>Amenities</span>
+                </a>
+            </li>
+
         </ul>
+
     </nav>
 
-    <!-- Logout (pinned to bottom) -->
-    <div class="un-sidebar-footer">
-        <a href="logout.php" class="un-nav-link un-logout-link">
+    <!-- LOGOUT -->
+    <div class="un-sidebar-bottom">
+
+        <a
+            href="/urbannest/admin/logout.php"
+            class="un-nav-link un-logout-link">
             <i class="fa-solid fa-right-from-bracket"></i>
             <span>Logout</span>
         </a>
-    </div>
-</aside>
 
-<!-- ============================================================
-       SIDEBAR (Mobile / Tablet portrait — Bootstrap Offcanvas)
-       Toggled by the hamburger button in the top navbar.
-     ============================================================= -->
-<div class="offcanvas offcanvas-start un-sidebar-offcanvas d-lg-none" tabindex="-1" id="unSidebarOffcanvas" aria-labelledby="unSidebarOffcanvasLabel">
-    <div class="offcanvas-header">
-        <div class="un-sidebar-brand un-sidebar-brand--offcanvas">
-            <span class="un-logo-mark">UN</span>
-            <div class="un-logo-text">
-                <span class="un-logo-title">UrbanNest</span>
-                <span class="un-logo-subtitle">Admin Panel</span>
-            </div>
-        </div>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body d-flex flex-column">
-        <nav class="un-sidebar-nav">
-            <ul class="un-nav-list">
-                <li class="un-nav-item active">
-                    <a href="#" class="un-nav-link">
-                        <i class="fa-solid fa-gauge-high"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <!-- <li class="un-nav-item">
-                            <a href="#" class="un-nav-link">
-                                <i class="fa-solid fa-building"></i>
-                                <span>Properties</span>
-                            </a>
-                        </li>
-                        <li class="un-nav-item">
-                            <a href="#" class="un-nav-link">
-                                <i class="fa-solid fa-layer-group"></i>
-                                <span>Categories</span>
-                            </a>
-                        </li>
-                        <li class="un-nav-item">
-                            <a href="#" class="un-nav-link">
-                                <i class="fa-solid fa-sitemap"></i>
-                                <span>Sub Categories</span>
-                            </a>
-                        </li> -->
-                <li class="un-nav-item">
-                    <a href="#" class="un-nav-link">
-                        <i class="fa-solid fa-users"></i>
-                        <span>Users</span>
-                    </a>
-                </li>
-                <!-- <li class="un-nav-item">
-                            <a href="#" class="un-nav-link">
-                                <i class="fa-solid fa-swimming-pool"></i>
-                                <span>Amenities</span>
-                            </a>
-                        </li>
-                        <li class="un-nav-item">
-                            <a href="#" class="un-nav-link">
-                                <i class="fa-solid fa-star"></i>
-                                <span>Reviews</span>
-                            </a>
-                        </li>
-                        <li class="un-nav-item">
-                            <a href="#" class="un-nav-link">
-                                <i class="fa-solid fa-envelope-open-text"></i>
-                                <span>Inquiries</span>
-                            </a>
-                        </li>
-                        <li class="un-nav-item">
-                            <a href="#" class="un-nav-link">
-                                <i class="fa-solid fa-gear"></i>
-                                <span>Settings</span>
-                            </a>
-                        </li> -->
-            </ul>
-        </nav>
-        <div class="un-sidebar-footer mt-auto">
-            <a href="./logout.php" class="un-nav-link un-logout-link">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Logout</span>
-            </a>
-        </div>
-    </div>
-</div>
+
+</aside>

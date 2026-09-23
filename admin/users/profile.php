@@ -71,7 +71,6 @@ if ($user['role_name'] === 'Agent') {
 
         mysqli_stmt_close($stmt);
     }
-
 } elseif ($user['role_name'] === 'Owner') {
 
     $sql = "
@@ -116,9 +115,7 @@ if ($user['role_name'] === 'Agent') {
 
         <div class="user-card">
 
-            <div class="user-icon">
-                👤
-            </div>
+            <i class="fa-solid fa-user"></i>
 
             <h2>
                 <?php echo $user['full_name']; ?>
@@ -164,58 +161,58 @@ if ($user['role_name'] === 'Agent') {
                         <?php echo $user['status']; ?>
                     </strong>
                 </div>
-                
+
                 <?php if ($agent): ?>
 
-    <h3>Agent Information</h3>
+                    <h3>Agent Information</h3>
 
-    <div class="info-row">
-        <span>Agency</span>
-        <strong>
-            <?php echo htmlspecialchars($agent['agency_name']); ?>
-        </strong>
-    </div>
+                    <div class="info-row">
+                        <span>Agency</span>
+                        <strong>
+                            <?php echo htmlspecialchars($agent['agency_name']); ?>
+                        </strong>
+                    </div>
 
-    <div class="info-row">
-        <span>Experience</span>
-        <strong>
-            <?php echo htmlspecialchars($agent['experience']); ?>
-        </strong>
-    </div>
+                    <div class="info-row">
+                        <span>Experience</span>
+                        <strong>
+                            <?php echo htmlspecialchars($agent['experience']); ?>
+                        </strong>
+                    </div>
 
-    <div class="info-row">
-        <span>License Number</span>
-        <strong>
-            <?php echo htmlspecialchars($agent['license_number']); ?>
-        </strong>
-    </div>
+                    <div class="info-row">
+                        <span>License Number</span>
+                        <strong>
+                            <?php echo htmlspecialchars($agent['license_number']); ?>
+                        </strong>
+                    </div>
 
-    <div class="info-row">
-        <span>Bio</span>
-        <strong>
-            <?php echo htmlspecialchars($agent['bio']); ?>
-        </strong>
-    </div>
+                    <div class="info-row">
+                        <span>Bio</span>
+                        <strong>
+                            <?php echo htmlspecialchars($agent['bio']); ?>
+                        </strong>
+                    </div>
 
-<?php elseif ($owner): ?>
+                <?php elseif ($owner): ?>
 
-    <h3>Owner Information</h3>
+                    <h3>Owner Information</h3>
 
-    <div class="info-row">
-        <span>Property Count</span>
-        <strong>
-            <?php echo htmlspecialchars($owner['property_count']); ?>
-        </strong>
-    </div>
+                    <div class="info-row">
+                        <span>Property Count</span>
+                        <strong>
+                            <?php echo htmlspecialchars($owner['property_count']); ?>
+                        </strong>
+                    </div>
 
-    <div class="info-row">
-        <span>Bio</span>
-        <strong>
-            <?php echo htmlspecialchars($owner['bio']); ?>
-        </strong>
-    </div>
+                    <div class="info-row">
+                        <span>Bio</span>
+                        <strong>
+                            <?php echo htmlspecialchars($owner['bio']); ?>
+                        </strong>
+                    </div>
 
-<?php endif; ?>
+                <?php endif; ?>
 
             </div>
 

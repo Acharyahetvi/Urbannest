@@ -1,0 +1,309 @@
+/* =========================================
+   URBANNEST ADMIN LOGIN PAGE
+========================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===============================
+   BODY
+================================ */
+
+body {
+  font-family: "Poppins", sans-serif;
+
+  background-color: #f4f6f8;
+
+  min-height: 100vh;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+}
+
+/* ===============================
+   LOGIN PANEL
+================================ */
+
+.form-panel {
+  width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  padding: 20px;
+}
+
+/* ===============================
+   LOGIN CARD
+================================ */
+
+.login-card {
+  width: 100%;
+
+  max-width: 430px;
+
+  background-color: white;
+
+  padding: 45px 40px;
+
+  border-radius: 15px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* ===============================
+   BRAND
+================================ */
+
+.card-brand {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 10px;
+}
+
+.card-brand img {
+  width: 45px;
+  height: 45px;
+
+  object-fit: cover;
+
+  border-radius: 10px;
+}
+ss .card-brand h1 {
+  font-size: 25px;
+
+  font-weight: 600;
+
+  color: #0b1f3a;
+}
+
+.card-brand h1 span {
+  color: #0b1f3a;
+}
+
+/* ===============================
+   TAGLINE
+================================ */
+
+.tagline {
+  text-align: center;
+
+  color: #d4af37;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  letter-spacing: 1px;
+
+  margin-bottom: 30px;
+}
+
+/* ===============================
+   HEADING
+================================ */
+
+.login-card h2 {
+  color: #0b1f3a;
+
+  font-size: 25px;
+
+  text-align: center;
+
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  text-align: center;
+
+  color: #777;
+
+  font-size: 14px;
+
+  margin-bottom: 25px;
+}
+
+/* ===============================
+   FORM FIELD
+================================ */
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field label {
+  display: block;
+
+  color: #0b1f3a;
+
+  font-size: 14px;
+
+  font-weight: 500;
+
+  margin-bottom: 7px;
+}
+
+/* ===============================
+   INPUT BOX
+================================ */
+
+.input-box {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  background-color: #f5f5f5;
+
+  border: 1px solid #ddd;
+
+  border-radius: 8px;
+
+  padding: 13px 15px;
+
+  transition: 0.3s;
+}
+
+.input-box i {
+  color: #0b1f3a;
+}
+
+.input-box input {
+  width: 100%;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: 14px;
+}
+
+/* ===============================
+   INPUT FOCUS
+================================ */
+
+.input-box:focus-within {
+  border-color: #d4af37;
+
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+/* ===============================
+   PASSWORD EYE
+================================ */
+
+.toggle-password {
+  cursor: pointer;
+}
+
+.toggle-password:hover {
+  color: #d4af37;
+}
+
+/* ===============================
+   LOGIN BUTTON
+================================ */
+
+.login-btn {
+  width: 100%;
+
+  border: none;
+
+  border-radius: 8px;
+
+  padding: 14px;
+
+  background-color: #d4af37;
+
+  color: #0b1f3a;
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 10px;
+
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background-color: #c39b2f;
+
+  transform: translateY(-2px);
+}
+
+/* ===============================
+   ERROR MESSAGE
+================================ */
+
+.error-message {
+  background-color: #ffecec;
+
+  color: #c62828;
+
+  border: 1px solid #ffbaba;
+
+  padding: 12px;
+
+  border-radius: 8px;
+
+  margin-bottom: 20px;
+
+  font-size: 13px;
+
+  text-align: center;
+}
+
+/* ===============================
+   FOOTER
+================================ */
+
+.footer-note {
+  text-align: center;
+
+  color: #999;
+
+  font-size: 12px;
+
+  margin-top: 25px;
+}
+
+/* ===============================
+   MOBILE
+================================ */
+
+@media (max-width: 500px) {
+  .login-card {
+    padding: 35px 25px;
+  }
+}

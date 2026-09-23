@@ -1,33 +1,126 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+/* =========================================================
+   DATABASE CONNECTION
+========================================================= */
+
 require_once __DIR__ . "/../../db_connection.php";
-if (isset($_POST['save'])) {
 
-    $category_name = $_POST['category_name'];
-    $description = $_POST['description'];
-    $status = $_POST['status'];
+if (!isset($con) && isset($conn)) {
+    $con = $conn;
+}
 
-    // Photo upload 
-    $photo = $_FILES['photo']['name'];
-    $photo_tmp = $_FILES['photo']['tmp_name'];
+if (!isset($con)) {
+    die("Database connection not found.");
+}
 
-    // Upload location 
-    $upload_folder = "../assets/images/category/";
+$message = "";
 
-    // Create unique filename 
-    $photo_name = time() . "_" . $photo;
+/* =========================================================
+   ADD CATEGORY
+========================================================= */
 
-    // Move photo to folder 
-    move_uploaded_file($photo_tmp, $upload_folder . $photo_name);
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $sql = "INSERT INTO categories (category_name, description, status, photo)  
-            VALUES ('$category_name', '$description', '$status', '$photo_name')";
+    $category_name = trim($_POST['category_name'] ?? "");
+    $description = trim($_POST['description'] ?? "");
+    $status = $_POST['status'] ?? "Active";
 
-    $result = mysqli_query($con, $sql);
+    $photo = "";
 
-    if ($result) {
-        echo "Category added successfully!";
+    if ($category_name === "") {
+
+        $message = "Please enter category name.";
+    } elseif (!in_array($status, ["Active", "Inactive"], true)) {
+
+        $message = "Invalid status selected.";
     } else {
-        echo "Category not added: " . mysqli_error($con);
+
+        /* PHOTO UPLOAD */
+
+        if (
+            isset($_FILES['photo']) &&
+            $_FILES['photo']['error'] !== UPLOAD_ERR_NO_FILE
+        ) {
+
+            if ($_FILES['photo']['error'] !== UPLOAD_ERR_OK) {
+
+                $message = "Photo upload failed.";
+            } else {
+
+                $allowed = ["jpg", "jpeg", "png", "webp"];
+
+                $originalName = $_FILES['photo']['name'];
+
+                $extension = strtolower(
+                    pathinfo($originalName, PATHINFO_EXTENSION)
+                );
+
+                if (!in_array($extension, $allowed, true)) {
+
+                    $message = "Only JPG, JPEG, PNG and WEBP files are allowed.";
+                } else {
+
+                    $uploadDir = __DIR__ . "/../assets/images/category/";
+
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0777, true);
+                    }
+
+                    $photo = uniqid("category_", true) . "." . $extension;
+
+                    if (!move_uploaded_file(
+                        $_FILES['photo']['tmp_name'],
+                        $uploadDir . $photo
+                    )) {
+
+                        $message = "Unable to save uploaded photo.";
+                    }
+                }
+            }
+        }
+
+        /* INSERT CATEGORY */
+
+        if ($message === "") {
+
+            $stmt = mysqli_prepare(
+                $con,
+                "INSERT INTO categories
+                (category_name, description, status, photo)
+                VALUES (?, ?, ?, ?)"
+            );
+
+            if (!$stmt) {
+
+                $message = "Database query preparation failed.";
+            } else {
+
+                mysqli_stmt_bind_param(
+                    $stmt,
+                    "ssss",
+                    $category_name,
+                    $description,
+                    $status,
+                    $photo
+                );
+
+                if (mysqli_stmt_execute($stmt)) {
+
+                    mysqli_stmt_close($stmt);
+
+                    header("Location: view.php");
+                    exit;
+                } else {
+
+                    $message = "Error adding category.";
+                }
+
+                mysqli_stmt_close($stmt);
+            }
+        }
     }
 }
 ?>
@@ -36,90 +129,206 @@ if (isset($_POST['save'])) {
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Add Category | UrbanNest</title>
 
-    <link rel="stylesheet" href="../assets/css-new/category.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+        href="/urbannest/admin/assets/css/bootstrap.min.css">
+
+    <!-- Common Admin CSS -->
+    <link rel="stylesheet"
+        href="/urbannest/admin/assets/css/style.css">
+
+    <!-- Category CSS -->
+    <link rel="stylesheet"
+        href="/urbannest/admin/assets/css/category.css">
+
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
 </head>
 
 <body>
 
-    <div class="subcategory-container">
+    <!-- SIDEBAR: INCLUDE ONLY ONCE -->
+    <?php include __DIR__ . "/../includes/sidebar.php"; ?>
 
-        <h2>Add Category</h2>
 
-        <form action="" method="POST" enctype="multipart/form-data">
+    <!-- MAIN WRAPPER -->
+    <div class="un-main-wrapper">
 
-            <div class="form-group">
+        <!-- HEADER -->
+        <?php include __DIR__ . "/../includes/header.php"; ?>
 
-                <label for="category_name">
-                    Category Name
-                </label>
 
-                <input
-                    type="text"
-                    id="category_name"
-                    name="category_name"
-                    placeholder="Enter category name"
-                    required>
+        <!-- PAGE CONTENT -->
+        <main class="un-content category-page">
 
-            </div>
+            <!-- PAGE HEADER -->
+            <div class="page-header">
 
-            <div class="form-group">
+                <div>
+                    <h2>Add Category</h2>
+                    <p>Add a new property category.</p>
+                </div>
 
-                <label for="description">
-                    Description
-                </label>
-
-                <textarea
-                    id="description"
-                    name="description"
-                    placeholder="Enter category description"></textarea>
+                <a href="view.php" class="back-btn">
+                    ← Back to Category
+                </a>
 
             </div>
 
-            <div class="form-group">
 
-                <label for="photo">
-                    Category Photo
-                </label>
+            <!-- CATEGORY FORM CARD -->
+            <div class="category-form-card">
 
-                <input
-                    type="file"
-                    id="photo"
-                    name="photo"
-                    accept="image/*"
-                    required>
+                <h3>Category Information</h3>
+
+
+                <!-- ERROR MESSAGE -->
+                <?php if ($message !== "") { ?>
+
+                    <div class="form-message">
+                        <?php echo htmlspecialchars($message); ?>
+                    </div>
+
+                <?php } ?>
+
+
+                <!-- FORM -->
+                <form method="POST" enctype="multipart/form-data">
+
+                    <!-- CATEGORY NAME -->
+                    <div class="form-group">
+
+                        <label for="category_name">
+                            Category Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="category_name"
+                            name="category_name"
+                            placeholder="Enter category name"
+                            required
+                            value="<?php
+                                    echo htmlspecialchars(
+                                        $_POST['category_name'] ?? ''
+                                    );
+                                    ?>">
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+                    <div class="form-group">
+
+                        <label for="description">
+                            Description
+                        </label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows="4"
+                            placeholder="Enter category description"><?php
+                                                                        echo htmlspecialchars(
+                                                                            $_POST['description'] ?? ''
+                                                                        );
+                                                                        ?></textarea>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+                    <div class="form-group">
+
+                        <label for="status">
+                            Status
+                        </label>
+
+                        <select
+                            id="status"
+                            name="status"
+                            required>
+
+                            <option value="Active"
+                                <?php
+                                echo (
+                                    ($_POST['status'] ?? 'Active') === 'Active'
+                                ) ? 'selected' : '';
+                                ?>>
+                                Active
+                            </option>
+
+                            <option value="Inactive"
+                                <?php
+                                echo (
+                                    ($_POST['status'] ?? '') === 'Inactive'
+                                ) ? 'selected' : '';
+                                ?>>
+                                Inactive
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- CATEGORY PHOTO -->
+                    <div class="form-group">
+
+                        <label for="photo">
+                            Category Photo
+                        </label>
+
+                        <input
+                            type="file"
+                            id="photo"
+                            name="photo"
+                            accept=".jpg,.jpeg,.png,.webp">
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+                    <div class="form-actions">
+
+                        <button
+                            type="submit"
+                            class="save-btn">
+                            Save Category
+                        </button>
+
+                        <a
+                            href="view.php"
+                            class="cancel-btn">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
 
             </div>
 
-            <div class="form-group">
+        </main>
 
-                <label for="status">
-                    Status
-                </label>
 
-                <select
-                    id="status"
-                    name="status">
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                </select>
-
-            </div>
-
-            <button
-                type="submit"
-                name="save"
-                class="submit-btn">
-                Save Category
-            </button>
-
-        </form>
+        <!-- FOOTER -->
+        <?php include __DIR__ . "/../includes/footer.php"; ?>
 
     </div>
+
+
+    <!-- Bootstrap JS (for mobile sidebar/offcanvas) -->
+    <script src="/urbannest/admin/assets/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

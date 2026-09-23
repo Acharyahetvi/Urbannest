@@ -1,97 +1,207 @@
 <?php
-
 require_once __DIR__ . "/../../db_connection.php";
 
 $message = "";
+$amenity_id = 0;
+$amenity_name = "";
 
-// Check amenity ID
-if (!isset($_GET['id'])) {
-    die("Amenity ID not found.");
+/* CHECK AMENITY ID */
+if (!isset($_GET['id']) || !ctype_digit($_GET['id'])) {
+    die("Invalid Amenity ID.");
 }
 
-$amenity_id = $_GET['id'];
+$amenity_id = (int) $_GET['id'];
 
+/* FETCH AMENITY */
+$stmt = mysqli_prepare(
+    $con,
+    "SELECT amenity_name FROM amenities WHERE amenity_id = ?"
+);
 
-// Fetch existing amenity
-$sql = "SELECT * FROM amenities
-        WHERE amenity_id = '$amenity_id'";
+mysqli_stmt_bind_param($stmt, "i", $amenity_id);
+mysqli_stmt_execute($stmt);
 
-$result = mysqli_query($con, $sql);
+$result = mysqli_stmt_get_result($stmt);
+$amenity = mysqli_fetch_assoc($result);
 
-if (!$result) {
-    die("Failed to fetch amenity: " . mysqli_error($con));
-}
+mysqli_stmt_close($stmt);
 
-if (mysqli_num_rows($result) == 0) {
+if (!$amenity) {
     die("Amenity not found.");
 }
 
-$amenity = mysqli_fetch_assoc($result);
+$amenity_name = $amenity['amenity_name'];
 
-
-// Update amenity
+/* UPDATE AMENITY */
 if (isset($_POST['update'])) {
 
     $amenity_name = trim($_POST['amenity_name']);
 
-    if ($amenity_name == "") {
-
-        $message = "Please enter an amenity name.";
+    if ($amenity_name === "") {
+        $message = "Please enter amenity name.";
     } else {
 
-        $update_sql = "UPDATE amenities SET
-                        amenity_name = '$amenity_name'
-                       WHERE amenity_id = '$amenity_id'";
+        $stmt = mysqli_prepare(
+            $con,
+            "UPDATE amenities
+             SET amenity_name = ?
+             WHERE amenity_id = ?"
+        );
 
-        if (mysqli_query($con, $update_sql)) {
+        mysqli_stmt_bind_param(
+            $stmt,
+            "si",
+            $amenity_name,
+            $amenity_id
+        );
 
-            $message = "Amenity updated successfully!";
+        if (mysqli_stmt_execute($stmt)) {
+            mysqli_stmt_close($stmt);
 
-            // Fetch updated data
-            $result = mysqli_query(
-                $con,
-                "SELECT * FROM amenities
-                 WHERE amenity_id = '$amenity_id'"
-            );
-
-            $amenity = mysqli_fetch_assoc($result);
+            header("Location: view.php?updated=1");
+            exit;
         } else {
-
-            $message = "Error updating amenity: " . mysqli_error($con);
+            $message = "Unable to update amenity.";
+            mysqli_stmt_close($stmt);
         }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Edit Amenity</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="/urbannest/admin/assets/css-new/amenities.css">
+    <title>Edit Amenity | UrbanNest</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+        href="/urbannest/admin/assets/css/bootstrap.min.css">
+
+    <!-- Common Layout CSS: Header, Sidebar, Footer -->
+    <link rel="stylesheet"
+        href="/urbannest/admin/assets/css/style.css">
+
+    <!-- Dashboard CSS -->
+    <link rel="stylesheet"
+        href="/urbannest/admin/assets/css/admin.css">
+
+    <!-- Amenities CSS -->
+    <link rel="stylesheet"
+        href="/urbannest/admin/assets/css/amenities.css">
+
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
 
-    <h1>Edit Amenity</h1>
+    <!-- HEADER -->
+    <?php include __DIR__ . "/../includes/header.php"; ?>
 
-    <form method="POST">
+    <!-- SIDEBAR -->
+    <?php include __DIR__ . "/../includes/sidebar.php"; ?>
 
-        <label>Amenity Name</label><br>
 
-        <input type="text" name="amenity_name"
-            value="<?php echo htmlspecialchars($amenity['amenity_name']); ?>">
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
 
-        <br>
+        <div class="amenity-edit-page">
 
-        <button type="submit">Update Amenity</button>
+            <!-- PAGE HEADER -->
+            <div class="amenity-page-header">
 
-    </form>
+                <div>
+                    <span class="amenity-eyebrow">
+                        AMENITY MANAGEMENT
+                    </span>
 
-    <a href="index.php">Back to Amenities</a>
+                    <h1>Edit Amenity</h1>
+
+                    <p>Update the amenity information below.</p>
+                </div>
+
+                <a href="view.php" class="amenity-back-btn">
+                    Back to Amenities
+                </a>
+
+            </div>
+
+
+            <!-- ERROR MESSAGE -->
+            <?php if ($message !== "") { ?>
+
+                <div class="amenity-error-message">
+                    <?php echo htmlspecialchars($message); ?>
+                </div>
+
+            <?php } ?>
+
+
+            <!-- EDIT FORM -->
+            <div class="amenity-edit-container">
+
+                <div class="amenity-edit-card">
+
+                    <div class="amenity-form-heading">
+                        <h2>Edit Amenity Details</h2>
+
+                        <p>
+                            Change the amenity name and save your changes.
+                        </p>
+                    </div>
+
+                    <form method="POST">
+
+                        <div class="amenity-form-group">
+
+                            <label for="amenity_name">
+                                Amenity Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="amenity_name"
+                                name="amenity_name"
+                                value="<?php echo htmlspecialchars($amenity_name); ?>"
+                                placeholder="Enter amenity name"
+                                required>
+
+                        </div>
+
+                        <div class="amenity-form-actions">
+
+                            <button
+                                type="submit"
+                                name="update"
+                                class="amenity-submit-btn">
+                                Update Amenity
+                            </button>
+
+                            <a href="view.php"
+                                class="amenity-cancel-btn">
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <?php include __DIR__ . "/../includes/footer.php"; ?>
 
 </body>
 

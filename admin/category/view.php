@@ -1,224 +1,161 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 require_once __DIR__ . "/../../db_connection.php";
 
-if (!$con) {
-    die("Database connection not available");
-}
+$sql = "SELECT category_id, category_name, description, status, photo
+        FROM categories
+        ORDER BY category_id DESC";
 
+$result = mysqli_query($conn, $sql);
+
+if (!$result) {
+    die("SQL Error: " . mysqli_error($conn));
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>View Categories</title>
+    <title>Category Management | UrbanNest</title>
 
-    <link rel="stylesheet" href="../assets/css-new/category.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+    <link rel="stylesheet"
+        href="/urbannest/admin/assets/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+        href="/urbannest/admin/assets/css/style.css">
+
+    <link rel="stylesheet"
+        href="/urbannest/admin/assets/css/category.css">
 </head>
 
 <body>
 
-    <div class="category-page">
+    <?php include __DIR__ . "/../includes/sidebar.php"; ?>
 
-        <div class="page-header">
+    <div class="un-main-wrapper">
 
-            <div>
+        <?php include __DIR__ . "/../includes/header.php"; ?>
 
-                <span class="eyebrow">UrbanNest Admin</span>
+        <main class="un-page-content category-page">
 
-                <h2>Categories</h2>
+            <div class="page-header">
+                <div>
+                    <h2>Category Management</h2>
+                    <p>Manage all property categories.</p>
+                </div>
 
-                <p>Manage property categories</p>
-
+                <a href="add.php" class="add-btn">
+                    + Add Category
+                </a>
             </div>
 
-            <a href="add.php" class="add-btn">
-                <i>+</i> Add Category
-            </a>
+            <div class="category-card">
 
-        </div>
+                <div class="table-header">
+                    <h3>All Categories</h3>
+                </div>
 
+                <div class="table-wrapper">
 
-        <div class="category-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Photo</th>
+                                <th>Category Name</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
 
-            <div class="table-header">
+                        <tbody>
 
-                <h3>All Categories</h3>
+                            <?php if (mysqli_num_rows($result) > 0) { ?>
 
-            </div>
+                                <?php while ($row = mysqli_fetch_assoc($result)) { ?>
 
+                                    <tr>
+                                        <td>
+                                            <?php echo (int)$row['category_id']; ?>
+                                        </td>
 
-            <div class="table-wrapper">
+                                        <td>
+                                            <?php if (!empty($row['photo'])) { ?>
+                                                <img
+                                                    src="/urbannest/admin/assets/images/category/<?php echo htmlspecialchars($row['photo']); ?>"
+                                                    class="category-photo"
+                                                    alt="Category Photo">
+                                            <?php } else { ?>
+                                                No Image
+                                            <?php } ?>
+                                        </td>
 
-                <table>
+                                        <td>
+                                            <?php echo htmlspecialchars($row['category_name']); ?>
+                                        </td>
 
-                    <thead>
+                                        <td>
+                                            <?php echo htmlspecialchars($row['description']); ?>
+                                        </td>
 
-                        <tr>
+                                        <td>
+                                            <span class="status-badge <?php echo strtolower($row['status']) === 'active' ? 'active' : 'inactive'; ?>">
+                                                <?php echo htmlspecialchars($row['status']); ?>
+                                            </span>
+                                        </td>
 
-                            <th>ID</th>
-                            <th>Photo</th>
-                            <th>Category Name</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <a
+                                                    href="edit.php?id=<?php echo (int)$row['category_id']; ?>"
+                                                    class="edit-btn">
+                                                    Edit
+                                                </a>
 
-                        </tr>
+                                                <a
+                                                    href="delete.php?id=<?php echo (int)$row['category_id']; ?>"
+                                                    class="delete-btn"
+                                                    onclick="return confirm('Are you sure you want to delete this category?');">
+                                                    Delete
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
 
-                    </thead>
+                                <?php } ?>
 
-
-                    <tbody>
-
-                        <?php
-
-                        $sql = "SELECT * FROM categories";
-
-                        $result = mysqli_query($con, $sql);
-
-                        if (!$result) {
-
-                            die("Query Failed: " . mysqli_error($con));
-                        }
-
-
-                        if (mysqli_num_rows($result) > 0) {
-
-                            while ($row = mysqli_fetch_assoc($result)) {
-
-                        ?>
+                            <?php } else { ?>
 
                                 <tr>
-
-                                    <!-- ID -->
-                                    <td class="category-id">
-
-                                        #<?php echo htmlspecialchars($row['category_id']); ?>
-
+                                    <td colspan="6" class="no-data">
+                                        No categories found.
                                     </td>
-
-
-                                    <!-- Photo -->
-                                    <td class="category-image">
-
-                                        <?php if (!empty($row['photo'])) { ?>
-
-                                            <img src="/urbannest/admin/assets/images/category/<?php echo htmlspecialchars($row['photo']); ?>"
-                                                alt="<?php echo htmlspecialchars($row['category_name']); ?>"
-                                                width="80"
-                                                height="55">
-                                        <?php } else { ?>
-
-                                            <span>No Image</span>
-
-                                        <?php } ?>
-
-                                    </td>
-
-
-                                    <!-- Category Name -->
-                                    <td class="category-name">
-
-                                        <?php
-                                        echo htmlspecialchars($row['category_name']);
-                                        ?>
-
-                                    </td>
-
-
-                                    <!-- Description -->
-                                    <td class="description">
-
-                                        <?php
-                                        echo htmlspecialchars($row['description'] ?? '');
-                                        ?>
-
-                                    </td>
-
-
-                                    <!-- Status -->
-                                    <td>
-
-                                        <?php if ($row['status'] == 'Active') { ?>
-
-                                            <span class="status active">
-                                                Active
-                                            </span>
-
-                                        <?php } else { ?>
-
-                                            <span class="status inactive">
-                                                Inactive
-                                            </span>
-
-                                        <?php } ?>
-
-                                    </td>
-
-
-                                    <!-- Actions -->
-                                    <td>
-
-                                        <div class="actions">
-
-                                            <a
-                                                href="edit.php?id=<?php echo $row['category_id']; ?>"
-                                                class="edit-btn">
-                                                Edit
-                                            </a>
-
-
-                                            <a
-                                                href="delete.php?id=<?php echo $row['category_id']; ?>"
-                                                class="delete-btn"
-                                                onclick="return confirm('Are you sure you want to delete this category?');">
-                                                Delete
-                                            </a>
-
-                                        </div>
-
-                                    </td>
-
                                 </tr>
 
-                            <?php
+                            <?php } ?>
 
-                            }
-                        } else {
+                        </tbody>
+                    </table>
 
-                            ?>
-
-                            <tr>
-
-                                <td colspan="6" class="no-data">
-
-                                    No categories found.
-
-                                </td>
-
-                            </tr>
-
-                        <?php
-
-                        }
-
-                        ?>
-
-                    </tbody>
-
-                </table>
-
+                </div>
             </div>
 
-        </div>
+        </main>
+
+        <?php include __DIR__ . "/../includes/footer.php"; ?>
 
     </div>
+
+    <script src="/urbannest/admin/assets/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

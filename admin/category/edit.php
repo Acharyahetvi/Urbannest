@@ -1,123 +1,76 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once __DIR__ . "/../../db_connection.php";
 
-$message = "";
+$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-/* =========================
-   GET CATEGORY ID
-========================= */
-
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    die("Category ID not found.");
+if ($id <= 0) {
+    die("Invalid Category ID.");
 }
 
-$category_id = (int) $_GET['id'];
+/* Get Category */
+$sql = "SELECT * FROM categories WHERE category_id = $id";
+$result = mysqli_query($conn, $sql);
 
-
-/* =========================
-   FETCH CATEGORY
-========================= */
-
-$sql = "SELECT * FROM categories WHERE category_id = $category_id LIMIT 1";
-
-$result = mysqli_query($con, $sql);
-
-if (!$result) {
-    die("Database Error: " . mysqli_error($con));
-}
-
-if (mysqli_num_rows($result) == 0) {
+if (!$result || mysqli_num_rows($result) == 0) {
     die("Category not found.");
 }
 
 $category = mysqli_fetch_assoc($result);
 
-
-/* =========================
-   UPDATE CATEGORY
-========================= */
-
+/* Update Category */
 if (isset($_POST['update'])) {
 
-    $category_name = trim($_POST['category_name'] ?? '');
-    $description = trim($_POST['description'] ?? '');
-    $status = $_POST['status'] ?? 'Active';
+    $name = mysqli_real_escape_string(
+        $conn,
+        trim($_POST['category_name'])
+    );
 
-    if ($category_name == "") {
+    $description = mysqli_real_escape_string(
+        $conn,
+        trim($_POST['description'])
+    );
 
-        $message = "Category name is required.";
+    $status = mysqli_real_escape_string(
+        $conn,
+        $_POST['status']
+    );
+
+    $photo = $category['photo'];
+
+    /* Image Upload */
+    if (!empty($_FILES['photo']['name'])) {
+
+        $fileName = time() . "_" . basename($_FILES['photo']['name']);
+        $targetDir = __DIR__ . "/../assets/images/category/";
+
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0777, true);
+        }
+
+        $targetFile = $targetDir . $fileName;
+
+        if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFile)) {
+            $photo = $fileName;
+        } else {
+            die("Image upload failed.");
+        }
+    }
+
+    $updateSql = "UPDATE categories SET
+                    category_name = '$name',
+                    description = '$description',
+                    status = '$status',
+                    photo = '$photo'
+                  WHERE category_id = $id";
+
+    if (mysqli_query($conn, $updateSql)) {
+        header("Location: view.php?success=updated");
+        exit;
     } else {
-
-        /* Keep old photo */
-        $photo_name = $category['photo'];
-
-        /* =========================
-           NEW PHOTO
-        ========================= */
-
-        if (isset($_FILES['photo']) && $_FILES['photo']['name'] != "") {
-
-            $photo = $_FILES['photo']['name'];
-            $photo_tmp = $_FILES['photo']['tmp_name'];
-
-            $upload_folder = __DIR__ . "/../assets/images/category/";
-
-            /* Create folder if not exists */
-            if (!is_dir($upload_folder)) {
-                mkdir($upload_folder, 0777, true);
-            }
-
-            /* Create unique filename */
-            $photo_name = time() . "_" . basename($photo);
-
-            /* Upload photo */
-            if (!move_uploaded_file(
-                $photo_tmp,
-                $upload_folder . $photo_name
-            )) {
-
-                $message = "Photo upload failed.";
-            }
-        }
-
-
-        /* =========================
-           UPDATE DATABASE
-        ========================= */
-
-        if ($message == "") {
-
-            $category_name = mysqli_real_escape_string($con, $category_name);
-            $description = mysqli_real_escape_string($con, $description);
-            $status = mysqli_real_escape_string($con, $status);
-            $photo_name = mysqli_real_escape_string($con, $photo_name);
-
-            $update_sql = "UPDATE categories SET
-                            category_name = '$category_name',
-                            description = '$description',
-                            status = '$status',
-                            photo = '$photo_name'
-                           WHERE category_id = $category_id";
-
-            if (mysqli_query($con, $update_sql)) {
-
-                $message = "Category updated successfully!";
-
-                /* Fetch updated category */
-                $result = mysqli_query(
-                    $con,
-                    "SELECT * FROM categories
-                     WHERE category_id = $category_id
-                     LIMIT 1"
-                );
-
-                $category = mysqli_fetch_assoc($result);
-            } else {
-
-                $message = "Error updating category: "
-                    . mysqli_error($con);
-            }
-        }
+        echo "Error: " . mysqli_error($conn);
     }
 }
 ?>
@@ -126,182 +79,126 @@ if (isset($_POST['update'])) {
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Edit Category | UrbanNest</title>
 
-    
-        <link rel="stylesheet" href="../assets/css-new/category.css">
+    <link rel="stylesheet" href="/urbannest/admin/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/urbannest/admin/assets/css/style.css">
+    <link rel="stylesheet" href="/urbannest/admin/assets/css/category.css">
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
 
 <body>
 
-    <div class="subcategory-container">
+    <?php include __DIR__ . "/../includes/sidebar.php"; ?>
 
-        <h2>Edit Category</h2>
+    <div class="un-main-wrapper">
 
+        <?php include __DIR__ . "/../includes/header.php"; ?>
 
-        <!-- MESSAGE -->
+        <main class="un-page-content category-page">
 
-        <?php if ($message != "") { ?>
+            <div class="category-page-header">
+                <div>
+                    <h2>Edit Category</h2>
+                    <p>Update category information</p>
+                </div>
 
-            <div class="success-message">
-                <?php echo htmlspecialchars($message); ?>
+                <a href="view.php" class="btn btn-secondary">
+                    ← Back to Category
+
+                </a>
             </div>
 
-        <?php } ?>
+            <div class="category-form-card">
 
+                <form method="POST" enctype="multipart/form-data">
 
-        <!-- EDIT FORM -->
+                    <div class="mb-3">
+                        <label class="form-label">Category Name</label>
 
-        <form method="POST"
-            enctype="multipart/form-data">
+                        <input
+                            type="text"
+                            name="category_name"
+                            class="form-control"
+                            value="<?php echo htmlspecialchars($category['category_name']); ?>"
+                            required>
+                    </div>
 
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
 
-            <!-- CATEGORY NAME -->
+                        <textarea
+                            name="description"
+                            class="form-control"
+                            rows="4"
+                            required><?php echo htmlspecialchars($category['description']); ?></textarea>
+                    </div>
 
-            <div class="form-group">
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
 
-                <label for="category_name">
-                    Category Name
-                </label>
+                        <select name="status" class="form-control" required>
+                            <option value="Active"
+                                <?php if ($category['status'] == 'Active') echo 'selected'; ?>>
+                                Active
+                            </option>
 
-                <input
-                    type="text"
-                    id="category_name"
-                    name="category_name"
-                    value="<?php echo htmlspecialchars($category['category_name']); ?>"
-                    required>
+                            <option value="Inactive"
+                                <?php if ($category['status'] == 'Inactive') echo 'selected'; ?>>
+                                Inactive
+                            </option>
+                        </select>
+                    </div>
 
-            </div>
+                    <div class="mb-3">
+                        <label class="form-label">Current Photo</label>
+                        <br>
 
+                        <?php if (!empty($category['photo'])) { ?>
+                            <img
+                                src="/urbannest/admin/assets/images/category/<?php echo htmlspecialchars($category['photo']); ?>"
+                                width="120"
+                                alt="Category Photo">
+                        <?php } else { ?>
+                            <p>No image available</p>
+                        <?php } ?>
+                    </div>
 
-            <!-- DESCRIPTION -->
+                    <div class="mb-3">
+                        <label class="form-label">Change Photo (Optional)</label>
 
-            <div class="form-group">
+                        <input
+                            type="file"
+                            name="photo"
+                            class="form-control"
+                            accept="image/*">
+                    </div>
 
-                <label for="description">
-                    Description
-                </label>
+                    <button type="submit" name="update" class="btn btn-primary">
+                        Update Category
+                    </button>
 
-                <textarea
-                    id="description"
-                    name="description"><?php echo htmlspecialchars($category['description']); ?></textarea>
+                    <a href="view.php" class="btn btn-secondary">
+                        Cancel
+                    </a>
 
-            </div>
-
-
-            <!-- CURRENT PHOTO -->
-
-            <div class="form-group">
-
-                <label>
-                    Current Photo
-                </label>
-
-                <?php if (!empty($category['photo'])) { ?>
-
-                    <br><br>
-
-                    <img
-                        src="../assets/images/category/<?php echo htmlspecialchars($category['photo']); ?>"
-                        alt="Category Photo"
-                        width="150">
-
-                <?php } else { ?>
-
-                    <p>No photo uploaded.</p>
-
-                <?php } ?>
-
-            </div>
-
-
-            <!-- CHANGE PHOTO -->
-
-            <div class="form-group">
-
-                <label for="photo">
-                    Change Photo
-                </label>
-
-                <input
-                    type="file"
-                    id="photo"
-                    name="photo"
-                    accept="image/*">
-
-                <small>
-                    Leave empty if you want to keep the current photo.
-                </small>
+                </form>
 
             </div>
 
+        </main>
 
-            <!-- STATUS -->
-
-            <div class="form-group">
-
-                <label for="status">
-                    Status
-                </label>
-
-                <select
-                    id="status"
-                    name="status"
-                    required>
-
-                    <option
-                        value="Active"
-                        <?php
-                        if ($category['status'] == 'Active') {
-                            echo 'selected';
-                        }
-                        ?>>
-                        Active
-                    </option>
-
-                    <option
-                        value="Inactive"
-                        <?php
-                        if ($category['status'] == 'Inactive') {
-                            echo 'selected';
-                        }
-                        ?>>
-                        Inactive
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <!-- UPDATE BUTTON -->
-
-            <button
-                type="submit"
-                name="update"
-                class="submit-btn">
-                Update Category
-            </button>
-
-
-            <!-- BACK BUTTON -->
-
-            <a
-                href="view.php"
-                class="submit-btn">
-                Back
-            </a>
-
-        </form>
+        <?php include __DIR__ . "/../includes/footer.php"; ?>
 
     </div>
+
+    <script src="/urbannest/admin/assets/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

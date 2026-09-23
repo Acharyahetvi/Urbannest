@@ -1,0 +1,281 @@
+/* =========================================================
+   URBANNEST - USERS PAGE CSS
+   Theme: Navy Blue + Mustard + White
+========================================================= */
+
+/* =========================================================
+   USERS PAGE
+========================================================= */
+
+.users-page {
+  width: 100%;
+  min-height: calc(100vh - 130px);
+  padding: 30px;
+  background: #f5f6f8;
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.users-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  gap: 20px;
+}
+
+.users-header h1 {
+  margin: 5px 0 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #0b1f3a;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* =========================================================
+   DASHBOARD BUTTON
+========================================================= */
+
+.dashboard-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  background: #0b1f3a;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.dashboard-btn:hover {
+  background: #d4af37;
+  color: #0b1f3a;
+}
+
+/* =========================================================
+   USERS TABLE WRAPPER
+========================================================= */
+
+.users-table-wrapper {
+  width: 100%;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+}
+
+/* =========================================================
+   USERS TABLE
+========================================================= */
+
+.users-table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+}
+
+.users-table thead {
+  background: #0b1f3a;
+}
+
+.users-table th {
+  padding: 14px 16px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.users-table td {
+  padding: 14px 16px;
+  color: #333333;
+  font-size: 14px;
+  border-bottom: 1px solid #eeeeee;
+  vertical-align: middle;
+}
+
+.users-table tbody tr {
+  transition: 0.2s ease;
+}
+
+.users-table tbody tr:hover {
+  background: #fffdf5;
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status {
+  display: inline-block;
+  padding: 5px 12px;
+  background: #fff8dc;
+  color: #8a6d00;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* =========================================================
+   VIEW BUTTON
+========================================================= */
+
+.view-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 14px;
+  background-color: #ffffff !important;
+  color: #0b1f3a !important;
+  border: 1px solid #d4af37 !important;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.view-btn:hover {
+  background-color: #d4af37 !important;
+  color: #0b1f3a !important;
+  border-color: #d4af37 !important;
+}
+
+/* =========================================================
+   NO DATA
+========================================================= */
+
+.no-data {
+  padding: 30px !important;
+  text-align: center;
+  color: #777777;
+  font-size: 14px;
+}
+
+/* =========================================================
+   USER DETAILS PAGE
+========================================================= */
+
+.user-details-page {
+  width: 100%;
+  min-height: calc(100vh - 130px);
+  padding: 30px;
+  background: #f5f6f8;
+}
+
+.user-card {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================================
+   USER ICON
+========================================================= */
+
+.user-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0b1f3a;
+  color: #d4af37;
+  border-radius: 50%;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.user-card h2 {
+  margin: 0;
+  text-align: center;
+  color: #0b1f3a;
+  font-size: 24px;
+}
+
+.role {
+  margin: 6px 0 25px;
+  text-align: center;
+  color: #d4af37;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   USER INFORMATION
+========================================================= */
+
+.info {
+  width: 100%;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 14px 0;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row strong {
+  color: #0b1f3a;
+  font-size: 14px;
+}
+
+.info-row span {
+  color: #555555;
+  font-size: 14px;
+  text-align: right;
+}
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 25px;
+  padding: 9px 18px;
+  background: #0b1f3a;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.back-btn:hover {
+  background: #d4af37;
+  color: #0b1f3a;
+}
+
