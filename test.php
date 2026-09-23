@@ -2,4 +2,4 @@
 
 require_once __DIR__ . '/includes/db.php';
 
-echo "Database Connected Successfully!";
+// echo "Database Connected Successfully!";

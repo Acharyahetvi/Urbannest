@@ -1,0 +1,130 @@
+
+/* =====================================
+   URBANNEST - ADMIN PROFILE PAGE
+   Theme: Navy, Mustard, White
+===================================== */
+
+/* MAIN CONTENT */
+.main-content {
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* PROFILE PAGE CONTAINER */
+.profile-page {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    box-sizing: border-box;
+}
+
+/* PAGE HEADING */
+.profile-page h1 {
+    color: #0b1f3a;
+    font-size: 30px;
+    margin: 0 0 8px;
+}
+
+.profile-page .profile-text {
+    color: #666666;
+    font-size: 15px;
+    margin: 0 0 25px;
+}
+
+/* PROFILE CARD */
+.profile-card {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 35px;
+    background-color: #ffffff;
+    border: 1px solid #eeeeee;
+    border-radius: 12px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+}
+
+/* PROFILE INITIALS */
+.profile-card .profile-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 15px;
+
+    background-color: #0b1f3a;
+    color: #d4af37;
+
+    border-radius: 50%;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* ADMIN INFORMATION */
+.profile-card .profile-info {
+    width: 100%;
+    min-width: 0;
+}
+
+/* ADMIN NAME */
+.profile-card .profile-info h2 {
+    color: #0b1f3a;
+    font-size: 26px;
+    text-align: center;
+    margin: 0 0 20px;
+    overflow-wrap: anywhere;
+}
+
+/* DETAIL ROWS */
+.profile-card .profile-info p {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+
+    width: 100%;
+    margin: 0;
+    padding: 14px 0;
+
+    border-bottom: 1px solid #eeeeee;
+    color: #666666;
+    line-height: 1.6;
+
+    box-sizing: border-box;
+}
+
+/* LABEL */
+.profile-card .profile-info p b {
+    flex-shrink: 0;
+    min-width: 80px;
+    color: #0b1f3a;
+}
+
+/* VALUE */
+.profile-card .profile-info p span {
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+/* BACK BUTTON */
+.profile-card .profile-back-btn {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 11px 20px;
+
+    background-color: #0b1f3a;
+    color: #ffffff;
+
+    text-decoration: none;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.profile-card .profile-back-btn:hover {
+    background-color: #d4af37;
+    color: #0b1f3a;
+}
+

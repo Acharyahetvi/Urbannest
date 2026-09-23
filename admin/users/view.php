@@ -1,448 +1,257 @@
 <?php
+/* DATABASE CONNECTION */
+require_once __DIR__ . "/../../db_connection.php";
 
-require_once __DIR__ . "/../db_connection.php";
+$con = isset($con) ? $con : (isset($conn) ? $conn : null);
 
+if (!$con) {
+    die("Database connection failed.");
+}
 
-// ==========================================
-// IF ID IS GIVEN - SHOW SINGLE USER
-// ==========================================
+/* SINGLE USER DETAILS */
+if (isset($_GET['id']) && $_GET['id'] !== '') {
 
-if (isset($_GET['id'])) {
+    $user_id = intval($_GET['id']);
 
-    $user_id = (int) $_GET['id'];
+    $sql = "SELECT user_id, full_name, email, phoneno, status
+            FROM users
+            WHERE user_id = $user_id";
 
-    $sql = "SELECT * FROM users WHERE user_id = $user_id";
-
-    $result = mysqli_query($conn, $sql);
-
+    $result = mysqli_query($con, $sql);
 
     if (!$result) {
-
-        die("Query Error: " . mysqli_error($conn));
+        die("Query Error: " . mysqli_error($con));
     }
-
-
-    if (mysqli_num_rows($result) == 0) {
-
-        die("User not found.");
-    }
-
 
     $user = mysqli_fetch_assoc($result);
 
+    if (!$user) {
+        die("User not found.");
+    }
 ?>
 
     <!DOCTYPE html>
-
     <html lang="en">
 
     <head>
-
-
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User Details - UrbanNest</title>
 
-        <meta name="viewport"
-            content="width=device-width, initial-scale=1.0">
-
-        <title>View User - UrbanNest</title>
-
-
-        <!-- COMMON CSS -->
-
-        <link rel="stylesheet"
-            href="/urbannest/admin/assets/css/style.css">
-
-
-        <!-- USERS CSS -->
-
-        <link rel="stylesheet"
-            href="/urbannest/admin/assets/css/users.css">
-
-
+        <link rel="stylesheet" href="/urbannest/admin/assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/urbannest/admin/assets/css/style.css">
+        <link rel="stylesheet" href="/urbannest/admin/assets/css/users.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     </head>
 
     <body>
 
+        <?php include __DIR__ . "/../includes/sidebar.php"; ?>
 
-        <!-- =====================================
-     SINGLE USER DETAILS PAGE
-===================================== -->
+        <div class="un-main-wrapper">
 
-        <div class="user-details-page">
+            <?php include __DIR__ . "/../includes/header.php"; ?>
 
+            <main class="users-page">
 
-            <!-- USER DETAILS CARD -->
-
-            <div class="user-card">
-
-
-                <!-- USER ICON -->
-
-                <div class="user-icon">
-
-                    👤
-
-                </div>
-
-
-                <!-- USER NAME -->
-
-                <h2>
-
-                    <?php echo htmlspecialchars($user['full_name']); ?>
-
-                </h2>
-
-
-                <!-- USER ROLE -->
-
-                <p class="role">
-
-                    UrbanNest User
-
-                </p>
-
-
-                <!-- =====================================
-             USER INFORMATION
-        ===================================== -->
-
-                <div class="info">
-
-
-                    <!-- USER ID -->
-
-                    <div class="info-row">
-
-                        <span>User ID</span>
-
-                        <strong>
-
-                            <?php echo $user['user_id']; ?>
-
-                        </strong>
-
+                <div class="users-header">
+                    <div>
+                        <span class="eyebrow">USER MANAGEMENT</span>
+                        <h2>User Details</h2>
                     </div>
 
+                    <a href="/urbannest/admin/users/view.php"
+                        class="dashboard-btn">
+                        ← Back to Users
+                    </a>
+                </div>
 
-                    <!-- USER NAME -->
+                <div class="user-details-page">
+                    <div class="user-card">
 
-                    <div class="info-row">
+                        <div class="user-icon">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
 
-                        <span>Name</span>
-
-                        <strong>
-
+                        <h2>
                             <?php echo htmlspecialchars($user['full_name']); ?>
+                        </h2>
 
-                        </strong>
+                        <p class="role">UrbanNest User</p>
 
-                    </div>
+                        <div class="info">
 
+                            <div class="info-row">
+                                <span>User ID</span>
+                                <strong><?php echo (int)$user['user_id']; ?></strong>
+                            </div>
 
-                    <!-- USER EMAIL -->
+                            <div class="info-row">
+                                <span>Full Name</span>
+                                <strong><?php echo htmlspecialchars($user['full_name']); ?></strong>
+                            </div>
 
-                    <div class="info-row">
+                            <div class="info-row">
+                                <span>Email</span>
+                                <strong><?php echo htmlspecialchars($user['email']); ?></strong>
+                            </div>
 
-                        <span>Email</span>
+                            <div class="info-row">
+                                <span>Phone</span>
+                                <strong><?php echo htmlspecialchars($user['phoneno']); ?></strong>
+                            </div>
 
-                        <strong>
+                            <div class="info-row">
+                                <span>Status</span>
+                                <strong>
+                                    <span class="status">
+                                        <?php echo htmlspecialchars($user['status']); ?>
+                                    </span>
+                                </strong>
+                            </div>
 
-                            <?php echo htmlspecialchars($user['email']); ?>
+                        </div>
 
-                        </strong>
-
-                    </div>
-
-
-                    <!-- USER PHONE -->
-
-                    <div class="info-row">
-
-                        <span>Phone</span>
-
-                        <strong>
-
-                            <?php echo htmlspecialchars($user['phoneno']); ?>
-
-                        </strong>
-
-                    </div>
-
-
-                    <!-- USER STATUS -->
-
-                    <div class="info-row">
-
-                        <span>Status</span>
-
-                        <strong class="status">
-
-                            <?php echo htmlspecialchars($user['status']); ?>
-
-                        </strong>
+                        <a href="/urbannest/admin/users/view.php"
+                            class="back-btn">
+                            ← Back to All Users
+                        </a>
 
                     </div>
-
-
                 </div>
 
+            </main>
 
-                <!-- BACK TO USERS -->
-
-                <a href="view.php"
-                    class="back-btn">
-
-                    ← Back to Users
-
-                </a>
-
-
-            </div>
-
+            <?php include __DIR__ . "/../includes/footer.php"; ?>
 
         </div>
 
-
-
+        <script src="/urbannest/admin/assets/js/bootstrap.bundle.min.js"></script>
     </body>
 
     </html>
 
 <?php
-
     exit;
 }
 
+/* ALL USERS */
+$sql = "SELECT user_id, full_name, email, phoneno, status
+        FROM users
+        ORDER BY user_id DESC";
 
-// ==========================================
-// IF ID IS NOT GIVEN - SHOW ALL USERS
-// ==========================================
-
-
-$sql = "SELECT * FROM users";
-
-$result = mysqli_query($conn, $sql);
-
+$result = mysqli_query($con, $sql);
 
 if (!$result) {
-
-    die("Query Error: " . mysqli_error($conn));
+    die("Query Error: " . mysqli_error($con));
 }
-
 ?>
 
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Users - UrbanNest</title>
 
-
-    <!-- COMMON CSS -->
-
-    <link rel="stylesheet"
-        href="/urbannest/admin/assets/css/style.css">
-
-
-    <!-- USERS CSS -->
-
-    <link rel="stylesheet"
-        href="/urbannest/admin/assets/css/users.css">
-
-
+    <link rel="stylesheet" href="/urbannest/admin/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/urbannest/admin/assets/css/style.css">
+    <link rel="stylesheet" href="/urbannest/admin/assets/css/users.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
 
+    <?php include __DIR__ . "/../includes/sidebar.php"; ?>
 
-    <!-- =====================================
-     ALL USERS PAGE
-===================================== -->
+    <div class="un-main-wrapper">
 
-    <div class="users-page">
+        <?php include __DIR__ . "/../includes/header.php"; ?>
 
+        <main class="users-page">
 
-        <!-- =====================================
-         PAGE HEADER
-    ===================================== -->
+            <div class="users-header">
+                <div>
+                    <span class="eyebrow">USER MANAGEMENT</span>
+                    <h2>All Users</h2>
+                </div>
 
-        <div class="users-header">
+                <a href="/urbannest/admin/dashboard.php"
+                    class="dashboard-btn">
+                    ← Back to Dashboard
+                </a>
+            </div>
 
+            <div class="users-table-wrapper">
 
-            <h2>
-
-                All Users
-
-            </h2>
-
-
-            <!-- BACK TO DASHBOARD -->
-
-            <a href="../view.php"
-                class="dashboard-btn">
-
-                ← Back to Dashboard
-
-            </a>
-
-
-        </div>
-
-
-        <!-- =====================================
-         USERS TABLE
-    ===================================== -->
-
-        <div class="users-table-wrapper">
-
-
-            <table class="users-table">
-
-
-                <!-- TABLE HEADER -->
-
-                <thead>
-
-                    <tr>
-
-                        <th>User ID</th>
-
-                        <th>Name</th>
-
-                        <th>Email</th>
-
-                        <th>Phone</th>
-
-                        <th>Status</th>
-
-                        <th>Action</th>
-
-                    </tr>
-
-                </thead>
-
-
-                <!-- TABLE BODY -->
-
-                <tbody>
-
-
-                    <?php
-
-                    while ($user = mysqli_fetch_assoc($result)) {
-
-                    ?>
-
-
+                <table class="users-table">
+                    <thead>
                         <tr>
-
-
-                            <!-- USER ID -->
-
-                            <td>
-
-                                <?php echo $user['user_id']; ?>
-
-                            </td>
-
-
-                            <!-- USER NAME -->
-
-                            <td>
-
-                                <?php
-                                echo htmlspecialchars($user['full_name']);
-                                ?>
-
-                            </td>
-
-
-                            <!-- USER EMAIL -->
-
-                            <td>
-
-                                <?php
-                                echo htmlspecialchars($user['email']);
-                                ?>
-
-                            </td>
-
-
-                            <!-- USER PHONE -->
-
-                            <td>
-
-                                <?php
-                                echo htmlspecialchars($user['phoneno']);
-                                ?>
-
-                            </td>
-
-
-                            <!-- USER STATUS -->
-
-                            <td>
-
-                                <span class="status-badge">
-
-                                    <?php
-                                    echo htmlspecialchars($user['status']);
-                                    ?>
-
-                                </span>
-
-                            </td>
-
-
-                            <!-- ACTION -->
-
-                            <td>
-
-
-                                <!-- VIEW USER -->
-
-                                <a href="view.php?id=<?php echo $user['user_id']; ?>"
-                                    class="view-btn">
-
-                                    View
-
-                                </a>
-
-
-                            </td>
-
-
+                            <th>User ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
+                    </thead>
 
+                    <tbody>
+                        <?php if (mysqli_num_rows($result) > 0) { ?>
 
-                    <?php
+                            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                                <tr>
+                                    <td><?php echo (int)$row['user_id']; ?></td>
 
-                    }
+                                    <td>
+                                        <?php echo htmlspecialchars($row['full_name']); ?>
+                                    </td>
 
-                    ?>
+                                    <td>
+                                        <?php echo htmlspecialchars($row['email']); ?>
+                                    </td>
 
+                                    <td>
+                                        <?php echo htmlspecialchars($row['phoneno']); ?>
+                                    </td>
 
-                </tbody>
+                                    <td>
+                                        <span class="status">
+                                            <?php echo htmlspecialchars($row['status']); ?>
+                                        </span>
+                                    </td>
 
+                                    <td>
+                                        <a href="/urbannest/admin/users/view.php?id=<?php echo (int)$row['user_id']; ?>"
+                                            class="view-btn">
+                                            View →
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php } ?>
 
-            </table>
+                        <?php } else { ?>
 
+                            <tr>
+                                <td colspan="6" class="no-data">
+                                    No users found.
+                                </td>
+                            </tr>
 
-        </div>
+                        <?php } ?>
+                    </tbody>
+                </table>
 
+            </div>
+
+        </main>
+
+        <?php include __DIR__ . "/../includes/footer.php"; ?>
 
     </div>
-    ```
 
+    <script src="/urbannest/admin/assets/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

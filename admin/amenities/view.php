@@ -2,6 +2,11 @@
 
 require_once __DIR__ . "/../../db_connection.php";
 
+
+/* =========================================================
+   FETCH AMENITIES
+========================================================= */
+
 $sql = "SELECT * FROM amenities ORDER BY amenity_id ASC";
 
 $result = mysqli_query($con, $sql);
@@ -13,7 +18,6 @@ if (!$result) {
 ?>
 
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -22,85 +26,271 @@ if (!$result) {
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>View Amenities - UrbanNest</title>
+    <title>View Amenities | UrbanNest</title>
 
-    <link rel="stylesheet" href="../../assets/css-new/amenities.css">
+
+    <!-- Bootstrap CSS -->
+
+    <link rel="stylesheet"
+        href="/urbannest/admin/assets/css/bootstrap.min.css">
+
+
+    <!-- Common CSS -->
+
+    <link rel="stylesheet"
+        href="/urbannest/admin/assets/css/style.css">
+
+    <link rel="stylesheet"
+        href="/urbannest/admin/assets/css/admin.css">
+
+
+    <!-- Amenities CSS -->
+
+    <link rel="stylesheet"
+        href="/urbannest/admin/assets/css/amenities.css">
+
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
-<body>
 
-    <h1>Manage Amenities</h1>
+<body class="admin-page">
 
-    <p>
-        <a href="add.php">Add Amenity</a>
-    </p>
 
-    <table border="1" cellpadding="10" cellspacing="0">
+    <!-- Header -->
 
-        <thead>
+    <?php include __DIR__ . "/../includes/header.php"; ?>
 
-            <tr>
 
-                <th>ID</th>
-                <th>Amenity Name</th>
-                <th>Actions</th>
+    <!-- Sidebar -->
 
-            </tr>
+    <?php include __DIR__ . "/../includes/sidebar.php"; ?>
 
-        </thead>
 
-        <tbody>
+    <!-- Main Content -->
 
-            <?php if (mysqli_num_rows($result) > 0): ?>
+    <main class="main-content">
 
-                <?php while ($row = mysqli_fetch_assoc($result)): ?>
+        <div class="amenity-view-page">
 
-                    <tr>
 
-                        <td>
-                            <?= (int) $row['amenity_id'] ?>
-                        </td>
+            <!-- =========================================
+                 PAGE HEADER
+            ========================================== -->
 
-                        <td>
-                            <?= htmlspecialchars($row['amenity_name']) ?>
-                        </td>
+            <div class="amenity-page-header">
 
-                        <td>
+                <div>
 
-                            <a href="edit.php?id=<?= (int) $row['amenity_id'] ?>">
-                                Edit
-                            </a>
+                    <span class="amenity-eyebrow">
+                        AMENITY MANAGEMENT
+                    </span>
 
-                            |
+                    <h1>Manage Amenities</h1>
 
-                            <a
-                                href="delete.php?id=<?= (int) $row['amenity_id'] ?>"
-                                onclick="return confirm('Are you sure you want to delete this amenity?');">
-                                Delete
-                            </a>
+                    <p>
+                        View and manage property amenities.
+                    </p>
 
-                        </td>
+                </div>
 
-                    </tr>
 
-                <?php endwhile; ?>
+                <!-- Add Amenity Button -->
 
-            <?php else: ?>
+                <a href="add.php" class="amenity-add-btn">
 
-                <tr>
+                    <i class="fa-solid fa-plus"></i>
 
-                    <td colspan="3">
-                        No amenities found.
-                    </td>
+                    Add Amenity
 
-                </tr>
+                </a>
 
-            <?php endif; ?>
+            </div>
 
-        </tbody>
 
-    </table>
+
+            <!-- =========================================
+                 SUCCESS MESSAGES
+            ========================================== -->
+
+            <?php if (
+                isset($_GET["message"]) &&
+                $_GET["message"] == "added"
+            ) { ?>
+
+                <div class="amenity-success-message">
+
+                    Amenity added successfully!
+
+                </div>
+
+            <?php } ?>
+
+
+            <?php if (
+                isset($_GET["message"]) &&
+                $_GET["message"] == "deleted"
+            ) { ?>
+
+                <div class="amenity-success-message">
+
+                    Amenity deleted successfully!
+
+                </div>
+
+            <?php } ?>
+
+
+
+            <!-- =========================================
+                 AMENITIES TABLE
+            ========================================== -->
+
+            <div class="amenity-table-wrapper">
+
+                <table class="amenity-table">
+
+
+                    <!-- Table Header -->
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Amenity Name</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <!-- Table Body -->
+
+                    <tbody>
+
+
+                        <?php if (mysqli_num_rows($result) > 0) { ?>
+
+
+                            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+
+                                <tr>
+
+
+                                    <!-- Amenity ID -->
+
+                                    <td>
+                                        <?php
+                                        echo (int) $row["amenity_id"];
+                                        ?>
+                                    </td>
+
+
+
+                                    <!-- Amenity Name -->
+
+                                    <td>
+
+                                        <span class="amenity-name">
+
+                                            <?php
+                                            echo htmlspecialchars(
+                                                $row["amenity_name"]
+                                            );
+                                            ?>
+
+                                        </span>
+
+                                    </td>
+
+
+
+                                    <!-- Actions -->
+
+                                    <td class="amenity-action-cell">
+
+                                        <div class="amenity-actions">
+
+
+                                            <!-- Edit Button -->
+
+                                            <a
+                                                href="edit.php?id=<?php echo (int) $row["amenity_id"]; ?>"
+                                                class="amenity-edit-btn">
+
+                                                Edit
+
+                                            </a>
+
+
+
+                                            <!-- Delete Button -->
+
+                                            <a
+                                                href="delete.php?id=<?php echo (int) $row["amenity_id"]; ?>"
+                                                class="amenity-delete-btn"
+                                                onclick="return confirm('Are you sure you want to delete this amenity?');">
+
+                                                Delete
+
+                                            </a>
+
+
+                                        </div>
+
+                                    </td>
+
+
+                                </tr>
+
+                            <?php } ?>
+
+
+                        <?php } else { ?>
+
+
+                            <!-- No Amenities Found -->
+
+                            <tr>
+
+                                <td colspan="3" class="amenity-empty">
+
+                                    No amenities found.
+
+                                </td>
+
+                            </tr>
+
+
+                        <?php } ?>
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+
+
+    <!-- Footer -->
+
+    <?php include __DIR__ . "/../includes/footer.php"; ?>
+
 
 </body>
 

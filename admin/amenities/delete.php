@@ -15,7 +15,7 @@ $sql = "DELETE FROM amenities
 
 if (mysqli_query($con, $sql)) {
 
-    header("Location: view.php");
+    header("Location: dashboard.php");
     exit();
 } else {
 

@@ -1,379 +1,577 @@
-```css
 /* =========================================================
-   URBANNEST - AMENITY MANAGEMENT CSS
-   Pages: View | Add | Edit | Delete
-   Note: Common styling is handled by style.css
+   URBANNEST - COMMON STYLE
+   Sidebar + Header + Footer + Main Layout
+   Theme: Navy, Mustard, White
 ========================================================= */
 
-
 /* =========================================================
-   1. AMENITY VIEW PAGE
+   1. RESET
 ========================================================= */
 
-/* Page Header */
-.amenity-page-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 25px;
-    gap: 15px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Add Amenity Button */
-.amenity-add-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 18px;
-    background: #d4af37;
-    color: #0b1f3a;
-    text-decoration: none;
-    font-weight: 600;
-    border-radius: 6px;
-    transition: 0.3s;
+html,
+body {
+  min-height: 100%;
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  color: #333;
 }
 
-.amenity-add-btn:hover {
-    background: #b89428;
-    color: #ffffff;
+body {
+  overflow-x: hidden;
 }
 
-/* Table Wrapper */
-.amenity-table-wrapper {
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 20px;
-    overflow-x: auto;
+a {
+  text-decoration: none;
 }
-
-/* Amenity Table */
-.amenity-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.amenity-table th {
-    padding: 14px;
-    text-align: left;
-    background: #0b1f3a;
-    color: #ffffff;
-    white-space: nowrap;
-}
-
-.amenity-table td {
-    padding: 13px 14px;
-    border-bottom: 1px solid #e5e7eb;
-    vertical-align: middle;
-}
-
-.amenity-table tbody tr {
-    transition: 0.2s;
-}
-
-.amenity-table tbody tr:hover {
-    background: #f8fafc;
-}
-
-/* Amenity Icon/Image */
-.amenity-icon {
-    width: 45px;
-    height: 45px;
-    object-fit: cover;
-    border-radius: 6px;
-}
-
-/* Action Buttons */
-.amenity-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.amenity-edit-btn,
-.amenity-delete-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 11px;
-    border-radius: 5px;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-/* Edit */
-.amenity-edit-btn {
-    background: #0b1f3a;
-    color: #ffffff;
-}
-
-.amenity-edit-btn:hover {
-    background: #162f54;
-}
-
-/* Delete */
-.amenity-delete-btn {
-    background: #dc3545;
-    color: #ffffff;
-}
-
-.amenity-delete-btn:hover {
-    background: #b02a37;
-}
-
 
 /* =========================================================
-   2. AMENITY ADD PAGE
+   2. DESKTOP SIDEBAR
 ========================================================= */
 
-.amenity-add-container {
-    max-width: 650px;
-    margin: 30px auto;
+.un-sidebar {
+  width: 230px;
+  height: 100vh;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+
+  background: #0b1f3a;
+  color: #ffffff;
+
+  overflow-y: auto;
 }
 
-.amenity-add-card {
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
+/* BRAND */
+
+.un-sidebar-brand {
+  min-height: 75px;
+  padding: 10px 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+
+  background: #ffffff;
+  border-bottom: 1px solid #eeeeee;
 }
 
-.amenity-add-card h2 {
-    color: #0b1f3a;
-    margin-bottom: 25px;
+.un-brand-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0b1f3a;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-.amenity-form-group {
-    margin-bottom: 20px;
+.un-brand-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
-.amenity-form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #0b1f3a;
+.un-brand-text {
+  display: flex;
+  align-items: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  white-space: nowrap;
 }
 
-/* Add Button */
-.amenity-submit-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    padding: 12px 20px;
-    background: #d4af37;
-    color: #0b1f3a;
-    border: none;
-    border-radius: 6px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
+.un-urban {
+  color: #0b1f3a;
+  font-style: normal;
 }
 
-.amenity-submit-btn:hover {
-    background: #b89428;
-    color: #ffffff;
+.un-nest {
+  color: #d4af37;
+  font-style: italic;
+}
+/* SIDEBAR TITLE */
+
+.un-sidebar-title {
+  padding: 25px 10px 15px;
+
+  color: #ffffff;
+  text-align: center;
+
+  font-size: 16px;
+  letter-spacing: 0.3px;
 }
 
+/* NAVIGATION AREA */
+
+.un-sidebar-nav {
+  flex: 1;
+  width: 100%;
+
+  padding: 5px 12px;
+
+  overflow-y: auto;
+}
+
+.un-nav-list {
+  width: 100%;
+
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.un-nav-item {
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+/* NAVIGATION LINKS */
+
+.un-sidebar .un-nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  gap: 12px;
+
+  width: 100%;
+  min-height: 48px;
+
+  padding: 12px;
+
+  color: #ffffff;
+  text-align: left;
+  text-decoration: none;
+
+  border-radius: 7px;
+
+  transition:
+    background 0.3s,
+    color 0.3s;
+}
+
+/* ICONS */
+
+.un-sidebar .un-nav-link i {
+  width: 20px;
+  min-width: 20px;
+  flex-shrink: 0;
+
+  display: inline-block;
+
+  text-align: center;
+  font-size: 16px;
+
+  color: #ffffff;
+}
+
+/* LINK TEXT */
+
+.un-sidebar .un-nav-link span {
+  display: inline-block;
+  flex: 1;
+
+  text-align: left;
+}
+
+/* HOVER */
+
+.un-sidebar .un-nav-link:hover {
+  background: #d4af37;
+  color: #0b1f3a;
+}
+
+.un-sidebar .un-nav-link:hover i {
+  color: #0b1f3a;
+}
+
+/* ACTIVE */
+
+.un-sidebar .un-nav-link.active {
+  background: #d4af37;
+  color: #0b1f3a;
+
+  font-weight: 600;
+}
+
+.un-sidebar .un-nav-link.active i {
+  color: #0b1f3a;
+}
+
+/* SIDEBAR BOTTOM */
+
+.un-sidebar-bottom {
+  width: 100%;
+
+  margin-top: auto;
+  padding: 12px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* LOGOUT */
+
+.un-sidebar .un-logout-link {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.un-sidebar .un-logout-link:hover {
+  background: #d4af37;
+  color: #0b1f3a;
+}
 
 /* =========================================================
-   3. AMENITY EDIT PAGE
+   3. MOBILE OFFCANVAS SIDEBAR
 ========================================================= */
 
-.amenity-edit-container {
-    max-width: 650px;
-    margin: 30px auto;
+.un-sidebar-offcanvas {
+  width: 280px;
+  background: #0b1f3a;
+  color: #fff;
 }
 
-.amenity-edit-card {
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
+.un-sidebar-offcanvas .offcanvas-header {
+  background: #fff;
+  padding: 10px 15px;
 }
 
-.amenity-edit-card h2 {
-    color: #0b1f3a;
-    margin-bottom: 25px;
+.un-sidebar-offcanvas .un-sidebar-brand {
+  height: auto;
+  min-height: auto;
+  padding: 5px 0;
+  border-bottom: none;
 }
 
-/* Update Button */
-.amenity-update-btn {
-    width: 100%;
-    padding: 12px 20px;
-    background: #0b1f3a;
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
+.un-sidebar-offcanvas .offcanvas-body {
+  padding: 0;
 }
 
-.amenity-update-btn:hover {
-    background: #162f54;
+.un-sidebar-offcanvas .btn-close {
+  margin-right: 5px;
 }
-
 
 /* =========================================================
-   4. AMENITY DELETE PAGE
+   4. MAIN WRAPPER
 ========================================================= */
 
-.amenity-delete-container {
-    max-width: 500px;
-    margin: 50px auto;
+.un-main-wrapper {
+  width: calc(100% - 230px);
+  min-height: 100vh;
+  margin-left: 230px;
+
+  display: flex;
+  flex-direction: column;
 }
 
-.amenity-delete-card {
-    background: #ffffff;
-    padding: 35px;
-    border-radius: 10px;
-    text-align: center;
+.un-main-wrapper > * {
+  min-width: 0;
 }
-
-.amenity-delete-icon {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #fff0f1;
-    color: #dc3545;
-    border-radius: 50%;
-    font-size: 24px;
-}
-
-.amenity-delete-card h2 {
-    color: #dc3545;
-    margin-bottom: 12px;
-}
-
-.amenity-delete-card p {
-    margin-bottom: 25px;
-    color: #6b7280;
-}
-
-/* Delete Action Buttons */
-.amenity-delete-actions {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-}
-
-.amenity-confirm-delete {
-    padding: 10px 18px;
-    background: #dc3545;
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.3s;
-}
-
-.amenity-confirm-delete:hover {
-    background: #b02a37;
-}
-
-.amenity-cancel-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 18px;
-    background: #0b1f3a;
-    color: #ffffff;
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: 600;
-    transition: 0.3s;
-}
-
-.amenity-cancel-btn:hover {
-    background: #162f54;
-}
-
 
 /* =========================================================
-   5. BACK BUTTON
+   5. HEADER / TOPBAR
 ========================================================= */
 
-.amenity-back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 20px;
-    padding: 10px 16px;
-    background: transparent;
-    color: #0b1f3a;
-    border: 1px solid #0b1f3a;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: 0.3s;
+.un-topbar {
+  width: 100%;
+  min-height: 75px;
+  padding: 12px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  position: relative;
+  z-index: 1000;
 }
 
-.amenity-back-btn:hover {
-    background: #0b1f3a;
-    color: #ffffff;
+/* TOPBAR LEFT */
+
+.un-topbar-left {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
+/* MOBILE MENU BUTTON */
+
+.un-mobile-menu-btn {
+  display: none;
+
+  width: 40px;
+  height: 40px;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  background: #fff;
+  color: #0b1f3a;
+
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* SEARCH AREA */
+
+.un-topbar-center {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.un-search {
+  width: 350px;
+  max-width: 100%;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+
+  border: 1px solid #ddd;
+  border-radius: 25px;
+
+  background: #fff;
+}
+
+.un-search-icon {
+  margin-right: 10px;
+  color: #0b1f3a;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.un-search-input {
+  width: 100%;
+  min-width: 0;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+  color: #333;
+  font-size: 14px;
+}
+
+.un-search-input::placeholder {
+  color: #777;
+}
+
+/* TOPBAR RIGHT */
+
+.un-topbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
 
 /* =========================================================
-   6. RESPONSIVE
+   6. PROFILE DROPDOWN
 ========================================================= */
 
-@media (max-width: 768px) {
-
-    .amenity-page-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .amenity-add-container,
-    .amenity-edit-container,
-    .amenity-delete-container {
-        margin: 20px auto;
-        width: 100%;
-    }
-
-    .amenity-add-card,
-    .amenity-edit-card,
-    .amenity-delete-card {
-        padding: 20px;
-    }
-
-    .amenity-table th,
-    .amenity-table td {
-        padding: 10px;
-        font-size: 14px;
-    }
-
+.un-profile {
+  position: relative;
+  display: inline-block;
 }
 
+/* PROFILE BUTTON */
 
-@media (max-width: 480px) {
+.un-profile-btn {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  margin: 0;
 
-    .amenity-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    .amenity-edit-btn,
-    .amenity-delete-btn {
-        width: 100%;
-    }
+  border: none;
+  border-radius: 50%;
+  outline: none;
 
-    .amenity-delete-actions {
-        flex-direction: column;
-    }
-
-    .amenity-confirm-delete,
-    .amenity-cancel-btn {
-        width: 100%;
-    }
-
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
 }
-```
+
+/* AU CIRCLE */
+
+.un-profile-circle {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #0b1f3a;
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: bold;
+
+  transition:
+    background 0.3s,
+    color 0.3s;
+}
+
+/* PROFILE HOVER */
+
+.un-profile-btn:hover .un-profile-circle {
+  background: #d4af37;
+  color: #0b1f3a;
+}
+
+/* PROFILE FOCUS */
+
+.un-profile-btn:focus-visible {
+  outline: 2px solid #d4af37;
+  outline-offset: 3px;
+}
+
+/* DROPDOWN MENU - HIDDEN BY DEFAULT */
+
+.un-profile-menu {
+  position: absolute;
+  top: 52px;
+  right: 0;
+
+  width: 180px;
+  padding: 6px 0;
+
+  display: none;
+
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+
+  z-index: 99999;
+}
+
+/* SHOW DROPDOWN ON CLICK */
+
+.un-profile-menu.show {
+  display: block;
+}
+
+/* DROPDOWN ITEMS */
+
+.un-profile-menu .un-profile-item {
+  width: 100%;
+  padding: 11px 15px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background: #fff;
+  color: #222;
+
+  font-size: 14px;
+  text-decoration: none;
+}
+
+/* DROPDOWN ICONS */
+
+.un-profile-menu .un-profile-item i {
+  width: 20px;
+  min-width: 20px;
+
+  text-align: center;
+  color: #0b1f3a;
+}
+
+/* DROPDOWN HOVER */
+
+.un-profile-menu .un-profile-item:hover {
+  background: #f5f5f5;
+  color: #0b1f3a;
+}
+
+.un-profile-menu .un-profile-item:hover i {
+  color: #0b1f3a;
+}
+
+/* DROPDOWN DIVIDER */
+
+.un-profile-divider {
+  height: 1px;
+  margin: 4px 0;
+  background: #eee;
+}
+
+/* LOGOUT ITEM */
+
+.un-profile-menu .logout-item {
+  color: #b02a37;
+}
+
+.un-profile-menu .logout-item i {
+  color: #b02a37;
+}
+
+/* =========================================================
+   7. COMMON PAGE CONTENT
+========================================================= */
+
+.un-page-content {
+  flex: 1;
+  min-width: 0;
+  padding: 30px;
+}
+
+/* =========================================================
+   8. FOOTER
+========================================================= */
+
+.un-footer {
+  width: 100%;
+  margin-top: auto;
+  padding: 15px;
+
+  background: #fff;
+  border-top: 1px solid #e5e5e5;
+
+  text-align: center;
+  color: #777;
+  font-size: 13px;
+}
+
+.un-footer p {
+  margin: 0;
+}
