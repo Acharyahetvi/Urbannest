@@ -1,398 +1,629 @@
 <?php
 
-// Include required files
-require_once __DIR__ . "/../includes/header.php";
-require_once __DIR__ . "/../includes/data.php";
-require_once __DIR__ . "/../includes/navbar.php";
+$pageTitle = 'Property Details — UrbanNest';
+$pageDesc = 'View complete property details with UrbanNest.';
+
+require_once __DIR__ . '/../db_connection.php';
+require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/navbar.php';
 
 
-// Get property ID from URL
-$id = $_GET["id"] ?? "";
+// =====================================
+// GET PROPERTY ID
+// =====================================
+
+$property_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 
-// Store property details
+// =====================================
+// GET PROPERTY DETAILS
+// =====================================
+
 $property = null;
 
+if ($property_id > 0) {
 
-// Check property ID
-if ($id == "UN001") {
-    $property = $UN_PROPERTIES[0];
-} else if ($id == "UN002") {
-    $property = $UN_PROPERTIES[1];
-} else if ($id == "UN003") {
-    $property = $UN_PROPERTIES[2];
-} else if ($id == "UN004") {
-    $property = $UN_PROPERTIES[3];
-} else if ($id == "UN005") {
-    $property = $UN_PROPERTIES[4];
-} else if ($id == "UN006") {
-    $property = $UN_PROPERTIES[5];
-} else if ($id == "UN007") {
-    $property = $UN_PROPERTIES[6];
-} else if ($id == "UN008") {
-    $property = $UN_PROPERTIES[7];
-} else if ($id == "UN009") {
-    $property = $UN_PROPERTIES[8];
-} else if ($id == "UN010") {
-    $property = $UN_PROPERTIES[9];
-} else if ($id == "UN011") {
-    $property = $UN_PROPERTIES[10];
-} else if ($id == "UN012") {
-    $property = $UN_PROPERTIES[11];
+    $sql = "SELECT *
+            FROM properties
+            WHERE property_id = $property_id
+            AND approval_status = 'Approved'
+            AND status = 'Active'";
+
+    $result = mysqli_query($conn, $sql);
+
+    if ($result) {
+        $property = mysqli_fetch_assoc($result);
+    }
 }
 
 
-// Check if property exists
-if ($property == null) {
+// =====================================
+// GET PROPERTY IMAGES
+// =====================================
 
-    echo "<div style='text-align:center; padding:60px;'>";
+$images = [];
 
-    echo "<h2>Property Not Found</h2>";
+if ($property) {
 
-    echo "<p>The property you are looking for does not exist.</p>";
+    $sql_images = "SELECT image_path, is_main
+                   FROM property_images
+                   WHERE property_id = $property_id
+                   ORDER BY is_main DESC, image_id ASC";
 
-    echo "<a href='list.php'>Back to Properties</a>";
+    $result_images = mysqli_query($conn, $sql_images);
 
-    echo "</div>";
+    if ($result_images) {
 
-    require_once __DIR__ . "/../includes/footer.php";
+        while ($image = mysqli_fetch_assoc($result_images)) {
 
-    exit;
+            $images[] = $image;
+        }
+    }
 }
 
 ?>
 
+<style>
+    /* =====================================
+   PROPERTY DETAILS PAGE
+===================================== */
+
+    .details-section {
+        padding: 60px 0;
+        background: #f8f7f2;
+    }
+
+
+    /* =====================================
+   PAGE HEADING
+===================================== */
+
+    .details-heading {
+        margin-bottom: 35px;
+    }
+
+    .details-heading h1 {
+        color: #0b1f3a;
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .details-location {
+        color: #687386;
+        font-size: 15px;
+    }
+
+
+    /* =====================================
+   PROPERTY IMAGE
+===================================== */
+
+    .details-main-image {
+        width: 100%;
+        height: 450px;
+        object-fit: cover;
+        display: block;
+        border-radius: 12px;
+    }
+
+
+    /* =====================================
+   PROPERTY GALLERY
+===================================== */
+
+    .details-gallery {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .details-gallery img {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+
+    /* =====================================
+   PROPERTY INFORMATION
+===================================== */
+
+    .details-card {
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        border: 1px solid #eee9dc;
+        box-shadow: 0 5px 18px rgba(11, 31, 58, 0.08);
+        margin-top: 30px;
+    }
+
+    .details-card h3 {
+        color: #0b1f3a;
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+
+    /* =====================================
+   PROPERTY PRICE
+===================================== */
+
+    .details-price {
+        color: #b9922e;
+        font-size: 30px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+
+    /* =====================================
+   PROPERTY DESCRIPTION
+===================================== */
+
+    .details-description {
+        color: #687386;
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+
+    /* =====================================
+   PROPERTY FEATURES
+===================================== */
+
+    .details-info {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        margin-top: 25px;
+    }
+
+    .details-info-box {
+        padding: 18px;
+        background: #f8f7f2;
+        border-radius: 8px;
+    }
+
+    .details-info-box strong {
+        display: block;
+        color: #0b1f3a;
+        font-size: 15px;
+        margin-bottom: 8px;
+    }
+
+    .details-info-box span {
+        color: #687386;
+        font-size: 14px;
+    }
 
-<!-- PROPERTY DETAILS -->
 
-<div style="
-    width:900px;
-    margin:40px auto;
-    background:white;
-    padding:30px;
-    border-radius:12px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.10);
-">
+    /* =====================================
+   PROPERTY DESCRIPTION
+===================================== */
 
+    .details-text {
+        color: #555;
+        font-size: 15px;
+        line-height: 1.8;
+    }
 
-    <!-- PROPERTY IMAGE -->
 
-    <img
-        src="<?php echo htmlspecialchars($property['image']); ?>"
-        alt="<?php echo htmlspecialchars($property['title']); ?>"
-        style="
-            width:100%;
-            height:350px;
-            object-fit:cover;
-            border-radius:10px;
-        ">
+    /* =====================================
+   PROPERTY TYPE
+===================================== */
 
+    .details-badge {
+        display: inline-block;
+        background: #0b1f3a;
+        color: #fff;
+        padding: 8px 18px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
 
-    <!-- PROPERTY TITLE -->
 
-    <h1 style="margin-top:25px;">
+    /* =====================================
+   BACK BUTTON
+===================================== */
 
-        <?php echo htmlspecialchars($property["title"]); ?>
+    .details-btn {
+        display: inline-block;
+        padding: 12px 25px;
+        background: #0b1f3a;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 7px;
+        font-weight: 600;
+        transition: 0.3s;
+        margin-top: 20px;
+    }
 
-    </h1>
+    .details-btn:hover {
+        background: #d4af37;
+        color: #0b1f3a;
+    }
 
 
-    <!-- PROPERTY LOCATION -->
+    /* =====================================
+   NO PROPERTY MESSAGE
+===================================== */
 
-    <p style="color:#666; font-size:17px;">
+    .details-empty {
+        padding: 50px;
+        text-align: center;
+        background: #fff;
+        border-radius: 12px;
+    }
 
-        📍
+    .details-empty h3 {
+        color: #0b1f3a;
+        margin-bottom: 15px;
+    }
 
-        <?php echo htmlspecialchars($property["city"]); ?>,
+    .details-empty p {
+        color: #687386;
+    }
+</style>
 
-        <?php echo htmlspecialchars($property["state"]); ?>
 
-    </p>
+<!-- =====================================
+     PROPERTY DETAILS SECTION
+===================================== -->
 
+<section class="details-section">
 
-    <!-- PROPERTY PRICE -->
+    <div class="container">
 
-    <h2 style="color:#d4af37;">
+        <?php if ($property) { ?>
 
-        ₹ <?php echo number_format($property["price"]); ?>
 
-        <?php
+            <!-- =====================================
+                 PROPERTY HEADING
+            ===================================== -->
 
-        if ($property["purpose"] == "rent") {
+            <div class="details-heading">
 
-            echo " / Month";
-        }
+                <h1>
+                    <?php echo htmlspecialchars($property['title']); ?>
+                </h1>
 
-        ?>
+                <p class="details-location">
 
-    </h2>
+                    <i class="fa-solid fa-location-dot"></i>
 
+                    <?php echo htmlspecialchars($property['city']); ?>,
 
-    <hr>
+                    <?php echo htmlspecialchars($property['state']); ?>
 
-
-    <!-- PROPERTY INFORMATION -->
-
-    <h3>Property Information</h3>
-
-
-    <div style="
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        gap:20px;
-        margin-top:20px;
-    ">
-
-
-        <!-- Category -->
-
-        <div>
-
-            <strong>Category:</strong>
-
-            <?php echo htmlspecialchars($property["category"]); ?>
-
-        </div>
-
-
-        <!-- Property Type -->
-
-        <div>
-
-            <strong>Property Type:</strong>
-
-            <?php echo htmlspecialchars($property["type"]); ?>
-
-        </div>
-
-
-        <!-- Status -->
-
-        <div>
-
-            <strong>Status:</strong>
-
-            <?php echo htmlspecialchars($property["status"]); ?>
-
-        </div>
-
-
-        <!-- Area -->
-
-        <div>
-
-            <strong>Area:</strong>
-
-            <?php echo number_format($property["area"]); ?> Sq Ft
-
-        </div>
-
-
-        <!-- Bedrooms -->
-
-        <div>
-
-            <strong>Bedrooms:</strong>
-
-            <?php
-
-            if ($property["bedrooms"] > 0) {
-
-                echo $property["bedrooms"];
-            } else {
-
-                echo "N/A";
-            }
-
-            ?>
-
-        </div>
-
-
-        <!-- Bathrooms -->
-
-        <div>
-
-            <strong>Bathrooms:</strong>
-
-            <?php
-
-            if ($property["bathrooms"] > 0) {
-
-                echo $property["bathrooms"];
-            } else {
-
-                echo "N/A";
-            }
-
-            ?>
-
-        </div>
-
-
-        <!-- City -->
-
-        <div>
-
-            <strong>City:</strong>
-
-            <?php echo htmlspecialchars($property["city"]); ?>
-
-        </div>
-
-
-        <!-- State -->
-
-        <div>
-
-            <strong>State:</strong>
-
-            <?php echo htmlspecialchars($property["state"]); ?>
-
-        </div>
-
-
-    </div>
-
-
-    <hr style="margin-top:30px;">
-
-
-    <!-- USER REVIEW SECTION -->
-
-    <h2>User Reviews</h2>
-
-
-    <div style="
-        margin-top:20px;
-        padding:25px;
-        background:#f8f8f8;
-        border-radius:10px;
-    ">
-
-
-        <h4>Rate this Property</h4>
-
-
-        <form method="post">
-
-
-            <!-- Rating -->
-
-            <div style="margin-top:15px;">
-
-                <label>
-                    <strong>Rating</strong>
-                </label>
-
-                <br>
-
-                <select
-                    name="rating"
-                    required
-                    style="
-                        width:100%;
-                        padding:10px;
-                        margin-top:8px;
-                        border:1px solid #ccc;
-                        border-radius:5px;
-                    ">
-
-                    <option value="">Select Rating</option>
-
-                    <option value="5">★★★★★ - 5 Stars</option>
-
-                    <option value="4">★★★★☆ - 4 Stars</option>
-
-                    <option value="3">★★★☆☆ - 3 Stars</option>
-
-                    <option value="2">★★☆☆☆ - 2 Stars</option>
-
-                    <option value="1">★☆☆☆☆ - 1 Star</option>
-
-                </select>
+                </p>
 
             </div>
 
 
-            <!-- Review Text -->
+            <!-- =====================================
+                 PROPERTY IMAGES
+            ===================================== -->
 
-            <div style="margin-top:15px;">
+            <div class="row">
 
-                <label>
-                    <strong>Your Review</strong>
-                </label>
+                <div class="col-12">
 
-                <br>
+                    <?php
 
-                <textarea
-                    name="review"
-                    rows="4"
-                    placeholder="Write your review..."
-                    required
-                    style="
-                        width:100%;
-                        padding:10px;
-                        margin-top:8px;
-                        border:1px solid #ccc;
-                        border-radius:5px;
-                    "></textarea>
+                    $mainImage = '';
+
+                    if (!empty($images)) {
+
+                        $mainImage = $images[0]['image_path'];
+                    }
+
+                    $mainImage = str_replace(
+                        'admin/property/../',
+                        'admin/',
+                        $mainImage
+                    );
+
+                    ?>
+
+                    <?php if (!empty($mainImage)) { ?>
+
+                        <img
+                            src="<?php echo htmlspecialchars($mainImage); ?>"
+                            class="details-main-image"
+                            alt="Property Image">
+
+                    <?php } else { ?>
+
+                        <img
+                            src="assets/images/hero.png"
+                            class="details-main-image"
+                            alt="Property Image">
+
+                    <?php } ?>
+
+
+                    <!-- PROPERTY GALLERY -->
+
+                    <?php if (count($images) > 1) { ?>
+
+                        <div class="details-gallery">
+
+                            <?php
+
+                            $galleryCount = 0;
+
+                            foreach ($images as $image) {
+
+                                if ($galleryCount >= 4) {
+                                    break;
+                                }
+
+                                if ($image['image_path'] == $images[0]['image_path']) {
+                                    continue;
+                                }
+
+                                $galleryImage = str_replace(
+                                    'admin/property/../',
+                                    'admin/',
+                                    $image['image_path']
+                                );
+
+                            ?>
+
+                                <img
+                                    src="<?php echo htmlspecialchars($galleryImage); ?>"
+                                    alt="Property Image">
+
+                            <?php
+
+                                $galleryCount++;
+                            }
+
+                            ?>
+
+                        </div>
+
+                    <?php } ?>
+
+                </div>
 
             </div>
 
 
-            <!-- Submit Button -->
+            <!-- =====================================
+                 PROPERTY INFORMATION
+            ===================================== -->
 
-            <button
-                type="submit"
-                name="submit_review"
-                style="
-                    margin-top:15px;
-                    padding:10px 25px;
-                    background:#0b1f3a;
-                    color:white;
-                    border:none;
-                    border-radius:5px;
-                    cursor:pointer;
-                ">
+            <div class="details-card">
 
-                Submit Review
+                <!-- PROPERTY TYPE -->
 
-            </button>
+                <span class="details-badge">
+
+                    <?php echo htmlspecialchars($property['listing_type']); ?>
+
+                </span>
 
 
-        </form>
+                <!-- PROPERTY PRICE -->
+
+                <div class="details-price">
+
+                    ₹<?php echo number_format($property['price']); ?>
+
+                </div>
+
+
+                <!-- PROPERTY DESCRIPTION -->
+
+                <h3>Property Description</h3>
+
+                <p class="details-description">
+
+                    <?php echo nl2br(htmlspecialchars($property['description'] ?? 'No description available.')); ?>
+
+                </p>
+
+
+                <hr>
+
+
+                <!-- =====================================
+                     PROPERTY FEATURES
+                ===================================== -->
+
+                <h3>Property Information</h3>
+
+                <div class="details-info">
+
+
+                    <!-- AREA -->
+
+                    <div class="details-info-box">
+
+                        <strong>Area</strong>
+
+                        <span>
+                            <?php echo htmlspecialchars($property['area_sqft'] ?? 'N/A'); ?>
+                            sq.ft.
+                        </span>
+
+                    </div>
+
+
+                    <!-- BEDROOMS -->
+
+                    <div class="details-info-box">
+
+                        <strong>Bedrooms</strong>
+
+                        <span>
+                            <?php echo htmlspecialchars($property['bedrooms'] ?? 'N/A'); ?>
+                        </span>
+
+                    </div>
+
+
+                    <!-- BATHROOMS -->
+
+                    <div class="details-info-box">
+
+                        <strong>Bathrooms</strong>
+
+                        <span>
+                            <?php echo htmlspecialchars($property['bathrooms'] ?? 'N/A'); ?>
+                        </span>
+
+                    </div>
+
+
+                    <!-- FURNISHING -->
+
+                    <div class="details-info-box">
+
+                        <strong>Furnishing</strong>
+
+                        <span>
+                            <?php echo htmlspecialchars($property['furnishing'] ?? 'N/A'); ?>
+                        </span>
+
+                    </div>
+
+
+                    <!-- PARKING -->
+
+                    <div class="details-info-box">
+
+                        <strong>Parking Spaces</strong>
+
+                        <span>
+                            <?php echo htmlspecialchars($property['parking_spaces'] ?? 'N/A'); ?>
+                        </span>
+
+                    </div>
+
+
+                    <!-- FLOOR NUMBER -->
+
+                    <div class="details-info-box">
+
+                        <strong>Floor Number</strong>
+
+                        <span>
+                            <?php echo htmlspecialchars($property['floor_number'] ?? 'N/A'); ?>
+                        </span>
+
+                    </div>
+
+
+                    <!-- TOTAL FLOORS -->
+
+                    <div class="details-info-box">
+
+                        <strong>Total Floors</strong>
+
+                        <span>
+                            <?php echo htmlspecialchars($property['total_floors'] ?? 'N/A'); ?>
+                        </span>
+
+                    </div>
+
+
+                    <!-- PROPERTY CONDITION -->
+
+                    <div class="details-info-box">
+
+                        <strong>Property Condition</strong>
+
+                        <span>
+                            <?php echo htmlspecialchars($property['property_condition'] ?? 'N/A'); ?>
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <hr>
+
+
+                <!-- =====================================
+                     PROPERTY ADDRESS
+                ===================================== -->
+
+                <h3>Property Address</h3>
+
+                <p class="details-text">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    <?php echo htmlspecialchars($property['address'] ?? 'Address not available'); ?>,
+
+                    <?php echo htmlspecialchars($property['city']); ?>,
+
+                    <?php echo htmlspecialchars($property['state']); ?>
+
+                </p>
+
+
+                <!-- =====================================
+                     BACK BUTTON
+                ===================================== -->
+
+                <a href="javascript:history.back()" class="details-btn">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Back to Properties
+
+                </a>
+
+            </div>
+
+
+        <?php } else { ?>
+
+
+            <!-- =====================================
+                 NO PROPERTY FOUND
+            ===================================== -->
+
+            <div class="details-empty">
+
+                <h3>Property Not Found</h3>
+
+                <p>
+                    Sorry, this property is not available or has been removed.
+                </p>
+
+                <a href="buy.php" class="details-btn">
+
+                    Browse Properties
+
+                </a>
+
+            </div>
+
+
+        <?php } ?>
 
     </div>
 
-
-    <!-- BACK BUTTON -->
-
-    <div style="margin-top:30px;">
-
-        <a
-            href="list.php"
-            style="
-                background:#0b1f3a;
-                color:white;
-                padding:10px 20px;
-                text-decoration:none;
-                border-radius:5px;
-            ">
-
-            ← Back to Properties
-
-        </a>
-
-    </div>
-
-
-</div>
+</section>
 
 
 <?php
 
-// Include footer
-require_once __DIR__ . "/../includes/footer.php";
+// =====================================
+// INCLUDE FOOTER
+// =====================================
+
+require_once __DIR__ . '/../includes/footer.php';
 
 ?>
