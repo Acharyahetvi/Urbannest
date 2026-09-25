@@ -1,66 +1,221 @@
 <footer class="un-footer">
-    <div class="container">
-        <div class="row g-5">
-            <div class="col-lg-4">
-                <a class="un-brand un-brand-light mb-3 d-inline-flex" href="<?= url('index.php') ?>">
-                    <span class="un-brand-mark"><i class="fa-solid fa-building-columns"></i></span>
-                    <span class="un-brand-text">Urban<span>Nest</span></span>
+
+    <div class="footer-container">
+
+        <!-- Company Information -->
+        <div class="footer-box">
+            <h2>Urban<span>Nest</span></h2>
+
+            <p>
+                Find your perfect property with UrbanNest.
+            </p>
+            <br>
+            <p>
+                Buy, sell and rent properties easily.
+            </p>
+
+            <!-- Social Media Icons -->
+            <div class="un-social-icons">
+
+                <a href="#">
+                    <i class="fab fa-facebook-f"></i>
                 </a>
-                <p class="text-white-50">UrbanNest curates the world's most extraordinary residences — from sky‑high penthouses to seaside estates — pairing discerning buyers with legacy homes.</p>
-                <div class="d-flex gap-2 mt-3">
-                    <a href="#" class="un-social"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" class="un-social"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="un-social"><i class="fa-brands fa-x-twitter"></i></a>
-                    <a href="https://www.linkedin.com" class="un-social"><i class="fa-brands fa-linkedin-in"></i></a>
-                    <a href="#" class="un-social"><i class="fa-brands fa-youtube"></i></a>
-                </div>
-            </div>
-            <div class="col-6 col-lg-2">
-                <h6 class="un-footer-title">Company</h6>
-                <ul class="list-unstyled un-footer-links">
-                    <li><a href="<?= url('urbannest/about.php') ?>">About Us</a></li>
-                    <li><a href="<?= url('urbannest/agents.php') ?>">Our Agents</a></li>
-                    <li><a href="<?= url('urbannest/blog.php') ?>">Journal</a></li>
-                    <li><a href="<?= url('urbannest/contact.php') ?>">Contact</a></li>
-                    <li><a href="<?= url('urbannest/faq.php') ?>">FAQ</a></li>
-                </ul>
-            </div>
-            <div class="col-6 col-lg-2">
-                <h6 class="un-footer-title">Discover</h6>
-                <ul class="list-unstyled un-footer-links">
-                    <li><a href="<?= url('properties/list.php?purpose=buy') ?>">Buy</a></li>
-                    <li><a href="<?= url('properties/list.php?purpose=rent') ?>">Rent</a></li>
-                    <li><a href="<?= url('properties/list.php?purpose=sell') ?>">Sell</a></li>
-                    <li><a href="<?= url('properties/list.php?cat=commercial') ?>">Commercial</a></li>
-                    <li><a href="<?= url('owners.php') ?>">Owners</a></li>
-                </ul>
-            </div>
-            <div class="col-lg-4">
-                <h6 class="un-footer-title">Get in touch</h6>
-                <p class="text-white-50 small mb-2"><i class="fa-solid fa-location-dot text-gold me-2"></i>432 Park Avenue, Manhattan, NY 10022</p>
-                <p class="text-white-50 small mb-2"><i class="fa-solid fa-phone text-gold me-2"></i>+1 (212) 555‑0117</p>
-                <p class="text-white-50 small mb-3"><i class="fa-regular fa-envelope text-gold me-2"></i>hello@urbannest.com</p>
-                <form class="un-footer-news" onsubmit="event.preventDefault(); this.reset(); alert('Subscribed. Welcome to UrbanNest.');">
-                    <input type="email" class="form-control" placeholder="Your email address" required>
-                    <button class="btn btn-gold" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
-                </form>
+
+                <a href="#">
+                    <i class="fab fa-instagram"></i>
+                </a>
+
+                <a href="#">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+
+                <a href="#">
+                    <i class="fab fa-youtube"></i>
+                </a>
+
             </div>
         </div>
-        <hr class="my-4 border-secondary">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-white-50 small">
-            <div>&copy; <?= date('Y') ?> UrbanNest. Crafted for extraordinary homes.</div>
-            <div class="d-flex gap-3 mt-2 mt-md-0">
-                <a href="#" class="link-light-50">Privacy</a>
-                <a href="#" class="link-light-50">Terms</a>
-                <a href="#" class="link-light-50">Cookies</a>
-            </div>
+
+        <!-- Discover -->
+        <div class="footer-box">
+            <h3>Discover</h3>
+
+            <a href="index.php">Home</a>
+            <a href="about.php">About Us</a>
+            <a href="properties.php">Properties</a>
+            <a href="agents.php">Agents</a>
         </div>
+
+        <!-- Contact -->
+        <div class="footer-box">
+            <h3>Contact Us</h3>
+            <br>
+
+            <p>Ahmedabad, Gujarat</p>
+            <p>+91 98765 43210</p>
+            <p>info@urbannest.com</p>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="footer-box">
+            <h3>Newsletter</h3>
+            <br>
+
+            <p>
+                Subscribe to get the latest property updates.
+            </p>
+
+            <form>
+                <input
+                    type="email"
+                    placeholder="Enter your email">
+
+                <button type="submit">
+                    Subscribe
+                </button>
+            </form>
+        </div>
+
     </div>
+
+    <!-- Copyright -->
+    <div class="footer-bottom">
+        <p>
+            © 2026 UrbanNest. All Rights Reserved.
+        </p>
+    </div>
+
 </footer>
 
-<a href="#" class="un-scrolltop" id="unScrollTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></a>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="<?= asset('js/main.js') ?>"></script>
-</body>
-</html>
+<style>
+    /* ==============================
+   URBANNEST - FOOTER CSS
+============================== */
+
+    /* Main Footer */
+    .un-footer {
+        background: #0b1f3a;
+        color: white;
+        padding-top: 50px;
+        margin-top: 50px;
+    }
+
+    /* Footer Container */
+    .footer-container {
+        width: 90%;
+        max-width: 1200px;
+        margin: auto;
+
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 2fr;
+        gap: 40px;
+    }
+
+    /* Footer Heading */
+    .footer-box h2 {
+        font-size: 28px;
+        margin-bottom: 15px;
+    }
+
+    .footer-box h2 span {
+        color: #d4af37;
+    }
+
+    /* Footer Text */
+    .footer-box p {
+        line-height: 1.7;
+        margin-bottom: 10px;
+    }
+
+    /* Footer Links */
+    .footer-box a {
+        display: block;
+        color: white;
+        text-decoration: none;
+        margin-bottom: 10px;
+    }
+
+    .footer-box a:hover {
+        color: #d4af37;
+    }
+
+    /* Social Media Icons */
+    .un-social-icons {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    /* Social Icon Circle */
+    .un-social-icons a {
+        width: 38px;
+        height: 38px;
+
+        border-radius: 50%;
+
+        background: white;
+        color: #0b1f3a;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        text-decoration: none;
+    }
+
+    /* Social Icon Hover */
+    .un-social-icons a:hover {
+        background: #d4af37;
+        color: #0b1f3a;
+    }
+
+    /* Newsletter Email Box */
+    .footer-box input {
+        width: 100%;
+        padding: 10px;
+
+        border: none;
+        margin-bottom: 10px;
+
+        /* Rounded four corners */
+        border-radius: 10px;
+
+        box-sizing: border-box;
+        outline: none;
+    }
+
+    /* Email Box Focus */
+    .footer-box input:focus {
+        border: 1px solid #d4af37;
+    }
+
+    /* Subscribe Button */
+    .footer-box button {
+        padding: 10px 18px;
+
+        background: #d4af37;
+        color: #0b1f3a;
+
+        border: none;
+        cursor: pointer;
+
+        /* Rounded four corners */
+        border-radius: 10px;
+    }
+
+    /* Button Hover */
+    .footer-box button:hover {
+        background: white;
+    }
+
+    /* Bottom Copyright */
+    .footer-bottom {
+        text-align: center;
+
+        border-top: 1px solid #ffffff33;
+
+        margin-top: 40px;
+        padding: 20px;
+    }
+</style>

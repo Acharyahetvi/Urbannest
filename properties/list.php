@@ -1,141 +1,851 @@
 <?php
-$pageTitle = 'Properties — UrbanNest';
-$pageDesc  = 'Browse UrbanNest\'s curated portfolio of luxury properties for sale and rent.';
-require_once __DIR__ . '/../includes/header.php';
-require_once __DIR__ . '/../includes/data.php';
-require_once __DIR__ . '/../includes/navbar.php';
 
-$catFilter = $_GET['cat'] ?? '';
-$results = $UN_PROPERTIES;
-if ($catFilter) {
-    $results = array_values(array_filter($results, fn($p)=>$p['category_slug']===$catFilter));
-    if (!$results) $results = $UN_PROPERTIES; // fallback for demo
+$pageTitle = "Properties - UrbanNest";
+$pageDesc = "Find properties in Gujarat and Mumbai.";
+
+require_once __DIR__ . "/../includes/header.php";
+require_once __DIR__ . "/../includes/data.php";
+require_once __DIR__ . "/../includes/navbar.php";
+
+
+/* =========================
+   GET SEARCH DATA
+========================= */
+
+$city = $_GET["city"] ?? "";
+$state = $_GET["state"] ?? "";
+$category = $_GET["category"] ?? "";
+$type = $_GET["type"] ?? "";
+$purpose = $_GET["purpose"] ?? "";
+
+$beds = $_GET["beds"] ?? "";
+$baths = $_GET["baths"] ?? "";
+$price = $_GET["price"] ?? "";
+$area = $_GET["area"] ?? "";
+$status = $_GET["status"] ?? "";
+
+
+/* =========================
+   DEFAULT PROPERTIES
+========================= */
+
+$properties = [];
+
+
+/* =========================
+   FILTER PROPERTIES
+========================= */
+
+foreach ($UN_PROPERTIES as $property) {
+
+    $match = true;
+
+
+    /* STATE */
+
+    if ($state != "" && $property["state"] != $state) {
+
+        $match = false;
+    }
+
+
+    /* CITY */
+
+    if ($city != "" && $property["city"] != $city) {
+
+        $match = false;
+    }
+
+
+    /* CATEGORY */
+
+    if ($category != "" && $property["category"] != $category) {
+
+        $match = false;
+    }
+
+
+    /* PROPERTY TYPE */
+
+    if ($type != "" && $property["type"] != $type) {
+
+        $match = false;
+    }
+
+
+    /* PURPOSE */
+
+    if ($purpose != "" && $property["purpose"] != $purpose) {
+
+        $match = false;
+    }
+
+
+    /* BEDROOMS */
+
+    if ($beds != "" && $property["bedrooms"] < $beds) {
+
+        $match = false;
+    }
+
+
+    /* BATHROOMS */
+
+    if ($baths != "" && $property["bathrooms"] < $baths) {
+
+        $match = false;
+    }
+
+
+    /* PROPERTY STATUS */
+
+    if ($status != "" && $property["status"] != $status) {
+
+        $match = false;
+    }
+
+
+    /* AREA */
+
+    if ($area != "") {
+
+        if ($area == "500-1500") {
+
+            if ($property["area"] < 500 || $property["area"] > 1500) {
+
+                $match = false;
+            }
+        } elseif ($area == "1500-3000") {
+
+            if ($property["area"] < 1500 || $property["area"] > 3000) {
+
+                $match = false;
+            }
+        } elseif ($area == "3000-6000") {
+
+            if ($property["area"] < 3000 || $property["area"] > 6000) {
+
+                $match = false;
+            }
+        } elseif ($area == "6000-plus") {
+
+            if ($property["area"] < 6000) {
+
+                $match = false;
+            }
+        }
+    }
+
+
+    /* PRICE */
+
+    if ($price != "") {
+
+        if ($price == "under-500k") {
+
+            if ($property["price"] >= 5000000) {
+
+                $match = false;
+            }
+        } elseif ($price == "500k-1m") {
+
+            if (
+                $property["price"] < 5000000 ||
+                $property["price"] > 10000000
+            ) {
+
+                $match = false;
+            }
+        } elseif ($price == "1m-5m") {
+
+            if (
+                $property["price"] < 10000000 ||
+                $property["price"] > 50000000
+            ) {
+
+                $match = false;
+            }
+        } elseif ($price == "5m-10m") {
+
+            if (
+                $property["price"] < 50000000 ||
+                $property["price"] > 100000000
+            ) {
+
+                $match = false;
+            }
+        } elseif ($price == "10m-plus") {
+
+            if ($property["price"] < 100000000) {
+
+                $match = false;
+            }
+        }
+    }
+
+
+    /* ADD MATCHING PROPERTY */
+
+    if ($match == true) {
+
+        $properties[] = $property;
+    }
 }
+
 ?>
 
+
+<!-- =========================
+     PAGE HEADER
+========================= -->
+
 <section class="un-page-head">
+
     <div class="container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-3">
-                <li class="breadcrumb-item"><a href="<?= url('index.php') ?>">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Properties</li>
-            </ol>
-        </nav>
-        <h1>Explore the Portfolio</h1>
-        <p class="lead opacity-75 mb-0"><?= count($results) ?> curated residences match your criteria.</p>
+
+        <h1>
+            Explore Properties
+        </h1>
+
+        <p>
+            Find properties in Gujarat and Mumbai.
+        </p>
+
     </div>
+
 </section>
+
+
+<!-- =========================
+     PROPERTY SECTION
+========================= -->
 
 <section class="section-pad-sm">
+
     <div class="container">
-        <div class="row g-4">
-            <!-- Sidebar filters -->
-            <aside class="col-lg-3">
-                <form class="un-filter">
-                    <h6>Category</h6>
-                    <select class="form-select">
-                        <option>All Categories</option>
-                        <?php foreach ($UN_CATEGORIES as $c) echo '<option'.($catFilter===$c['slug']?' selected':'').'>'.e($c['name']).'</option>'; ?>
-                    </select>
 
-                    <h6>Sub Category</h6>
-                    <select class="form-select">
-                        <option>Any</option><option>Studio</option><option>Duplex</option><option>Triplex</option><option>Estate</option><option>Loft</option>
-                    </select>
+        <div class="row">
 
-                    <h6>State</h6>
-                    <select class="form-select">
-                        <option>All States</option>
-                        <?php foreach ($UN_STATES as $s) echo '<option>'.e($s['name']).'</option>'; ?>
-                    </select>
 
-                    <h6>City</h6>
-                    <select class="form-select">
-                        <option>All Cities</option>
-                        <?php foreach ($UN_CITIES as $c) echo '<option>'.e($c['name']).'</option>'; ?>
-                    </select>
+            <!-- =====================
+                 FILTER
+            ====================== -->
 
-                    <h6>Property Status</h6>
-                    <?php foreach (['Ready to Move','Under Construction','New Launch','For Rent','For Sale'] as $st): ?>
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="st_<?= md5($st) ?>"><label class="form-check-label" for="st_<?= md5($st) ?>"><?= e($st) ?></label></div>
-                    <?php endforeach; ?>
+            <div class="col-lg-3">
 
-                    <h6>Price Range</h6>
-                    <div class="un-range">
-                        <input type="number" class="form-control" placeholder="Min $">
-                        <input type="number" class="form-control" placeholder="Max $">
-                    </div>
+                <div class="un-filter">
 
-                    <h6>Area (sqft)</h6>
-                    <div class="un-range">
-                        <input type="number" class="form-control" placeholder="Min">
-                        <input type="number" class="form-control" placeholder="Max">
-                    </div>
+                    <h4>
+                        Search Property
+                    </h4>
 
-                    <h6>Bedrooms</h6>
-                    <div class="d-flex flex-wrap gap-2">
-                        <?php foreach (['1+','2+','3+','4+','5+'] as $b): ?>
-                            <input type="radio" class="btn-check" name="beds" id="bed_<?= $b ?>"><label class="btn btn-sm btn-outline-navy" for="bed_<?= $b ?>"><?= $b ?></label>
-                        <?php endforeach; ?>
-                    </div>
 
-                    <h6>Bathrooms</h6>
-                    <div class="d-flex flex-wrap gap-2">
-                        <?php foreach (['1+','2+','3+','4+'] as $b): ?>
-                            <input type="radio" class="btn-check" name="baths" id="bath_<?= $b ?>"><label class="btn btn-sm btn-outline-navy" for="bath_<?= $b ?>"><?= $b ?></label>
-                        <?php endforeach; ?>
-                    </div>
+                    <form
+                        action="list.php"
+                        method="get">
 
-                    <h6>Amenities</h6>
-                    <?php foreach (array_slice($UN_AMENITIES, 0, 8) as $a): ?>
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="am_<?= $a['id'] ?>"><label class="form-check-label" for="am_<?= $a['id'] ?>"><?= e($a['name']) ?></label></div>
-                    <?php endforeach; ?>
 
-                    <hr>
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-navy">Apply Filters</button>
-                        <button type="reset" class="btn btn-outline-navy btn-sm">Reset</button>
-                    </div>
-                </form>
-            </aside>
+                        <!-- STATE -->
+
+                        <label class="form-label">
+                            State
+                        </label>
+
+                        <select
+                            name="state"
+                            class="form-select mb-3">
+
+                            <option value="">
+                                Select State
+                            </option>
+
+                            <option
+                                value="Gujarat"
+                                <?= $state == "Gujarat" ? "selected" : "" ?>>
+                                Gujarat
+                            </option>
+
+                            <option
+                                value="Maharashtra"
+                                <?= $state == "Maharashtra" ? "selected" : "" ?>>
+                                Maharashtra
+                            </option>
+
+                        </select>
+
+
+                        <!-- CITY -->
+
+                        <label class="form-label">
+                            City
+                        </label>
+
+                        <select
+                            name="city"
+                            class="form-select mb-3">
+
+                            <option value="">
+                                Select City
+                            </option>
+
+                            <option
+                                value="Ahmedabad"
+                                <?= $city == "Ahmedabad" ? "selected" : "" ?>>
+                                Ahmedabad
+                            </option>
+
+                            <option
+                                value="Surat"
+                                <?= $city == "Surat" ? "selected" : "" ?>>
+                                Surat
+                            </option>
+
+                            <option
+                                value="Vadodara"
+                                <?= $city == "Vadodara" ? "selected" : "" ?>>
+                                Vadodara
+                            </option>
+
+                            <option
+                                value="Rajkot"
+                                <?= $city == "Rajkot" ? "selected" : "" ?>>
+                                Rajkot
+                            </option>
+
+                            <option
+                                value="Gandhinagar"
+                                <?= $city == "Gandhinagar" ? "selected" : "" ?>>
+                                Gandhinagar
+                            </option>
+
+                            <option
+                                value="Bhavnagar"
+                                <?= $city == "Bhavnagar" ? "selected" : "" ?>>
+                                Bhavnagar
+                            </option>
+
+                            <option
+                                value="Mumbai"
+                                <?= $city == "Mumbai" ? "selected" : "" ?>>
+                                Mumbai
+                            </option>
+
+                        </select>
+
+
+                        <!-- CATEGORY -->
+
+                        <label class="form-label">
+                            Property Category
+                        </label>
+
+                        <select
+                            name="category"
+                            class="form-select mb-3">
+
+                            <option value="">
+                                Select Category
+                            </option>
+
+                            <option
+                                value="Residential"
+                                <?= $category == "Residential" ? "selected" : "" ?>>
+                                Residential
+                            </option>
+
+                            <option
+                                value="Commercial"
+                                <?= $category == "Commercial" ? "selected" : "" ?>>
+                                Commercial
+                            </option>
+
+                            <option
+                                value="Land"
+                                <?= $category == "Land" ? "selected" : "" ?>>
+                                Land
+                            </option>
+
+                            <option
+                                value="Industrial"
+                                <?= $category == "Industrial" ? "selected" : "" ?>>
+                                Industrial
+                            </option>
+
+                            <option
+                                value="Luxury"
+                                <?= $category == "Luxury" ? "selected" : "" ?>>
+                                Luxury
+                            </option>
+
+                        </select>
+
+
+                        <!-- PROPERTY TYPE -->
+
+                        <label class="form-label">
+                            Property Type
+                        </label>
+
+                        <select
+                            name="type"
+                            class="form-select mb-3">
+
+                            <option value="">
+                                Select Property Type
+                            </option>
+
+                            <option
+                                value="Apartment"
+                                <?= $type == "Apartment" ? "selected" : "" ?>>
+                                Apartment
+                            </option>
+
+                            <option
+                                value="Villa"
+                                <?= $type == "Villa" ? "selected" : "" ?>>
+                                Villa
+                            </option>
+
+                            <option
+                                value="Independent House"
+                                <?= $type == "Independent House" ? "selected" : "" ?>>
+                                Independent House
+                            </option>
+
+                            <option
+                                value="Office"
+                                <?= $type == "Office" ? "selected" : "" ?>>
+                                Office
+                            </option>
+
+                            <option
+                                value="Residential Plot"
+                                <?= $type == "Residential Plot" ? "selected" : "" ?>>
+                                Residential Plot
+                            </option>
+
+                        </select>
+
+
+                        <!-- PURPOSE -->
+
+                        <label class="form-label">
+                            Property For
+                        </label>
+
+                        <select
+                            name="purpose"
+                            class="form-select mb-3">
+
+                            <option value="">
+                                Buy / Rent / Sell
+                            </option>
+
+                            <option
+                                value="buy"
+                                <?= $purpose == "buy" ? "selected" : "" ?>>
+                                Buy
+                            </option>
+
+                            <option
+                                value="rent"
+                                <?= $purpose == "rent" ? "selected" : "" ?>>
+                                Rent
+                            </option>
+
+                            <option
+                                value="sell"
+                                <?= $purpose == "sell" ? "selected" : "" ?>>
+                                Sell
+                            </option>
+
+                        </select>
+
+
+                        <!-- BEDROOMS -->
+
+                        <label class="form-label">
+                            Bedrooms
+                        </label>
+
+                        <select
+                            name="beds"
+                            class="form-select mb-3">
+
+                            <option value="">
+                                Any
+                            </option>
+
+                            <option value="1">
+                                1+ Bedrooms
+                            </option>
+
+                            <option value="2">
+                                2+ Bedrooms
+                            </option>
+
+                            <option value="3">
+                                3+ Bedrooms
+                            </option>
+
+                            <option value="4">
+                                4+ Bedrooms
+                            </option>
+
+                        </select>
+
+
+                        <!-- BATHROOMS -->
+
+                        <label class="form-label">
+                            Bathrooms
+                        </label>
+
+                        <select
+                            name="baths"
+                            class="form-select mb-3">
+
+                            <option value="">
+                                Any
+                            </option>
+
+                            <option value="1">
+                                1+ Bathrooms
+                            </option>
+
+                            <option value="2">
+                                2+ Bathrooms
+                            </option>
+
+                            <option value="3">
+                                3+ Bathrooms
+                            </option>
+
+                            <option value="4">
+                                4+ Bathrooms
+                            </option>
+
+                        </select>
+
+
+                        <!-- STATUS -->
+
+                        <label class="form-label">
+                            Property Status
+                        </label>
+
+                        <select
+                            name="status"
+                            class="form-select mb-3">
+
+                            <option value="">
+                                Any Status
+                            </option>
+
+                            <option value="For Sale">
+                                For Sale
+                            </option>
+
+                            <option value="For Rent">
+                                For Rent
+                            </option>
+
+                            <option value="Ready to Move">
+                                Ready to Move
+                            </option>
+
+                            <option value="Under Construction">
+                                Under Construction
+                            </option>
+
+                            <option value="New Launch">
+                                New Launch
+                            </option>
+
+                        </select>
+
+
+                        <!-- AREA -->
+
+                        <label class="form-label">
+                            Area
+                        </label>
+
+                        <select
+                            name="area"
+                            class="form-select mb-3">
+
+                            <option value="">
+                                Any Area
+                            </option>
+
+                            <option value="500-1500">
+                                500–1,500 sqft
+                            </option>
+
+                            <option value="1500-3000">
+                                1,500–3,000 sqft
+                            </option>
+
+                            <option value="3000-6000">
+                                3,000–6,000 sqft
+                            </option>
+
+                            <option value="6000-plus">
+                                6,000+ sqft
+                            </option>
+
+                        </select>
+
+
+                        <!-- PRICE -->
+
+                        <label class="form-label">
+                            Price
+                        </label>
+
+                        <select
+                            name="price"
+                            class="form-select mb-3">
+
+                            <option value="">
+                                Any Price
+                            </option>
+
+                            <option value="under-500k">
+                                Under ₹50 Lakh
+                            </option>
+
+                            <option value="500k-1m">
+                                ₹50 Lakh – ₹1 Crore
+                            </option>
+
+                            <option value="1m-5m">
+                                ₹1 Crore – ₹5 Crore
+                            </option>
+
+                            <option value="5m-10m">
+                                ₹5 Crore – ₹10 Crore
+                            </option>
+
+                            <option value="10m-plus">
+                                ₹10 Crore+
+                            </option>
+
+                        </select>
+
+
+                        <!-- SEARCH BUTTON -->
+
+                        <button
+                            type="submit"
+                            class="btn btn-navy w-100">
+
+                            Search Properties
+
+                        </button>
+
+
+                        <!-- RESET -->
+
+                        <a
+                            href="list.php"
+                            class="btn btn-outline-navy w-100 mt-2">
+
+                            Reset
+
+                        </a>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================
+                 PROPERTIES
+            ====================== -->
 
             <div class="col-lg-9">
-                <!-- Toolbar -->
-                <div class="d-flex justify-content-between align-items-center flex-wrap mb-4 p-3 bg-cream rounded-4">
-                    <div><strong><?= count($results) ?></strong> <span class="text-muted">properties found</span></div>
-                    <div class="d-flex gap-2 align-items-center">
-                        <span class="small text-muted">Sort by</span>
-                        <select class="form-select form-select-sm" style="min-width: 200px;">
-                            <option>Recommended</option>
-                            <option>Price: Low to High</option>
-                            <option>Price: High to Low</option>
-                            <option>Newest First</option>
-                            <option>Largest Area</option>
-                        </select>
-                    </div>
+
+                <div class="mb-4">
+
+                    <h3>
+                        Available Properties
+                    </h3>
+
+                    <p class="text-muted">
+
+                        Properties found:
+                        <?= count($properties) ?>
+
+                    </p>
+
                 </div>
+
 
                 <div class="row g-4">
-                    <?php foreach ($results as $p): ?>
-                        <div class="col-md-6 col-xl-4"><?php un_render_card($p); ?></div>
-                    <?php endforeach; ?>
+
+
+                    <?php if (count($properties) > 0) { ?>
+
+
+                        <?php foreach ($properties as $property) { ?>
+
+
+                            <div class="col-md-6">
+
+                                <div class="card shadow-sm h-100">
+
+
+                                    <!-- IMAGE -->
+
+                                    <img
+                                        src="<?= $property["image"] ?>"
+                                        class="card-img-top"
+                                        style="
+                                            height:220px;
+                                            object-fit:cover;
+                                        "
+                                        alt="<?= $property["title"] ?>">
+
+
+                                    <div class="card-body">
+
+
+                                        <!-- CATEGORY -->
+
+                                        <p class="text-muted mb-1">
+
+                                            <?= $property["category"] ?>
+
+                                        </p>
+
+
+                                        <!-- TITLE -->
+
+                                        <h5>
+
+                                            <?= $property["title"] ?>
+
+                                        </h5>
+
+
+                                        <!-- LOCATION -->
+
+                                        <p class="text-muted">
+
+                                            <i class="fa-solid fa-location-dot"></i>
+
+                                            <?= $property["city"] ?>,
+                                            <?= $property["state"] ?>
+
+                                        </p>
+
+
+                                        <!-- PRICE -->
+
+                                        <h5>
+
+                                            ₹<?= number_format($property["price"]) ?>
+
+                                            <?php
+
+                                            if ($property["purpose"] == "rent") {
+
+                                                echo " / month";
+                                            }
+
+                                            ?>
+
+                                        </h5>
+
+
+                                        <!-- DETAILS -->
+
+                                        <p class="text-muted">
+
+                                            <?= $property["bedrooms"] ?>
+                                            Bedrooms
+
+                                            &nbsp; | &nbsp;
+
+                                            <?= $property["bathrooms"] ?>
+                                            Bathrooms
+
+                                            &nbsp; | &nbsp;
+
+                                            <?= number_format($property["area"]) ?>
+                                            sqft
+
+                                        </p>
+
+
+                                        <!-- STATUS -->
+
+                                        <p>
+
+                                            <strong>
+                                                <?= $property["status"] ?>
+                                            </strong>
+
+                                        </p>
+
+
+                                        <!-- DETAILS BUTTON -->
+
+                                        <a
+                                            href="details.php?id=<?= $property["id"] ?>"
+                                            class="btn btn-outline-navy">
+
+                                            View Details
+
+                                        </a>
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                        <?php } ?>
+
+
+                    <?php } else { ?>
+
+
+                        <!-- NO PROPERTY -->
+
+                        <div class="col-12">
+
+                            <div class="alert alert-warning">
+
+                                No properties found for the selected filters.
+
+                            </div>
+
+                        </div>
+
+
+                    <?php } ?>
+
+
                 </div>
 
-                <!-- Pagination -->
-                <nav class="mt-5">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled"><a class="page-link" href="#"><i class="fa-solid fa-chevron-left"></i></a></li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item disabled"><span class="page-link">…</span></li>
-                        <li class="page-item"><a class="page-link" href="#">12</a></li>
-                        <li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-chevron-right"></i></a></li>
-                    </ul>
-                </nav>
             </div>
+
         </div>
+
     </div>
+
 </section>
 
-<?php require_once __DIR__ . '/../includes/footer.php'; ?>
+
+<?php
+
+require_once __DIR__ . "/../includes/footer.php";
+
+?>
