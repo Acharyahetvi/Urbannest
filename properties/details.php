@@ -1,210 +1,398 @@
 <?php
-require_once __DIR__ . '/../includes/header.php';
-require_once __DIR__ . '/../includes/data.php';
 
-$id = $_GET['id'] ?? 'UN-1024';
+// Include required files
+require_once __DIR__ . "/../includes/header.php";
+require_once __DIR__ . "/../includes/data.php";
+require_once __DIR__ . "/../includes/navbar.php";
+
+
+// Get property ID from URL
+$id = $_GET["id"] ?? "";
+
+
+// Store property details
 $property = null;
-foreach ($UN_PROPERTIES as $p) if ($p['id'] === $id) { $property = $p; break; }
-if (!$property) $property = $UN_PROPERTIES[0];
 
-$agent = $UN_AGENTS[array_search($property['agent_id'], array_column($UN_AGENTS, 'id'))] ?? $UN_AGENTS[0];
-$owner = $UN_OWNERS[array_search($property['owner_id'], array_column($UN_OWNERS, 'id'))] ?? $UN_OWNERS[0];
 
-$pageTitle = $property['title'] . ' — UrbanNest';
-$pageDesc  = $property['title'] . ' at ' . $property['address'];
+// Check property ID
+if ($id == "UN001") {
+    $property = $UN_PROPERTIES[0];
+} else if ($id == "UN002") {
+    $property = $UN_PROPERTIES[1];
+} else if ($id == "UN003") {
+    $property = $UN_PROPERTIES[2];
+} else if ($id == "UN004") {
+    $property = $UN_PROPERTIES[3];
+} else if ($id == "UN005") {
+    $property = $UN_PROPERTIES[4];
+} else if ($id == "UN006") {
+    $property = $UN_PROPERTIES[5];
+} else if ($id == "UN007") {
+    $property = $UN_PROPERTIES[6];
+} else if ($id == "UN008") {
+    $property = $UN_PROPERTIES[7];
+} else if ($id == "UN009") {
+    $property = $UN_PROPERTIES[8];
+} else if ($id == "UN010") {
+    $property = $UN_PROPERTIES[9];
+} else if ($id == "UN011") {
+    $property = $UN_PROPERTIES[10];
+} else if ($id == "UN012") {
+    $property = $UN_PROPERTIES[11];
+}
 
-$gallery = [
-    $property['image'],
-    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
-];
 
-require_once __DIR__ . '/../includes/navbar.php';
+// Check if property exists
+if ($property == null) {
+
+    echo "<div style='text-align:center; padding:60px;'>";
+
+    echo "<h2>Property Not Found</h2>";
+
+    echo "<p>The property you are looking for does not exist.</p>";
+
+    echo "<a href='list.php'>Back to Properties</a>";
+
+    echo "</div>";
+
+    require_once __DIR__ . "/../includes/footer.php";
+
+    exit;
+}
+
 ?>
 
-<section class="un-page-head" style="padding: 120px 0 60px;">
-    <div class="container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-3">
-                <li class="breadcrumb-item"><a href="<?= url('index.php') ?>">Home</a></li>
-                <li class="breadcrumb-item"><a href="<?= url('properties/list.php') ?>">Properties</a></li>
-                <li class="breadcrumb-item active"><?= e($property['id']) ?></li>
-            </ol>
-        </nav>
-        <div class="d-flex justify-content-between align-items-end flex-wrap gap-3">
-            <div>
-                <div class="d-flex gap-2 mb-2">
-                    <?php if ($property['featured']): ?><span class="un-badge un-badge-featured"><i class="fa-solid fa-star"></i> Featured</span><?php endif; ?>
-                    <?php if ($property['luxury']):  ?><span class="un-badge un-badge-luxury"><i class="fa-solid fa-crown"></i> Luxury</span><?php endif; ?>
-                    <span class="un-badge un-badge-new"><?= e($property['status']) ?></span>
-                </div>
-                <h1><?= e($property['title']) ?></h1>
-                <p class="lead opacity-75 mb-0"><i class="fa-solid fa-location-dot text-gold me-2"></i><?= e($property['address']) ?></p>
-            </div>
-            <div class="text-lg-end">
-                <div style="font-family:'Playfair Display',serif;font-size:2.4rem;color:#fff;">$<?= number_format((float)$property['price']) ?><?= $property['purpose']==='rent'?' <small class="opacity-50">/mo</small>':'' ?></div>
-                <span class="opacity-75">ID · <?= e($property['id']) ?></span>
-            </div>
+
+<!-- PROPERTY DETAILS -->
+
+<div style="
+    width:900px;
+    margin:40px auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.10);
+">
+
+
+    <!-- PROPERTY IMAGE -->
+
+    <img
+        src="<?php echo htmlspecialchars($property['image']); ?>"
+        alt="<?php echo htmlspecialchars($property['title']); ?>"
+        style="
+            width:100%;
+            height:350px;
+            object-fit:cover;
+            border-radius:10px;
+        ">
+
+
+    <!-- PROPERTY TITLE -->
+
+    <h1 style="margin-top:25px;">
+
+        <?php echo htmlspecialchars($property["title"]); ?>
+
+    </h1>
+
+
+    <!-- PROPERTY LOCATION -->
+
+    <p style="color:#666; font-size:17px;">
+
+        📍
+
+        <?php echo htmlspecialchars($property["city"]); ?>,
+
+        <?php echo htmlspecialchars($property["state"]); ?>
+
+    </p>
+
+
+    <!-- PROPERTY PRICE -->
+
+    <h2 style="color:#d4af37;">
+
+        ₹ <?php echo number_format($property["price"]); ?>
+
+        <?php
+
+        if ($property["purpose"] == "rent") {
+
+            echo " / Month";
+        }
+
+        ?>
+
+    </h2>
+
+
+    <hr>
+
+
+    <!-- PROPERTY INFORMATION -->
+
+    <h3>Property Information</h3>
+
+
+    <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:20px;
+        margin-top:20px;
+    ">
+
+
+        <!-- Category -->
+
+        <div>
+
+            <strong>Category:</strong>
+
+            <?php echo htmlspecialchars($property["category"]); ?>
+
         </div>
+
+
+        <!-- Property Type -->
+
+        <div>
+
+            <strong>Property Type:</strong>
+
+            <?php echo htmlspecialchars($property["type"]); ?>
+
+        </div>
+
+
+        <!-- Status -->
+
+        <div>
+
+            <strong>Status:</strong>
+
+            <?php echo htmlspecialchars($property["status"]); ?>
+
+        </div>
+
+
+        <!-- Area -->
+
+        <div>
+
+            <strong>Area:</strong>
+
+            <?php echo number_format($property["area"]); ?> Sq Ft
+
+        </div>
+
+
+        <!-- Bedrooms -->
+
+        <div>
+
+            <strong>Bedrooms:</strong>
+
+            <?php
+
+            if ($property["bedrooms"] > 0) {
+
+                echo $property["bedrooms"];
+            } else {
+
+                echo "N/A";
+            }
+
+            ?>
+
+        </div>
+
+
+        <!-- Bathrooms -->
+
+        <div>
+
+            <strong>Bathrooms:</strong>
+
+            <?php
+
+            if ($property["bathrooms"] > 0) {
+
+                echo $property["bathrooms"];
+            } else {
+
+                echo "N/A";
+            }
+
+            ?>
+
+        </div>
+
+
+        <!-- City -->
+
+        <div>
+
+            <strong>City:</strong>
+
+            <?php echo htmlspecialchars($property["city"]); ?>
+
+        </div>
+
+
+        <!-- State -->
+
+        <div>
+
+            <strong>State:</strong>
+
+            <?php echo htmlspecialchars($property["state"]); ?>
+
+        </div>
+
+
     </div>
-</section>
 
-<section class="section-pad-sm">
-    <div class="container">
-        <!-- Gallery -->
-        <div class="un-gallery-main mb-3">
-            <img id="galleryMain" src="<?= e($gallery[0]) ?>" alt="<?= e($property['title']) ?>" style="transition: opacity .3s;">
-        </div>
-        <div class="row g-3 mb-5">
-            <?php foreach ($gallery as $i => $src): ?>
-                <div class="col-3 col-md-2">
-                    <div class="un-gallery-thumb <?= $i===0?'active':'' ?>" data-src="<?= e($src) ?>">
-                        <img src="<?= e($src) ?>" alt="Photo <?= $i+1 ?>" loading="lazy">
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
 
-        <div class="row g-5">
-            <div class="col-lg-8">
-                <!-- Overview -->
-                <div class="un-detail-box">
-                    <span class="eyebrow">Overview</span>
-                    <h2 class="section-title mb-3" style="font-size:1.8rem;">A residence composed with rare precision.</h2>
-                    <div class="un-detail-meta">
-                        <div><i class="fa-solid fa-bed"></i> <?= (int)$property['beds'] ?> Bedrooms</div>
-                        <div><i class="fa-solid fa-bath"></i> <?= (int)$property['baths'] ?> Bathrooms</div>
-                        <div><i class="fa-solid fa-vector-square"></i> <?= number_format((int)$property['area']) ?> sqft</div>
-                        <div><i class="fa-solid fa-tags"></i> <?= e($property['category']) ?></div>
-                        <div><i class="fa-solid fa-city"></i> <?= e($property['city']) ?>, <?= e($property['state']) ?></div>
-                        <div><i class="fa-regular fa-calendar"></i> Listed 2 days ago</div>
-                    </div>
-                    <p>Set within one of the most sought‑after addresses in <?= e($property['city']) ?>, this residence is defined by generous proportions, floor‑to‑ceiling glazing and quiet, considered materials. Interiors were reimagined by a leading studio to blend architectural clarity with the warmth of a private home.</p>
-                    <p>The layout unfolds across a formal reception, a chef's kitchen with dual islands, and a primary suite with dual dressing rooms. Every principal room enjoys skyline or waterfront views, and the residence is fitted with a full‑home smart system, high‑fidelity audio and climate‑controlled wine storage.</p>
-                </div>
+    <hr style="margin-top:30px;">
 
-                <!-- Features -->
-                <div class="un-detail-box">
-                    <span class="eyebrow">Features</span>
-                    <h3 class="section-title mb-3" style="font-size:1.4rem;">Property Features</h3>
-                    <div class="row g-3">
-                        <div class="col-md-6"><i class="fa-solid fa-check text-gold me-2"></i>Floor‑to‑ceiling windows throughout</div>
-                        <div class="col-md-6"><i class="fa-solid fa-check text-gold me-2"></i>Radiant heated stone flooring</div>
-                        <div class="col-md-6"><i class="fa-solid fa-check text-gold me-2"></i>Chef's kitchen with dual islands</div>
-                        <div class="col-md-6"><i class="fa-solid fa-check text-gold me-2"></i>Dual primary dressing rooms</div>
-                        <div class="col-md-6"><i class="fa-solid fa-check text-gold me-2"></i>Whole‑home smart automation</div>
-                        <div class="col-md-6"><i class="fa-solid fa-check text-gold me-2"></i>Climate‑controlled wine storage</div>
-                        <div class="col-md-6"><i class="fa-solid fa-check text-gold me-2"></i>Private elevator direct to residence</div>
-                        <div class="col-md-6"><i class="fa-solid fa-check text-gold me-2"></i>Secure two‑car parking</div>
-                    </div>
-                </div>
 
-                <!-- Amenities -->
-                <div class="un-detail-box">
-                    <span class="eyebrow">Building</span>
-                    <h3 class="section-title mb-3" style="font-size:1.4rem;">Amenities</h3>
-                    <ul class="un-amen-list ps-0">
-                        <?php foreach ($UN_AMENITIES as $a): ?>
-                            <li><i class="<?= e($a['icon']) ?>"></i> <?= e($a['name']) ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
+    <!-- USER REVIEW SECTION -->
 
-                <!-- Floor plan -->
-                <div class="un-detail-box">
-                    <span class="eyebrow">Floor Plan</span>
-                    <h3 class="section-title mb-3" style="font-size:1.4rem;">Layout</h3>
-                    <img src="https://images.unsplash.com/photo-1580216643062-cf460548a66a?auto=format&fit=crop&w=1400&q=80" alt="Floor plan" class="img-fluid rounded-4" style="filter: grayscale(1) contrast(1.05);">
-                    <div class="row g-3 mt-3 small">
-                        <div class="col-md-4"><strong>Level 1:</strong> Reception, kitchen, terrace</div>
-                        <div class="col-md-4"><strong>Level 2:</strong> Primary suite + two bedrooms</div>
-                        <div class="col-md-4"><strong>Rooftop:</strong> Private garden + plunge pool</div>
-                    </div>
-                </div>
+    <h2>User Reviews</h2>
 
-                <!-- Video -->
-                <div class="un-detail-box">
-                    <span class="eyebrow">Property Tour</span>
-                    <h3 class="section-title mb-3" style="font-size:1.4rem;">Cinematic Walkthrough</h3>
-                    <div class="ratio ratio-16x9 rounded-4 overflow-hidden">
-                        <iframe src="https://www.youtube.com/embed/9K68nxUcqKM" title="Property tour" allowfullscreen></iframe>
-                    </div>
-                </div>
 
-                <!-- Map -->
-                <div class="un-detail-box">
-                    <span class="eyebrow">Location</span>
-                    <h3 class="section-title mb-3" style="font-size:1.4rem;">On the Map</h3>
-                    <div class="ratio ratio-21x9 rounded-4 overflow-hidden">
-                        <iframe src="https://www.google.com/maps?q=<?= urlencode($property['address']) ?>&output=embed" loading="lazy"></iframe>
-                    </div>
-                </div>
+    <div style="
+        margin-top:20px;
+        padding:25px;
+        background:#f8f8f8;
+        border-radius:10px;
+    ">
+
+
+        <h4>Rate this Property</h4>
+
+
+        <form method="post">
+
+
+            <!-- Rating -->
+
+            <div style="margin-top:15px;">
+
+                <label>
+                    <strong>Rating</strong>
+                </label>
+
+                <br>
+
+                <select
+                    name="rating"
+                    required
+                    style="
+                        width:100%;
+                        padding:10px;
+                        margin-top:8px;
+                        border:1px solid #ccc;
+                        border-radius:5px;
+                    ">
+
+                    <option value="">Select Rating</option>
+
+                    <option value="5">★★★★★ - 5 Stars</option>
+
+                    <option value="4">★★★★☆ - 4 Stars</option>
+
+                    <option value="3">★★★☆☆ - 3 Stars</option>
+
+                    <option value="2">★★☆☆☆ - 2 Stars</option>
+
+                    <option value="1">★☆☆☆☆ - 1 Star</option>
+
+                </select>
+
             </div>
 
-            <!-- Sidebar -->
-            <aside class="col-lg-4">
-                <div class="un-agent-side mb-4">
-                    <img src="<?= e($agent['avatar']) ?>" alt="<?= e($agent['name']) ?>">
-                    <div class="un-agent-role mt-3"><?= e($agent['role']) ?></div>
-                    <h5 class="un-agent-name mt-1"><?= e($agent['name']) ?></h5>
-                    <p class="text-muted small"><i class="fa-solid fa-phone text-gold me-1"></i><?= e($agent['phone']) ?></p>
-                    <form class="text-start mt-3" onsubmit="event.preventDefault(); alert('Inquiry sent to '+'<?= e($agent['name']) ?>');">
-                        <div class="mb-2"><input class="form-control" placeholder="Your name" required></div>
-                        <div class="mb-2"><input class="form-control" type="email" placeholder="Email" required></div>
-                        <div class="mb-2"><input class="form-control" placeholder="Phone"></div>
-                        <div class="mb-2"><textarea class="form-control" rows="3" placeholder="I'm interested in <?= e($property['id']) ?>…"></textarea></div>
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-navy">Send Inquiry</button>
-                            <button type="button" class="btn btn-gold"><i class="fa-regular fa-calendar-check me-2"></i>Schedule Visit</button>
-                        </div>
-                    </form>
-                </div>
 
-                <div class="un-detail-box">
-                    <span class="eyebrow">Owner</span>
-                    <div class="d-flex align-items-center gap-3 mt-2">
-                        <img src="<?= e($owner['avatar']) ?>" alt="" style="width:60px;height:60px;border-radius:50%;object-fit:cover;">
-                        <div>
-                            <div class="fw-semibold text-navy"><?= e($owner['name']) ?></div>
-                            <div class="small text-muted"><?= e($owner['role']) ?> · Since <?= e($owner['since']) ?></div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="d-grid"><a href="<?= url('owners.php?id='.$owner['id']) ?>" class="btn btn-outline-navy btn-sm">View Owner Profile</a></div>
-                </div>
+            <!-- Review Text -->
 
-                <div class="un-detail-box mt-4">
-                    <span class="eyebrow">Actions</span>
-                    <div class="d-grid gap-2 mt-2">
-                        <button class="btn btn-outline-navy"><i class="fa-regular fa-heart me-2"></i>Save to Wishlist</button>
-                        <button class="btn btn-outline-navy"><i class="fa-solid fa-code-compare me-2"></i>Add to Compare</button>
-                        <button class="btn btn-outline-navy"><i class="fa-solid fa-share-nodes me-2"></i>Share Listing</button>
-                        <button class="btn btn-outline-navy"><i class="fa-solid fa-print me-2"></i>Print Details</button>
-                    </div>
-                </div>
-            </aside>
-        </div>
+            <div style="margin-top:15px;">
 
-        <!-- Similar properties -->
-        <div class="mt-5 pt-4">
-            <div class="d-flex justify-content-between align-items-end flex-wrap mb-4">
-                <div>
-                    <span class="eyebrow">You may also like</span>
-                    <h2 class="section-title mb-0" style="font-size:1.8rem;">Similar Properties</h2>
-                </div>
-                <a href="<?= url('properties/list.php') ?>" class="btn btn-outline-navy btn-sm">See All</a>
+                <label>
+                    <strong>Your Review</strong>
+                </label>
+
+                <br>
+
+                <textarea
+                    name="review"
+                    rows="4"
+                    placeholder="Write your review..."
+                    required
+                    style="
+                        width:100%;
+                        padding:10px;
+                        margin-top:8px;
+                        border:1px solid #ccc;
+                        border-radius:5px;
+                    "></textarea>
+
             </div>
-            <div class="row g-4">
-                <?php
-                $similar = array_values(array_filter($UN_PROPERTIES, fn($p)=>$p['id']!==$property['id']));
-                foreach (array_slice($similar, 0, 3) as $p): ?>
-                    <div class="col-md-6 col-lg-4"><?php un_render_card($p); ?></div>
-                <?php endforeach; ?>
-            </div>
-        </div>
+
+
+            <!-- Submit Button -->
+
+            <button
+                type="submit"
+                name="submit_review"
+                style="
+                    margin-top:15px;
+                    padding:10px 25px;
+                    background:#0b1f3a;
+                    color:white;
+                    border:none;
+                    border-radius:5px;
+                    cursor:pointer;
+                ">
+
+                Submit Review
+
+            </button>
+
+
+        </form>
+
     </div>
-</section>
 
-<?php require_once __DIR__ . '/../includes/footer.php'; ?>
+
+    <!-- BACK BUTTON -->
+
+    <div style="margin-top:30px;">
+
+        <a
+            href="list.php"
+            style="
+                background:#0b1f3a;
+                color:white;
+                padding:10px 20px;
+                text-decoration:none;
+                border-radius:5px;
+            ">
+
+            ← Back to Properties
+
+        </a>
+
+    </div>
+
+
+</div>
+
+
+<?php
+
+// Include footer
+require_once __DIR__ . "/../includes/footer.php";
+
+?>

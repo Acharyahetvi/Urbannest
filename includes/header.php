@@ -1,4 +1,3 @@
-
 <?php
 
 require_once __DIR__ . '/db.php';
@@ -14,20 +13,17 @@ $pageDesc  = $pageDesc  ?? 'Discover premium homes, penthouses & investment prop
     <meta name="description" content="<?= e($pageDesc) ?>">
     <title><?= e($pageTitle) ?></title>
 
-    <!-- Bootstrap 5 -->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="http://localhost/xampp/UrbanNest/assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome 6 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
     <!-- Google Fonts: Playfair + Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
 
-    <!-- UrbanNest theme -->
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="http://localhost/xampp/UrbanNest/assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+
 </head>
 
 <body>

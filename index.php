@@ -1,363 +1,975 @@
 <?php
 
 $pageTitle = 'UrbanNest — Luxury Real Estate';
-$pageDesc  = 'Discover premium homes, penthouses & investment properties curated by UrbanNest.';
+$pageDesc = 'Discover premium homes, penthouses & investment properties curated by UrbanNest';
 
+require_once __DIR__ . '/db_connection.php';
 require_once __DIR__ . '/includes/header.php';
 require_once __DIR__ . '/includes/data.php';
 require_once __DIR__ . '/includes/navbar.php';
-require_once __DIR__ . '/db_connection.php';
+
+
+// =====================================
+// GET REVIEWS FROM DATABASE
+// =====================================
+
+$reviews = [];
+
+$sql = "SELECT users.full_name, reviews.rating, reviews.review, reviews.created_at
+        FROM reviews
+        INNER JOIN users ON reviews.user_id = users.user_id
+        ORDER BY reviews.created_at DESC
+        LIMIT 6";
+
+$result = mysqli_query($conn, $sql);
+
+
+// STORE REVIEWS
+
+if ($result) {
+
+    while ($row = mysqli_fetch_assoc($result)) {
+
+        $reviews[] = $row;
+    }
+}
 
 ?>
 
-<!-- ============== HERO ============== -->
+<style>
+    /* =====================================
+   URBANNEST HOME PAGE
+===================================== */
+
+
+    /* =====================================
+   HERO SECTION
+===================================== */
+
+    .un-hero {
+
+        position: relative;
+        min-height: 620px;
+        padding: 90px 0 70px;
+
+        color: #fff;
+
+        background:
+            linear-gradient(90deg,
+                rgba(11, 31, 58, 0.85),
+                rgba(11, 31, 58, 0.60),
+                rgba(11, 31, 58, 0.20)),
+            url('assets/images/hero.png') center / cover no-repeat;
+    }
+
+
+    .un-hero-content {
+
+        max-width: 720px;
+    }
+
+
+    .un-hero-eyebrow {
+
+        display: inline-block;
+        margin-bottom: 18px;
+
+        color: #d4af37;
+
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 3px;
+
+        text-transform: uppercase;
+    }
+
+
+    .un-hero h1 {
+
+        margin-bottom: 22px;
+
+        font-size: clamp(36px, 5vw, 62px);
+        line-height: 1.15;
+
+        font-weight: 700;
+    }
+
+
+    .un-hero h1 em {
+
+        color: #d4af37;
+        font-style: normal;
+    }
+
+
+    .un-hero p {
+
+        max-width: 600px;
+        margin-bottom: 28px;
+
+        color: #e2e7ef;
+
+        font-size: 17px;
+        line-height: 1.8;
+    }
+
+
+    /* HERO BUTTONS */
+
+    .un-hero-buttons {
+
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+
+    .un-btn-gold {
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+
+        padding: 13px 24px;
+
+        border: 1px solid #d4af37;
+        border-radius: 8px;
+
+        background: #d4af37;
+        color: #0b1f3a;
+
+        font-weight: 700;
+        text-decoration: none;
+
+        transition: 0.25s;
+    }
+
+
+    .un-btn-gold:hover {
+
+        background: #fff;
+        border-color: #fff;
+
+        color: #0b1f3a;
+
+        transform: translateY(-2px);
+    }
+
+
+    .un-btn-outline {
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 13px 24px;
+
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        border-radius: 8px;
+
+        color: #fff;
+
+        font-weight: 600;
+        text-decoration: none;
+
+        transition: 0.25s;
+    }
+
+
+    .un-btn-outline:hover {
+
+        background: #fff;
+        color: #0b1f3a;
+    }
+
+
+    /* =====================================
+   HERO STATISTICS
+===================================== */
+
+    .un-hero-stats {
+
+        display: flex;
+        flex-wrap: wrap;
+        gap: 45px;
+
+        margin-top: 45px;
+    }
+
+
+    .un-stat .num {
+
+        color: #d4af37;
+
+        font-size: 27px;
+        font-weight: 700;
+    }
+
+
+    .un-stat .lbl {
+
+        margin-top: 4px;
+
+        color: #e2e7ef;
+
+        font-size: 13px;
+    }
+
+
+    /* =====================================
+   BUY / RENT / SELL SECTION
+===================================== */
+
+    .un-purpose-section {
+
+        position: relative;
+        z-index: 2;
+
+        margin-top: -45px;
+        padding-bottom: 65px;
+    }
+
+
+    .un-purpose-heading {
+
+        margin-bottom: 24px;
+
+        color: #021020;
+
+        text-align: center;
+    }
+
+
+    .un-purpose-heading h2 {
+
+        margin-bottom: 8px;
+
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+
+    .un-purpose-heading p {
+
+        margin: 0;
+
+        color: #687386;
+    }
+
+
+    /* PURPOSE CARDS */
+
+    .un-purpose-card {
+
+        display: flex;
+        align-items: center;
+        gap: 18px;
+
+        height: 100%;
+        padding: 25px;
+
+        border: 1px solid #eee9dc;
+        border-radius: 15px;
+
+        background: #fff;
+
+        box-shadow: 0 8px 25px rgba(11, 31, 58, 0.08);
+
+        text-decoration: none;
+
+        transition: 0.25s;
+    }
+
+
+    .un-purpose-card:hover {
+
+        border-color: #d4af37;
+
+        box-shadow: 0 14px 30px rgba(11, 31, 58, 0.13);
+
+        transform: translateY(-5px);
+    }
+
+
+    /* PURPOSE ICON */
+
+    .un-purpose-icon {
+
+        display: flex;
+        flex-shrink: 0;
+
+        align-items: center;
+        justify-content: center;
+
+        width: 58px;
+        height: 58px;
+
+        border-radius: 13px;
+
+        background: #f8f4e8;
+        color: #b9922e;
+
+        font-size: 24px;
+    }
+
+
+    /* PURPOSE INFO */
+
+    .un-purpose-info {
+
+        flex: 1;
+        min-width: 0;
+    }
+
+
+    .un-purpose-info h3 {
+
+        margin: 0 0 7px;
+
+        color: #0b1f3a;
+
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+
+    .un-purpose-info p {
+
+        margin: 0;
+
+        color: #687386;
+
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+
+    /* PURPOSE ARROW */
+
+    .un-purpose-arrow {
+
+        flex-shrink: 0;
+
+        color: #b9922e;
+
+        font-size: 18px;
+    }
+
+
+    /* =====================================
+   USER REVIEWS SECTION
+===================================== */
+
+    .un-review-section {
+
+        padding: 65px 0;
+
+        background: #f8f7f2;
+    }
+
+
+    /* REVIEW HEADING */
+
+    .un-review-heading {
+
+        margin-bottom: 35px;
+
+        text-align: center;
+    }
+
+
+    .un-review-heading h2 {
+
+        margin-bottom: 10px;
+
+        color: #0b1f3a;
+
+        font-size: 32px;
+        font-weight: 700;
+    }
+
+
+    .un-review-heading p {
+
+        margin: 0;
+
+        color: #687386;
+    }
+
+
+    /* REVIEW CARD */
+
+    .un-review-card {
+
+        height: 100%;
+        padding: 25px;
+
+        background: #fff;
+
+        border: 1px solid #eee9dc;
+        border-radius: 12px;
+
+        box-shadow: 0 5px 18px rgba(11, 31, 58, 0.07);
+
+        transition: 0.25s;
+    }
+
+
+    .un-review-card:hover {
+
+        transform: translateY(-4px);
+
+        box-shadow: 0 10px 25px rgba(11, 31, 58, 0.12);
+    }
+
+
+    /* REVIEW STARS */
+
+    .un-review-stars {
+
+        margin-bottom: 15px;
+
+        color: #d4af37;
+
+        font-size: 20px;
+    }
+
+
+    /* REVIEW TEXT */
+
+    .un-review-text {
+
+        margin-bottom: 20px;
+
+        color: #555;
+
+        line-height: 1.7;
+
+        overflow-wrap: anywhere;
+    }
+
+
+    /* REVIEW NAME */
+
+    .un-review-name {
+
+        margin-bottom: 5px;
+
+        color: #0b1f3a;
+
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+
+    /* REVIEW DATE */
+
+    .un-review-date {
+
+        color: #888;
+
+        font-size: 13px;
+    }
+
+
+    /* NO REVIEW */
+
+    .un-no-review {
+
+        padding: 20px;
+
+        color: #687386;
+
+        text-align: center;
+    }
+
+
+    /* =====================================
+   RESPONSIVE DESIGN
+===================================== */
+
+    @media (max-width: 768px) {
+
+        .un-hero {
+
+            min-height: auto;
+
+            padding: 65px 0 80px;
+
+            background-position: center;
+        }
+
+
+        .un-hero h1 {
+
+            font-size: 38px;
+        }
+
+
+        .un-hero p {
+
+            font-size: 15px;
+        }
+
+
+        .un-hero-stats {
+
+            gap: 25px;
+
+            margin-top: 35px;
+        }
+
+
+        .un-stat .num {
+
+            font-size: 23px;
+        }
+
+
+        .un-purpose-section {
+
+            margin-top: -35px;
+        }
+
+
+        .un-purpose-heading h2 {
+
+            font-size: 25px;
+        }
+
+
+        .un-purpose-card {
+
+            padding: 20px;
+        }
+
+
+        .un-review-heading h2 {
+
+            font-size: 27px;
+        }
+
+    }
+
+
+    /* =====================================
+   SMALL MOBILE DEVICES
+===================================== */
+
+    @media (max-width: 480px) {
+
+        .un-hero h1 {
+
+            font-size: 32px;
+        }
+
+
+        .un-hero-buttons {
+
+            flex-direction: column;
+        }
+
+
+        .un-hero-buttons a {
+
+            width: 100%;
+        }
+
+
+        .un-hero-stats {
+
+            gap: 20px;
+        }
+
+
+        .un-stat .num {
+
+            font-size: 21px;
+        }
+
+
+        .un-purpose-card {
+
+            gap: 13px;
+
+            padding: 16px;
+        }
+
+
+        .un-purpose-icon {
+
+            width: 48px;
+            height: 48px;
+
+            font-size: 20px;
+        }
+
+
+        .un-purpose-info h3 {
+
+            font-size: 17px;
+        }
+
+    }
+</style>
+
+
+<!-- =====================================
+     HERO SECTION
+===================================== -->
+
 <section class="un-hero">
+
     <div class="container">
 
-        <div class="row">
-            <div class="col-lg-9">
+        <div class="un-hero-content">
 
-                <span class="un-hero-eyebrow">Discover · Reside · Belong</span>
+            <!-- EYEBROW -->
 
-                <h1>
-                    Find the home that <em>defines</em><br>
-                    the life you deserve.
-                </h1>
+            <span class="un-hero-eyebrow">
 
-                <p class="lead">
-                    UrbanNest curates a global portfolio of extraordinary residences
-                    matched to your ambitions with quiet precision.
-                </p>
+                Discover · Reside · Belong
 
-                <div class="d-flex flex-wrap gap-3">
+            </span>
 
-                    <a href="properties/list.php" class="btn btn-gold px-4">
-                        <i class="fa-solid fa-magnifying-glass me-2"></i>
-                        Explore Listings
-                    </a>
 
-                    <a href="contact.php" class="btn btn-light-ghost px-4">
-                        Talk to an Advisor
-                    </a>
+            <!-- HERO HEADING -->
+
+            <h1>
+
+                Find the home that <em>defines</em>
+                the life you deserve.
+
+            </h1>
+
+
+            <!-- HERO DESCRIPTION -->
+
+            <p>
+
+                Discover beautiful properties, explore new places
+                and find a home that fits your lifestyle with UrbanNest.
+
+            </p>
+
+
+            <!-- HERO BUTTONS -->
+
+            <div class="un-hero-buttons">
+
+                <a href="properties/list.php" class="un-btn-gold">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    Explore Listings
+
+                </a>
+
+
+                <a href="contact.php" class="un-btn-outline">
+
+                    Talk to an Advisor
+
+                </a>
+
+            </div>
+
+
+            <!-- HERO STATISTICS -->
+
+            <div class="un-hero-stats">
+
+                <div class="un-stat">
+
+                    <div class="num">2,400+</div>
+
+                    <div class="lbl">Listings</div>
 
                 </div>
 
-                <div class="un-hero-stats">
 
-                    <div>
-                        <div class="num">2,400+</div>
-                        <div class="lbl">Listings</div>
-                    </div>
+                <div class="un-stat">
 
-                    <div>
-                        <div class="num">180</div>
-                        <div class="lbl">Cities</div>
-                    </div>
+                    <div class="num">180</div>
 
-                    <div>
-                        <div class="num">98%</div>
-                        <div class="lbl">Client Retention</div>
-                    </div>
+                    <div class="lbl">Cities</div>
+
+                </div>
+
+
+                <div class="un-stat">
+
+                    <div class="num">98%</div>
+
+                    <div class="lbl">Client Retention</div>
 
                 </div>
 
             </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================
+     BUY / RENT / SELL SECTION
+===================================== -->
+
+<section class="un-purpose-section">
+
+    <div class="container">
+
+        <!-- SECTION HEADING -->
+
+        <div class="un-purpose-heading">
+
+            <h2>What are you looking for?</h2>
+
+            <p>Choose an option to get started.</p>
+
         </div>
 
 
-        <!-- ============== SEARCH ============== -->
-        <div class="un-search">
-
-            <ul class="nav nav-tabs" role="tablist">
-
-                <li class="nav-item">
-                    <button class="nav-link active"
-                        data-bs-toggle="tab"
-                        data-bs-target="#buyTab"
-                        type="button">
-                        Buy
-                    </button>
-                </li>
-
-                <li class="nav-item">
-                    <button class="nav-link"
-                        data-bs-toggle="tab"
-                        data-bs-target="#rentTab"
-                        type="button">
-                        Rent
-                    </button>
-                </li>
-
-                <li class="nav-item">
-                    <button class="nav-link"
-                        data-bs-toggle="tab"
-                        data-bs-target="#sellTab"
-                        type="button">
-                        Sell
-                    </button>
-                </li>
-
-            </ul>
+        <div class="row g-3">
 
 
-            <div class="tab-content">
+            <!-- BUY PROPERTY -->
 
-                <!-- BUY -->
-                <div class="tab-pane fade show active" id="buyTab">
+            <div class="col-md-4">
 
-                    <form action="properties/list.php" method="get">
+                <a href="buy.php" class="un-purpose-card">
 
-                        <div class="row g-2 align-items-center">
+                    <div class="un-purpose-icon">
 
-                            <div class="col-md-2">
-                                <select name="state" class="form-select">
+                        <i class="fa-solid fa-house"></i>
 
-                                    <option value="">State</option>
-
-                                    <?php foreach ($UN_STATES as $s): ?>
-                                        <option value="<?= e($s['name']) ?>">
-                                            <?= e($s['name']) ?>
-                                        </option>
-                                    <?php endforeach; ?>
-
-                                </select>
-                            </div>
+                    </div>
 
 
-                            <div class="col-md-2">
+                    <div class="un-purpose-info">
 
-                                <select name="city" class="form-select">
+                        <h3>Buy a Property</h3>
 
-                                    <option value="">City</option>
+                        <p>
+                            Find your dream home from our property listings.
+                        </p>
 
-                                    <?php foreach ($UN_CITIES as $c): ?>
-
-                                        <option value="<?= e($c['name']) ?>">
-                                            <?= e($c['name']) ?>
-                                        </option>
-
-                                    <?php endforeach; ?>
-
-                                </select>
-
-                            </div>
+                    </div>
 
 
-                            <div class="col-md-2">
+                    <i class="fa-solid fa-arrow-right un-purpose-arrow"></i>
 
-                                <select name="cat" class="form-select">
+                </a>
 
-                                    <option value="">Category</option>
-
-                                    <?php foreach ($UN_CATEGORIES as $c): ?>
-
-                                        <option value="<?= e($c['slug']) ?>">
-                                            <?= e($c['name']) ?>
-                                        </option>
-
-                                    <?php endforeach; ?>
-
-                                </select>
-
-                            </div>
+            </div>
 
 
-                            <div class="col-md-2">
+            <!-- RENT PROPERTY -->
 
-                                <select name="sub" class="form-select">
+            <div class="col-md-4">
 
-                                    <option value="">Sub Category</option>
-                                    <option value="Studio">Apartment</option>
-                                    <option value="Duplex">Bungalow</option>
-                                    <option value="Triplex">Duplex</option>
-                                    <option value="Estate">independent House</option>
-                                    <option value="Triplex">Office</option>
-                                    <option value="Triplex">Shop</option>
-                                    <option value="Triplex">Warehouse</option>
-                                    <option value="Triplex">Showroom</option>
-                                    <option value="Triplex">Penthouse</option>
-                                    <option value="Triplex">Farmhouse</option>
-                                    <option value="Triplex">Luxury Villa</option>
-                                    <option value="Triplex">Residential</option>
-                                    <option value="Triplex">Commercial plots</option>
-                                    <option value="Triplex">Agriculture</option>
-                                    <option value="Triplex">Factory</option>
-                                    <option value="Triplex">Industrial Shed</option>
+                <a href="rent.php" class="un-purpose-card">
 
-                                </select>
+                    <div class="un-purpose-icon">
 
-                            </div>
+                        <i class="fa-solid fa-key"></i>
+
+                    </div>
 
 
-                            <div class="col-md-2">
+                    <div class="un-purpose-info">
 
-                                <select name="status" class="form-select">
+                        <h3>Rent a Property</h3>
 
-                                    <option value="">Status</option>
-                                    <option value="Ready to Move">Ready to Move</option>
-                                    <option value="Under Construction">Under Construction</option>
-                                    <option value="New Launch">New Launch</option>
+                        <p>
+                            Explore homes and spaces available for rent.
+                        </p>
 
-                                </select>
-
-                            </div>
+                    </div>
 
 
-                            <div class="col-md-2">
+                    <i class="fa-solid fa-arrow-right un-purpose-arrow"></i>
 
-                                <button type="submit"
-                                    class="btn btn-gold un-search-btn">
+                </a>
 
-                                    <i class="fa-solid fa-magnifying-glass me-2"></i>
-                                    Search
-
-                                </button>
-
-                            </div>
+            </div>
 
 
-                            <div class="col-md-3">
+            <!-- SELL PROPERTY -->
 
-                                <select name="price" class="form-select">
+            <div class="col-md-4">
 
-                                    <option value="">Price Range</option>
-                                    <option value="under-500k">Under $500k</option>
-                                    <option value="500k-1m">$500k – $1M</option>
-                                    <option value="1m-5m">$1M – $5M</option>
-                                    <option value="5m-10m">$5M – $10M</option>
-                                    <option value="10m-plus">$10M+</option>
+                <a href="sell.php" class="un-purpose-card">
 
-                                </select>
+                    <div class="un-purpose-icon">
+
+                        <i class="fa-solid fa-tag"></i>
+
+                    </div>
+
+
+                    <div class="un-purpose-info">
+
+                        <h3>Sell a Property</h3>
+
+                        <p>
+                            List your property and connect with buyers.
+                        </p>
+
+                    </div>
+
+
+                    <i class="fa-solid fa-arrow-right un-purpose-arrow"></i>
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================
+     USER REVIEWS SECTION
+===================================== -->
+
+<section class="un-review-section">
+
+    <div class="container">
+
+        <!-- REVIEW HEADING -->
+
+        <div class="un-review-heading">
+
+            <h2>What Our Customers Say</h2>
+
+            <p>
+                Read reviews from our valued customers.
+            </p>
+
+        </div>
+
+
+        <!-- REVIEW CARDS -->
+
+        <div class="row g-4">
+
+            <?php if (count($reviews) > 0) { ?>
+
+                <?php foreach ($reviews as $review) { ?>
+
+                    <div class="col-md-4">
+
+                        <div class="un-review-card">
+
+
+                            <!-- RATING -->
+
+                            <div class="un-review-stars">
+
+                                <?php
+
+                                $rating = (int) $review["rating"];
+
+                                for ($i = 1; $i <= 5; $i++) {
+
+                                    if ($i <= $rating) {
+
+                                        echo "★";
+                                    } else {
+
+                                        echo "☆";
+                                    }
+                                }
+
+                                ?>
 
                             </div>
 
 
-                            <div class="col-md-3">
+                            <!-- REVIEW TEXT -->
 
-                                <select name="beds" class="form-select">
+                            <p class="un-review-text">
 
-                                    <option value="">Bedrooms</option>
-                                    <option value="1">1+</option>
-                                    <option value="2">2+</option>
-                                    <option value="3">3+</option>
-                                    <option value="4">4+</option>
-                                    <option value="5">5+</option>
+                                <?php
 
-                                </select>
+                                echo htmlspecialchars($review["review"]);
 
-                            </div>
+                                ?>
+
+                            </p>
 
 
-                            <div class="col-md-3">
+                            <!-- CUSTOMER NAME -->
 
-                                <select name="baths" class="form-select">
+                            <div class="un-review-name">
 
-                                    <option value="">Bathrooms</option>
-                                    <option value="1">1+</option>
-                                    <option value="2">2+</option>
-                                    <option value="3">3+</option>
-                                    <option value="4">4+</option>
+                                <?php
 
-                                </select>
+                                echo htmlspecialchars($review["full_name"]);
+
+                                ?>
 
                             </div>
 
 
-                            <div class="col-md-3">
+                            <!-- REVIEW DATE -->
 
-                                <select name="area" class="form-select">
+                            <div class="un-review-date">
 
-                                    <option value="">Area (sqft)</option>
-                                    <option value="500-1500">500 – 1,500</option>
-                                    <option value="1500-3000">1,500 – 3,000</option>
-                                    <option value="3000-6000">3,000 – 6,000</option>
-                                    <option value="6000-plus">6,000+</option>
+                                <?php
 
-                                </select>
+                                echo date(
+                                    "d M Y",
+                                    strtotime($review["created_at"])
+                                );
+
+                                ?>
 
                             </div>
+
 
                         </div>
 
-                    </form>
+                    </div>
+
+                <?php } ?>
+
+            <?php } else { ?>
+
+                <div class="col-12">
+
+                    <p class="un-no-review">
+
+                        No reviews available yet.
+
+                    </p>
 
                 </div>
 
+            <?php } ?>
 
-                <!-- RENT -->
-                <div class="tab-pane fade" id="rentTab">
+        </div>
 
-                    <form action="properties/list.php" method="get">
+    </div>
 
-                        <input type="hidden" name="purpose" value="rent">
-
-                        <div class="row g-2">
-
-                            <div class="col-md-3">
-                                <input type="text"
-                                    name="location"
-                                    class="form-control"
-                                    placeholder="Where do you want to live?">
-                            </div>
-
-                            <div class="col-md-3">
-
-                                <select name="type" class="form-select">
-
-                                    <option value="">Any Type</option>
-                                    <option value="Apartment">Apartment</option>
-                                    <option value="Loft">Loft</option>
-                                    <option value="Villa">Villa</option>
-
-                                </select>
-
-                            </div>
-
-                            <div class="col-md-3">
-
-                                <select name="price" class="form-select">
-
-                                    <option value="">Any Price</option>
-                                    <option value="under-3k">Under $3k/mo</option>
-                                    <option value="3k-6k">$3k – $6k/mo</option>
-                                    <option value="6k-plus">$6k+/mo</option>
-
-                                </select>
-
-                            </div>
-
-                            <div class="col-md-3">
-
-                                <button type="submit"
-                                    class="btn btn-gold un-search-btn">
-
-                                    Find Rentals
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </form>
-
-                </div>
+</section>
 
 
-                <!-- SELL -->
-                <div class="tab-pane fade" id="sellTab">
+<?php
 
-                    <div class="row g-2">
+// =====================================
+// INCLUDE FOOTER
+// =====================================
 
-                        <div class="col-md-4">
-                            <input type="text"
-                                class="form-control"
-                                placeholder="Property Address">
-                        </div>
+require_once __DIR__ . '/includes/footer.php';
 
-                        <div class="col-md-3">
-
-                            <select class="form-select">
-
-                                <option>Property Type</option>
-                                <option>Villa</option>
+?>

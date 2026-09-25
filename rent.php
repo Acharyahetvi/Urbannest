@@ -1,0 +1,778 @@
+<?php
+
+$pageTitle = 'Rent Properties | UrbanNest';
+$pageDesc = 'Find the perfect property for rent with UrbanNest.';
+
+require_once __DIR__ . '/db_connection.php';
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/includes/navbar.php';
+
+?>
+
+<style>
+    /* =========================================
+   RENT PAGE
+========================================= */
+
+    .rent-page {
+        background: #f8f7f3;
+        min-height: 100vh;
+        padding-bottom: 60px;
+    }
+
+
+    /* =========================================
+   HERO
+========================================= */
+
+    .rent-hero {
+        min-height: 390px;
+
+        display: flex;
+        align-items: center;
+
+        background:
+            linear-gradient(90deg,
+                rgba(7, 24, 45, .92),
+                rgba(7, 24, 45, .45)),
+            url('assets/images/rent-hero.jpg') center/cover no-repeat;
+
+        color: #fff;
+
+        padding: 65px 0;
+    }
+
+    .rent-hero-content {
+        max-width: 680px;
+    }
+
+    .rent-label {
+        color: #e0bd55;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+    .rent-hero h1 {
+        font-size: 56px;
+        font-weight: 700;
+        line-height: 1.15;
+        margin: 18px 0;
+    }
+
+    .rent-hero h1 em {
+        color: #e0bd55;
+        font-style: normal;
+    }
+
+    .rent-hero p {
+        color: #e4e8ed;
+        font-size: 16px;
+        line-height: 1.8;
+        max-width: 550px;
+    }
+
+
+    /* =========================================
+   SEARCH CARD
+========================================= */
+
+    .rent-search-wrap {
+        position: relative;
+        margin-top: -45px;
+        z-index: 2;
+
+        width: 92%;
+        max-width: 1350px;
+
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .rent-search {
+        background: #fff;
+        border-radius: 18px;
+        padding: 25px;
+
+        box-shadow:
+            0 12px 35px rgba(11, 31, 58, .12);
+
+        border: 1px solid #eee9dc;
+
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+
+    /* =========================================
+   SEARCH HEADING
+========================================= */
+
+    .search-heading {
+        margin-bottom: 20px;
+    }
+
+    .search-heading h2 {
+        color: #0b1f3a;
+        font-size: 21px;
+        font-weight: 700;
+        margin: 0 0 5px;
+    }
+
+    .search-heading p {
+        color: #777;
+        font-size: 13px;
+        margin: 0;
+    }
+
+
+    /* =========================================
+   FORM GRID
+========================================= */
+
+    .rent-form-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+
+    /* =========================================
+   FORM FIELDS
+========================================= */
+
+    .rent-field label {
+        display: block;
+        color: #4e5968;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 7px;
+    }
+
+    .rent-field select,
+    .rent-field input {
+        width: 100%;
+        height: 48px;
+
+        padding: 0 12px;
+
+        border: 1px solid #e5e5e5;
+        border-radius: 9px;
+
+        background: #fafafa;
+        color: #0b1f3a;
+
+        font-size: 14px;
+        outline: none;
+
+        box-sizing: border-box;
+    }
+
+    .rent-field select:focus,
+    .rent-field input:focus {
+        border-color: #d4af37;
+        background: #fff;
+
+        box-shadow:
+            0 0 0 3px rgba(212, 175, 55, .12);
+    }
+
+
+    /* =========================================
+   SEARCH BUTTON
+========================================= */
+
+    .rent-search-btn {
+        width: 100%;
+        height: 48px;
+
+        margin-top: 22px;
+
+        border: none;
+        border-radius: 9px;
+
+        background: #d4af37;
+        color: #0b1f3a;
+
+        font-size: 14px;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        transition: .25s;
+    }
+
+    .rent-search-btn:hover {
+        background: #0b1f3a;
+        color: #fff;
+    }
+
+
+    /* =========================================
+   PAGE CONTENT
+========================================= */
+
+    .rent-content {
+        padding-top: 50px;
+    }
+
+    .rent-section-title {
+        color: #0b1f3a;
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .rent-section-desc {
+        color: #777;
+        margin-bottom: 25px;
+    }
+
+
+    /* =========================================
+   EMPTY PROPERTY BOX
+========================================= */
+
+    .rent-empty {
+        background: #fff;
+
+        border: 1px solid #eee9dc;
+        border-radius: 14px;
+
+        padding: 35px;
+
+        text-align: center;
+
+        color: #6b7280;
+    }
+
+    .rent-empty i {
+        font-size: 35px;
+        color: #d4af37;
+        margin-bottom: 12px;
+    }
+
+    .rent-empty h3 {
+        color: #0b1f3a;
+        font-size: 19px;
+        margin-bottom: 8px;
+    }
+</style>
+
+
+<main class="rent-page">
+
+
+    <!-- =========================================
+         HERO
+    ========================================== -->
+
+    <section class="rent-hero">
+
+        <div class="container">
+
+            <div class="rent-hero-content">
+
+                <span class="rent-label">
+                    UrbanNest · Find Your Place
+                </span>
+
+                <h1>
+                    Find a place to
+                    <em>call home.</em>
+                </h1>
+
+                <p>
+                    Explore apartments, homes and properties
+                    available for rent that match your lifestyle,
+                    location and monthly budget.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         SEARCH SECTION
+    ========================================== -->
+
+    <section class="rent-search-wrap">
+
+        <div class="rent-search">
+
+            <div class="search-heading">
+
+                <h2>
+                    Find Your Perfect Rental
+                </h2>
+
+                <p>
+                    Choose your preferences to explore available rental properties.
+                </p>
+
+            </div>
+
+
+            <!-- IMPORTANT:
+                 purpose=rent means only RENT properties
+            -->
+
+            <form action="properties/list.php" method="get">
+
+                <input
+                    type="hidden"
+                    name="purpose"
+                    value="rent">
+
+
+                <div class="rent-form-grid">
+
+
+                    <!-- STATE -->
+
+                    <div class="rent-field">
+
+                        <label>
+                            State
+                        </label>
+
+                        <select name="state">
+
+                            <option value="">
+                                All States
+                            </option>
+
+                            <option value="Gujarat">
+                                Gujarat
+                            </option>
+
+                            <option value="Maharashtra">
+                                Maharashtra
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- CITY -->
+
+                    <div class="rent-field">
+
+                        <label>
+                            City
+                        </label>
+
+                        <select name="city">
+
+                            <option value="">
+                                All Cities
+                            </option>
+
+                            <option value="Ahmedabad">
+                                Ahmedabad
+                            </option>
+
+                            <option value="Surat">
+                                Surat
+                            </option>
+
+                            <option value="Rajkot">
+                                Rajkot
+                            </option>
+
+                            <option value="Vadodara">
+                                Vadodara
+                            </option>
+
+                            <option value="Gandhinagar">
+                                Gandhinagar
+                            </option>
+
+                            <option value="Bhavnagar">
+                                Bhavnagar
+                            </option>
+
+                            <option value="Mumbai">
+                                Mumbai
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- CATEGORY -->
+
+                    <div class="rent-field">
+
+                        <label>
+                            Property Category
+                        </label>
+
+                        <select name="category">
+
+                            <option value="">
+                                All Categories
+                            </option>
+
+                            <option value="Residential">
+                                Residential
+                            </option>
+
+                            <option value="Commercial">
+                                Commercial
+                            </option>
+
+                            <option value="Land">
+                                Land
+                            </option>
+
+                            <option value="Industrial">
+                                Industrial
+                            </option>
+
+                            <option value="Luxury">
+                                Luxury
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PROPERTY TYPE -->
+
+                    <div class="rent-field">
+
+                        <label>
+                            Property Type
+                        </label>
+
+                        <select name="type">
+
+                            <option value="">
+                                All Property Types
+                            </option>
+
+                            <option value="Apartment">
+                                Apartment
+                            </option>
+
+                            <option value="Villa">
+                                Villa
+                            </option>
+
+                            <option value="Bungalow">
+                                Bungalow
+                            </option>
+
+                            <option value="Duplex">
+                                Duplex
+                            </option>
+
+                            <option value="Independent House">
+                                Independent House
+                            </option>
+
+                            <option value="Office">
+                                Office
+                            </option>
+
+                            <option value="Shop">
+                                Shop
+                            </option>
+
+                            <option value="Warehouse">
+                                Warehouse
+                            </option>
+
+                            <option value="Showroom">
+                                Showroom
+                            </option>
+
+                            <option value="Residential Plot">
+                                Residential Plot
+                            </option>
+
+                            <option value="Commercial plots">
+                                Commercial Plots
+                            </option>
+
+                            <option value="Agriculture">
+                                Agriculture
+                            </option>
+
+                            <option value="Factory">
+                                Factory
+                            </option>
+
+                            <option value="Industrial Shed">
+                                Industrial Shed
+                            </option>
+
+                            <option value="Penthouse">
+                                Penthouse
+                            </option>
+
+                            <option value="Farmhouse">
+                                Farmhouse
+                            </option>
+
+                            <option value="Luxury Villa">
+                                Luxury Villa
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- MONTHLY RENT -->
+
+                    <div class="rent-field">
+
+                        <label>
+                            Monthly Rent
+                        </label>
+
+                        <select name="price">
+
+                            <option value="">
+                                Any Rent
+                            </option>
+
+                            <option value="under-10000">
+                                Under ₹10,000
+                            </option>
+
+                            <option value="10000-25000">
+                                ₹10,000 – ₹25,000
+                            </option>
+
+                            <option value="25000-50000">
+                                ₹25,000 – ₹50,000
+                            </option>
+
+                            <option value="50000-100000">
+                                ₹50,000 – ₹1 Lakh
+                            </option>
+
+                            <option value="100000-plus">
+                                ₹1 Lakh+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- BEDROOMS -->
+
+                    <div class="rent-field">
+
+                        <label>
+                            Bedrooms
+                        </label>
+
+                        <select name="beds">
+
+                            <option value="">
+                                Any
+                            </option>
+
+                            <option value="1">
+                                1+ Bedrooms
+                            </option>
+
+                            <option value="2">
+                                2+ Bedrooms
+                            </option>
+
+                            <option value="3">
+                                3+ Bedrooms
+                            </option>
+
+                            <option value="4">
+                                4+ Bedrooms
+                            </option>
+
+                            <option value="5">
+                                5+ Bedrooms
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- BATHROOMS -->
+
+                    <div class="rent-field">
+
+                        <label>
+                            Bathrooms
+                        </label>
+
+                        <select name="baths">
+
+                            <option value="">
+                                Any
+                            </option>
+
+                            <option value="1">
+                                1+ Bathrooms
+                            </option>
+
+                            <option value="2">
+                                2+ Bathrooms
+                            </option>
+
+                            <option value="3">
+                                3+ Bathrooms
+                            </option>
+
+                            <option value="4">
+                                4+ Bathrooms
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- FURNISHING -->
+
+                    <div class="rent-field">
+
+                        <label>
+                            Furnishing
+                        </label>
+
+                        <select name="furnishing">
+
+                            <option value="">
+                                Any Furnishing
+                            </option>
+
+                            <option value="Fully Furnished">
+                                Fully Furnished
+                            </option>
+
+                            <option value="Semi Furnished">
+                                Semi Furnished
+                            </option>
+
+                            <option value="Unfurnished">
+                                Unfurnished
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- AREA -->
+
+                    <div class="rent-field">
+
+                        <label>
+                            Area
+                        </label>
+
+                        <select name="area">
+
+                            <option value="">
+                                Any Area
+                            </option>
+
+                            <option value="500-1500">
+                                500–1,500 sqft
+                            </option>
+
+                            <option value="1500-3000">
+                                1,500–3,000 sqft
+                            </option>
+
+                            <option value="3000-6000">
+                                3,000–6,000 sqft
+                            </option>
+
+                            <option value="6000-plus">
+                                6,000+ sqft
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- SEARCH BUTTON -->
+
+                <button
+                    type="submit"
+                    class="rent-search-btn">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    &nbsp; Search Rental Properties
+
+                </button>
+
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         PROPERTY LISTINGS
+    ========================================== -->
+
+    <section class="container rent-content">
+
+        <h2 class="rent-section-title">
+            Explore Rental Properties
+        </h2>
+
+        <p class="rent-section-desc">
+            Discover comfortable homes and properties available for rent.
+        </p>
+
+
+        <div class="rent-empty">
+
+            <i class="fa-solid fa-house"></i>
+
+            <h3>
+                Find a Place You'll Love
+            </h3>
+
+            <p>
+                Select your preferred location, property type
+                and monthly budget above, then search to explore
+                matching rental properties.
+            </p>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<?php
+
+require_once __DIR__ . '/includes/footer.php';
+
+?>
