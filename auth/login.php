@@ -1,49 +1,273 @@
 <?php
-$pageTitle = 'Sign in — UrbanNest';
-require_once __DIR__ . '/../includes/header.php';
-?>
-<section class="un-auth">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6 col-xl-5">
-                <div class="un-auth-card">
-                    <a class="un-brand mb-3 d-inline-flex" href="<?= url('index.php') ?>">
-                         <img src="/urbannest/assets/images/img1.png" class="un-brand-mark">
-                        <span class="un-brand-text">Urban<span>Nest</span></span>
-                    </a>
-                    <h2 class="section-title mb-1" style="font-size:1.8rem;">Welcome back</h2>
-                    <p class="text-muted mb-4">Sign in to continue to your dashboard.</p>
+session_start();
 
-                    <form action="#" method="post" onsubmit="event.preventDefault(); alert('Demo — connect this form to your auth handler.');">
-                        <div class="mb-3">
-                            <label class="form-label small text-uppercase text-muted">Email</label>
-                            <input type="email" class="form-control" name="email" required>
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label small text-uppercase text-muted">Password</label>
-                            <input type="password" class="form-control" name="password" required>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-4 small">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="remember">
-                                <label class="form-check-label" for="remember">Remember me</label>
-                            </div>
-                            <a href="#" class="text-navy">Forgot password?</a>
-                        </div>
-                        <button class="btn btn-gold w-100 mb-3">Sign in <i class="fa-solid fa-arrow-right ms-2"></i></button>
-                        <div class="text-center text-muted small mb-3">— or continue with —</div>
-                        <div class="row g-2">
-                            <div class="col-6"><button type="button" class="btn btn-outline-navy w-100"><i class="fa-brands fa-google me-2"></i>Google</button></div>
-                            <div class="col-6"><button type="button" class="btn btn-outline-navy w-100"><i class="fa-brands fa-apple me-2"></i>Apple</button></div>
-                        </div>
-                    </form>
-                    <p class="text-center small text-muted mt-4 mb-0">Don't have an account? <a href="<?= url('urbannest/auth/register.php') ?>" class="text-gold fw-semibold">Create one</a></p>
+require_once __DIR__ . '/../db_connection.php';
+
+$error = "";
+
+// ===============================
+// LOGIN FORM
+// ===============================
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+
+    // CHECK USER LOGIN
+    $sql = "SELECT * FROM users
+            WHERE email = ?
+            AND password = ?
+            AND role_id != 1
+            AND status = 'Active'";
+
+    $stmt = mysqli_prepare($conn, $sql);
+
+    if ($stmt) {
+
+        mysqli_stmt_bind_param($stmt, "ss", $email, $password);
+
+        mysqli_stmt_execute($stmt);
+
+        $result = mysqli_stmt_get_result($stmt);
+
+        if (mysqli_num_rows($result) == 1) {
+
+            $user = mysqli_fetch_assoc($result);
+
+            // CREATE SESSION
+            session_regenerate_id(true);
+
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['user_name'] = $user['full_name'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_role'] = $user['role_id'];
+
+            // REDIRECT TO HOMEPAGE
+            mysqli_stmt_close($stmt);
+
+            header("Location: /urbannest/index.php");
+            exit;
+        } else {
+
+            $error = "Invalid email or password.";
+        }
+
+        mysqli_stmt_close($stmt);
+    } else {
+
+        $error = "Database error. Please try again.";
+    }
+}
+
+$pageTitle = "Login - UrbanNest";
+
+require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/navbar.php';
+?>
+
+<style>
+    /* ===============================
+   LOGIN SECTION
+=============================== */
+
+    .login-section {
+        background:
+            linear-gradient(rgba(11, 31, 58, 0.55),
+                rgba(11, 31, 58, 0.55)),
+            url('/urbannest/assets/images/hero.png');
+
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+
+        padding: 60px 0;
+        min-height: 80vh;
+
+        display: flex;
+        align-items: center;
+    }
+
+    /* ===============================
+   LOGIN BOX
+=============================== */
+
+    .login-box {
+        max-width: 450px;
+        margin: auto;
+        background: #ffffff;
+        padding: 35px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* ===============================
+   LOGIN HEADING
+=============================== */
+
+    .login-box h2 {
+        color: #0b1f3a;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    /* ===============================
+   INPUT FIELDS
+=============================== */
+
+    .form-control {
+        padding: 12px;
+        border-radius: 7px;
+        border: 1px solid #ddd;
+    }
+
+    .form-control:focus {
+        border-color: #d4af37;
+        box-shadow: 0 0 0 0.15rem rgba(212, 175, 55, 0.15);
+    }
+
+    /* ===============================
+   LOGIN BUTTON
+=============================== */
+
+    .btn-login {
+        width: 100%;
+        padding: 12px;
+        background: #0b1f3a;
+        color: #ffffff;
+        border: none;
+        border-radius: 7px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+    .btn-login:hover {
+        background: #d4af37;
+        color: #0b1f3a;
+    }
+
+    /* ===============================
+   REGISTER LINK
+=============================== */
+
+    .register-link {
+        color: #d4af37;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .register-link:hover {
+        color: #0b1f3a;
+    }
+</style>
+
+
+<!-- ===============================
+     LOGIN SECTION
+=============================== -->
+
+<section class="login-section">
+
+    <div class="container">
+
+        <div class="login-box">
+
+            <!-- HEADING -->
+
+            <h2>Welcome Back</h2>
+
+            <p class="text-muted mb-4">
+                Sign in to continue to your account.
+            </p>
+
+
+            <!-- ERROR MESSAGE -->
+
+            <?php if ($error != ""): ?>
+
+                <div class="alert alert-danger">
+                    <?= htmlspecialchars($error) ?>
                 </div>
-            </div>
+
+            <?php endif; ?>
+
+
+            <!-- LOGIN FORM -->
+
+            <form method="POST">
+
+                <!-- EMAIL -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="Enter your email"
+                        autocomplete="username"
+                        required>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        class="form-control"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required>
+
+                </div>
+
+
+                <!-- LOGIN BUTTON -->
+
+                <button
+                    type="submit"
+                    class="btn-login">
+
+                    Sign In
+
+                </button>
+
+            </form>
+
+
+            <!-- REGISTER LINK -->
+
+            <p class="text-center mt-4 mb-0">
+
+                Don't have an account?
+
+                <a
+                    href="/urbannest/auth/register.php"
+                    class="register-link">
+
+                    Create Account
+
+                </a>
+
+            </p>
+
         </div>
+
     </div>
+
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>

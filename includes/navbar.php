@@ -1,72 +1,111 @@
 <nav class="navbar navbar-expand-lg un-navbar sticky-top">
+
     <div class="container">
-        <a class="navbar-brand un-brand" href="<?= url('index.php') ?>">
-            <!--<span class="un-brand-mark"><i class="fa-solid fa-building-columns"></i></span>  old logo-->
-            <!--<img src="assets/images/img1.png" alt="Description of the image"  width="40" height="40">-->
-            <img src="/urbannest/assets/images/img1.png" class="un-brand-mark">
-            <span class="un-brand-text">Urban<span>Nest</span></span>
+
+        <!-- Logo -->
+        <a class="navbar-brand un-brand" href="/urbannest/index.php">
+
+            <img src="/urbannest/assets/images/img1.png"
+                class="un-brand-mark"
+                alt="UrbanNest Logo">
+
+            <span class="un-brand-text">
+                Urban<span>Nest</span>
+            </span>
+
         </a>
 
-        <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#unMenu">
+        <!-- Mobile Menu Button -->
+        <button class="navbar-toggler border-0"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#unMenu"
+            aria-controls="unMenu"
+            aria-label="Toggle navigation">
+
             <i class="fa-solid fa-bars fs-4"></i>
+
         </button>
 
-        <div class="offcanvas offcanvas-end un-offcanvas" id="unMenu">
+        <!-- Navbar Menu -->
+        <div class="offcanvas offcanvas-end un-offcanvas"
+            tabindex="-1"
+            id="unMenu">
+
+            <!-- Offcanvas Header -->
             <div class="offcanvas-header">
-                <span class="un-brand-text fs-4">Urban<span>Nest</span></span>
-                <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+
+                <span class="un-brand-text fs-4">
+                    Urban<span>Nest</span>
+                </span>
+
+                <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="offcanvas"
+                    aria-label="Close">
+                </button>
+
             </div>
+
+            <!-- Offcanvas Body -->
             <div class="offcanvas-body">
+
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
-                    <li class="nav-item"><a class="nav-link <?= is_active('index.php') ?>" href="<?= url('urbannest/index.php') ?>">Home</a></li>
 
-                    <li class="nav-item dropdown un-mega">
-                        <a class="nav-link dropdown-toggle <?= is_active('properties') ?>" href="#" data-bs-toggle="dropdown">Properties</a>
-                        <div class="dropdown-menu un-mega-menu p-4">
-                            <div class="row g-4">
-                                <div class="col-md-4">
-                                    <h6 class="un-mega-title">By Purpose</h6>
-                                    <a class="un-mega-link" href="<?= url('properties/list.php?purpose=buy') ?>"><i class="fa-solid fa-key"></i> Buy a Home</a>
-                                    <a class="un-mega-link" href="<?= url('properties/list.php?purpose=rent') ?>"><i class="fa-solid fa-house-chimney"></i> Rent a Home</a>
-                                    <a class="un-mega-link" href="<?= url('properties/list.php?purpose=sell') ?>"><i class="fa-solid fa-hand-holding-dollar"></i> Sell Property</a>
-                                </div>
-                                <div class="col-md-4">
-                                    <h6 class="un-mega-title">Categories</h6>
-                                    <a class="un-mega-link" href="<?= url('properties/list.php?cat=villa') ?>"><i class="fa-solid fa-tree-city"></i> Luxury Villas</a>
-                                    <a class="un-mega-link" href="<?= url('properties/list.php?cat=penthouse') ?>"><i class="fa-solid fa-building"></i> Penthouses</a>
-                                    <a class="un-mega-link" href="<?= url('properties/list.php?cat=apartment') ?>"><i class="fa-solid fa-city"></i> Apartments</a>
-                                    <a class="un-mega-link" href="<?= url('properties/list.php?cat=commercial') ?>"><i class="fa-solid fa-warehouse"></i> Commercial</a>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="un-mega-promo">
-                                        <span class="badge bg-gold mb-2">Featured</span>
-                                        <h5 class="mb-2">Curated Collection</h5>
-                                        <p class="small mb-3">Hand‑picked luxury estates across four continents.</p>
-                                        <a href="<?= url('properties/list.php') ?>" class="btn btn-sm btn-outline-gold">Explore All</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Home -->
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="/urbannest/index.php">
+                            Home
+                        </a>
                     </li>
 
-                    <li class="nav-item"><a class="nav-link <?= is_active('agents') ?>" href="<?= url('urbannest/agents.php') ?>">Agents</a></li>
-                    <li class="nav-item"><a class="nav-link <?= is_active('owners') ?>" href="<?= url('urbannest/owners.php') ?>">Owners</a></li>
-                    <li class="nav-item"><a class="nav-link <?= is_active('blog') ?>" href="<?= url('urbannest/blog.php') ?>">Blog</a></li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Pages</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?= url('urbannest/about.php') ?>">About</a></li>
-                            <li><a class="dropdown-item" href="<?= url('urbannest/faq.php') ?>">FAQ</a></li>
-                            <li><a class="dropdown-item" href="<?= url('urbannest/contact.php') ?>">Contact</a></li>
-                        </ul>
+                    <!-- Agents -->
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="/urbannest/agents.php">
+                            Agents
+                        </a>
                     </li>
 
-                    <li class="nav-item ms-lg-3 d-flex gap-2 mt-3 mt-lg-0">
-                        <a href="<?= url('urbannest/auth/login.php') ?>" class="btn btn-outline-navy btn-sm px-3">Login</a>
-                        <a href="<?= url('urbannest/auth/register.php') ?>" class="btn btn-gold btn-sm px-3">Register</a>
+                    <!-- Owners -->
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="/urbannest/owners.php">
+                            Owners
+                        </a>
                     </li>
+
+                    <!-- Login -->
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="/urbannest/auth/login.php">
+                            Login
+                        </a>
+                    </li>
+
+                    <!-- Register -->
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="/urbannest/auth/register.php">
+                            Register
+                        </a>
+                    </li>
+
+                    <!-- Sell/Rent Property -->
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="/urbannest/add-property.php">
+                            Sell/Rent Property
+                        </a>
+                    </li>
+
                 </ul>
+
             </div>
+
         </div>
+
     </div>
+
 </nav>
