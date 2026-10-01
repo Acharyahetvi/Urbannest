@@ -184,7 +184,7 @@ $imageResult = mysqli_stmt_get_result($imageStmt);
                             <div class="property-image-box">
 
                                 <img
-                                    src="/urbannest/<?php
+                                    src="/urbannest/admin/<?php
                                                     echo htmlspecialchars(
                                                         ltrim($image['image_path'], '/')
                                                     );

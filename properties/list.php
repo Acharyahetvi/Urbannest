@@ -178,9 +178,9 @@ $result = mysqli_query($conn, $sql);
 
                     // Property image
                     if (!empty($row['image_path'])) {
-                        $image = '../' . $row['image_path'];
+                    $image = '../admin/' . $row['image_path'];
                     } else {
-                        $image = '../assets/images/no-property.png';
+                        $image = '../admin/assets/images/no-property.png';
                     }
 
                     // Property price

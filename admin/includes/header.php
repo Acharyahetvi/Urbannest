@@ -117,4 +117,31 @@
         }
 
     });
+
+    const searchInput = document.querySelector(".un-search-input");
+
+searchInput.addEventListener("keydown", function (e) {
+
+    if (e.key !== "Enter") return;
+
+    const search = this.value.trim().toLowerCase();
+
+    const pages = {
+        "dashboard": "/urbannest/admin/dashboard.php",
+        "properties": "/urbannest/admin/property/view.php",
+        "property": "/urbannest/admin/property/view.php",
+        "categories": "/urbannest/admin/category/view.php",
+        "category": "/urbannest/admin/category/view.php",
+        "sub categories": "/urbannest/admin/sub-category/view.php",
+        "subcategory": "/urbannest/admin/sub-category/view.php",
+        "amenities": "/urbannest/admin/amenities/view.php",
+        "users": "/urbannest/admin/users/view.php"
+    };
+
+    if (pages[search]) {
+        window.location.href = pages[search];
+    }
+
+});
+
 </script>

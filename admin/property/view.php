@@ -200,7 +200,7 @@ if (!$result) {
                                             <?php if (!empty($property["main_image"])) { ?>
 
                                                 <img
-                                                    src="/urbannest/<?php
+                                                    src="/urbannest/admin/<?php
                                                                     echo htmlspecialchars(
                                                                         $property["main_image"]
                                                                     );
