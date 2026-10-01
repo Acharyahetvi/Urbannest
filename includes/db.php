@@ -17,7 +17,7 @@ if (session_status() == PHP_SESSION_NONE) {
 $host = "localhost";
 $username = "root";
 $password = "";
-$database = "urbannest";
+$database = "db_urbannest";
 
 // Connect to database
 $con = mysqli_connect($host, $username, $password, $database);

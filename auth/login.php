@@ -14,10 +14,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    // CHECK USER LOGIN
-    $sql = "SELECT * FROM users
+    // Find active non-admin user by email
+    $sql = "SELECT *
+            FROM users
             WHERE email = ?
-            AND password = ?
             AND role_id != 1
             AND status = 'Active'";
 
@@ -25,8 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt) {
 
-        mysqli_stmt_bind_param($stmt, "ss", $email, $password);
-
+        mysqli_stmt_bind_param($stmt, "s", $email);
         mysqli_stmt_execute($stmt);
 
         $result = mysqli_stmt_get_result($stmt);
@@ -35,25 +34,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $user = mysqli_fetch_assoc($result);
 
-            // CREATE SESSION
-            session_regenerate_id(true);
+            /*
+             * UrbanNest currently has:
+             * - Older users with plain-text passwords
+             * - Newer users with bcrypt passwords
+             *
+             * Support both for now.
+             */
 
-            $_SESSION['user_id'] = $user['user_id'];
-            $_SESSION['user_name'] = $user['full_name'];
-            $_SESSION['user_email'] = $user['email'];
-            $_SESSION['user_role'] = $user['role_id'];
+            $password_valid = false;
 
-            // REDIRECT TO HOMEPAGE
-            mysqli_stmt_close($stmt);
+            // Check bcrypt password
+            if (password_verify($password, $user['password'])) {
 
-            header("Location: /urbannest/index.php");
-            exit;
+                $password_valid = true;
+
+            }
+            // Check existing plain-text password
+            elseif ($password === $user['password']) {
+
+                $password_valid = true;
+
+            }
+
+            if ($password_valid) {
+
+                // Create session
+                session_regenerate_id(true);
+
+                $_SESSION['user_id'] = $user['user_id'];
+                $_SESSION['user_name'] = $user['full_name'];
+                $_SESSION['user_email'] = $user['email'];
+                $_SESSION['user_role'] = $user['role_id'];
+
+                mysqli_stmt_close($stmt);
+
+                // Redirect to homepage
+                header("Location: /urbannest/index.php");
+                exit;
+
+            } else {
+
+                $error = "Invalid email or password.";
+            }
+
         } else {
 
             $error = "Invalid email or password.";
         }
 
         mysqli_stmt_close($stmt);
+
     } else {
 
         $error = "Database error. Please try again.";
@@ -67,98 +98,141 @@ require_once __DIR__ . '/../includes/navbar.php';
 ?>
 
 <style>
-    /* ===============================
+
+/* ===============================
    LOGIN SECTION
 =============================== */
 
-    .login-section {
-        background:
-            linear-gradient(rgba(11, 31, 58, 0.55),
-                rgba(11, 31, 58, 0.55)),
-            url('/urbannest/assets/images/hero.png');
+.login-section {
 
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
+    background:
+        linear-gradient(
+            rgba(11, 31, 58, 0.55),
+            rgba(11, 31, 58, 0.55)
+        ),
+        url('/urbannest/assets/images/hero.png');
 
-        padding: 60px 0;
-        min-height: 80vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 
-        display: flex;
-        align-items: center;
-    }
+    padding: 60px 0;
+    min-height: 80vh;
 
-    /* ===============================
+    display: flex;
+    align-items: center;
+}
+
+
+/* ===============================
    LOGIN BOX
 =============================== */
 
-    .login-box {
-        max-width: 450px;
-        margin: auto;
-        background: #ffffff;
-        padding: 35px;
-        border-radius: 12px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-    }
+.login-box {
 
-    /* ===============================
+    max-width: 450px;
+    margin: auto;
+
+    background: #ffffff;
+
+    padding: 35px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ===============================
    LOGIN HEADING
 =============================== */
 
-    .login-box h2 {
-        color: #0b1f3a;
-        font-weight: 700;
-        margin-bottom: 10px;
-    }
+.login-box h2 {
 
-    /* ===============================
+    color: #0b1f3a;
+
+    font-weight: 700;
+
+    margin-bottom: 10px;
+}
+
+
+/* ===============================
    INPUT FIELDS
 =============================== */
 
-    .form-control {
-        padding: 12px;
-        border-radius: 7px;
-        border: 1px solid #ddd;
-    }
+.form-control {
 
-    .form-control:focus {
-        border-color: #d4af37;
-        box-shadow: 0 0 0 0.15rem rgba(212, 175, 55, 0.15);
-    }
+    padding: 12px;
 
-    /* ===============================
+    border-radius: 7px;
+
+    border: 1px solid #ddd;
+}
+
+
+.form-control:focus {
+
+    border-color: #d4af37;
+
+    box-shadow:
+        0 0 0 0.15rem
+        rgba(212, 175, 55, 0.15);
+}
+
+
+/* ===============================
    LOGIN BUTTON
 =============================== */
 
-    .btn-login {
-        width: 100%;
-        padding: 12px;
-        background: #0b1f3a;
-        color: #ffffff;
-        border: none;
-        border-radius: 7px;
-        font-weight: 600;
-        transition: 0.3s;
-    }
+.btn-login {
 
-    .btn-login:hover {
-        background: #d4af37;
-        color: #0b1f3a;
-    }
+    width: 100%;
 
-    /* ===============================
+    padding: 12px;
+
+    background: #0b1f3a;
+
+    color: #ffffff;
+
+    border: none;
+
+    border-radius: 7px;
+
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+
+.btn-login:hover {
+
+    background: #d4af37;
+
+    color: #0b1f3a;
+}
+
+
+/* ===============================
    REGISTER LINK
 =============================== */
 
-    .register-link {
-        color: #d4af37;
-        font-weight: 600;
-        text-decoration: none;
-    }
+.register-link {
 
-    .register-link:hover {
-        color: #0b1f3a;
-    }
+    color: #d4af37;
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+
+.register-link:hover {
+
+    color: #0b1f3a;
+}
+
 </style>
 
 
@@ -174,7 +248,9 @@ require_once __DIR__ . '/../includes/navbar.php';
 
             <!-- HEADING -->
 
-            <h2>Welcome Back</h2>
+            <h2>
+                Welcome Back
+            </h2>
 
             <p class="text-muted mb-4">
                 Sign in to continue to your account.
@@ -186,7 +262,9 @@ require_once __DIR__ . '/../includes/navbar.php';
             <?php if ($error != ""): ?>
 
                 <div class="alert alert-danger">
+
                     <?= htmlspecialchars($error) ?>
+
                 </div>
 
             <?php endif; ?>
@@ -210,7 +288,8 @@ require_once __DIR__ . '/../includes/navbar.php';
                         class="form-control"
                         placeholder="Enter your email"
                         autocomplete="username"
-                        required>
+                        required
+                    >
 
                 </div>
 
@@ -229,7 +308,8 @@ require_once __DIR__ . '/../includes/navbar.php';
                         class="form-control"
                         placeholder="Enter your password"
                         autocomplete="current-password"
-                        required>
+                        required
+                    >
 
                 </div>
 
@@ -238,7 +318,8 @@ require_once __DIR__ . '/../includes/navbar.php';
 
                 <button
                     type="submit"
-                    class="btn-login">
+                    class="btn-login"
+                >
 
                     Sign In
 
@@ -255,7 +336,8 @@ require_once __DIR__ . '/../includes/navbar.php';
 
                 <a
                     href="/urbannest/auth/register.php"
-                    class="register-link">
+                    class="register-link"
+                >
 
                     Create Account
 
@@ -270,4 +352,8 @@ require_once __DIR__ . '/../includes/navbar.php';
 </section>
 
 
-<?php require_once __DIR__ . '/../includes/footer.php'; ?>
+<?php
+
+require_once __DIR__ . '/../includes/footer.php';
+
+?>

@@ -1,7 +1,7 @@
 <?php
 
-$pageTitle = 'Buy a Property — UrbanNest';
-$pageDesc = 'Find properties available for sale with UrbanNest.';
+$pageTitle = 'Rent a Property — UrbanNest';
+$pageDesc = 'Find properties available for rent with UrbanNest.';
 
 require_once __DIR__ . '/db_connection.php';
 require_once __DIR__ . '/includes/header.php';
@@ -9,7 +9,7 @@ require_once __DIR__ . '/includes/navbar.php';
 
 
 // =====================================
-// GET PROPERTIES AVAILABLE FOR SALE
+// GET PROPERTIES AVAILABLE FOR RENT
 // =====================================
 
 $sql = "SELECT properties.*, property_images.image_path
@@ -17,10 +17,16 @@ $sql = "SELECT properties.*, property_images.image_path
         LEFT JOIN property_images
         ON properties.property_id = property_images.property_id
         AND property_images.is_main = 1
-        WHERE properties.listing_type = 'For Sale'
+        WHERE properties.listing_type = 'For Rent'
         AND properties.approval_status = 'Approved'
         AND properties.status = 'Active'
-        ORDER BY properties.property_id DESC
+        AND EXISTS (
+            SELECT 1
+            FROM property_images pi
+            WHERE pi.property_id = properties.property_id
+            AND pi.is_main = 1
+        )
+        ORDER BY properties.property_id ASC
         LIMIT 10";
 
 $result = mysqli_query($conn, $sql);
@@ -164,6 +170,68 @@ $result = mysqli_query($conn, $sql);
     }
 
 
+
+    /* =====================================
+       REQUIREMENTS CTA
+    ===================================== */
+
+    .buy-requirements-cta {
+        margin: 0 auto 42px;
+        padding: 20px 24px;
+        background: #fff;
+        border: 1px solid #eee9dc;
+        border-radius: 12px;
+        box-shadow: 0 5px 18px rgba(11, 31, 58, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+    }
+
+    .buy-requirements-cta h4 {
+        margin: 0 0 5px;
+        color: #0b1f3a;
+        font-size: 19px;
+        font-weight: 700;
+    }
+
+    .buy-requirements-cta p {
+        margin: 0;
+        color: #687386;
+        font-size: 14px;
+    }
+
+    .buy-requirements-btn {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 18px;
+        background: #0b1f3a;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 7px;
+        font-weight: 600;
+        transition: .3s;
+    }
+
+    .buy-requirements-btn:hover {
+        background: #d4af37;
+        color: #0b1f3a;
+    }
+
+    @media (max-width: 767px) {
+        .buy-requirements-cta {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .buy-requirements-btn {
+            width: 100%;
+        }
+    }
+
     /* =====================================
    NO PROPERTY MESSAGE
 ===================================== */
@@ -190,19 +258,32 @@ $result = mysqli_query($conn, $sql);
 
         <div class="buy-heading">
 
-            <h1>Buy a Property</h1>
+            <h1>Rent a Property</h1>
 
             <p>
-                Find your dream home from our property listings.
+                Find a property that fits your rental needs.
             </p>
 
+        </div>
+
+        <!-- REQUIREMENTS CTA -->
+        <div class="buy-requirements-cta">
+            <div>
+                <h4>Looking for a rental property?</h4>
+                <p>Set your requirements and find rental properties that match your needs.</p>
+            </div>
+
+            <a href="requirements.php?type=rent" class="buy-requirements-btn">
+                <i class="fa-solid fa-sliders"></i>
+                Set Your Requirements
+            </a>
         </div>
 
 
         <!-- PROPERTY SECTION TITLE -->
 
         <h3 class="buy-title">
-            Properties Available for Sale
+            Properties Available for Rent
         </h3>
 
 
@@ -222,11 +303,11 @@ $result = mysqli_query($conn, $sql);
 
                             <?php
 
-                            $imagePath = str_replace(
-                                'admin/property/../',
-                                'admin/',
-                                $property['image_path'] ?? ''
-                            );
+                            $imagePath = '';
+
+                            if (!empty($property['image_path'])) {
+                                $imagePath = 'admin/' . ltrim($property['image_path'], '/');
+                            }
 
                             ?>
 
