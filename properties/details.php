@@ -1,752 +1,523 @@
 <?php
-
-$pageTitle = 'Property Details — UrbanNest';
-$pageDesc = 'View complete property details with UrbanNest.';
+$pageTitle = 'Property Details - UrbanNest';
+$pageDesc  = 'View complete property details, amenities, gallery and contact information on UrbanNest.';
 
 require_once __DIR__ . '/../db_connection.php';
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/navbar.php';
 
-
-// =====================================
-// GET PROPERTY ID
-// =====================================
-
-$property_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
-
-// =====================================
-// GET PROPERTY DETAILS
-// =====================================
-
+$propertyId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $property = null;
+$images = [];
+$amenities = [];
+$listedBy = null;
+$otherProperties = [];
+$inquiryMessage = '';
+$inquirySuccess = false;
 
-if ($property_id > 0) {
+function detailsEsc($value): string {
+    return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
+}
 
-    $sql = "SELECT *
-            FROM properties
-            WHERE property_id = $property_id
-            AND approval_status = 'Approved'
-            AND status = 'Active'";
+function detailsPropertyImage(?string $path): string {
+    if (!empty($path)) {
+        return '../admin/' . ltrim($path, '/');
+    }
+    return '../admin/assets/images/no-property.png';
+}
 
-    $result = mysqli_query($conn, $sql);
+function detailsFormatPrice($price, string $listingType): string {
+    $price = (float)$price;
+    if ($listingType === 'For Rent') {
+        return '₹' . number_format($price) . ' / month';
+    }
+    return '₹' . number_format($price);
+}
 
-    if ($result) {
+/* -------------------------------------------------
+   PROPERTY
+------------------------------------------------- */
+if ($propertyId > 0) {
+    $stmt = mysqli_prepare($conn, "
+        SELECT
+            p.*,
+            s.subcategory_name,
+            c.category_name
+        FROM properties p
+        LEFT JOIN sub_categories s
+            ON p.subcategory_id = s.subcategory_id
+        LEFT JOIN categories c
+            ON s.category_id = c.category_id
+        WHERE p.property_id = ?
+          AND p.approval_status = 'Approved'
+          AND p.status = 'Active'
+        LIMIT 1
+    ");
+
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, 'i', $propertyId);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
         $property = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
     }
 }
 
+/* -------------------------------------------------
+   INQUIRY
+------------------------------------------------- */
+if ($property && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_inquiry'])) {
+    $message = trim($_POST['message'] ?? '');
+    $sessionUserId = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
 
-// =====================================
-// GET PROPERTY IMAGES
-// =====================================
+    if ($sessionUserId <= 0) {
+        $inquiryMessage = 'Please log in before sending an inquiry.';
+    } elseif ($message === '') {
+        $inquiryMessage = 'Please enter a message.';
+    } else {
+        $status = 'Pending';
+        $insert = mysqli_prepare($conn, "
+            INSERT INTO inquiries (user_id, property_id, message, status, created_at)
+            VALUES (?, ?, ?, ?, NOW())
+        ");
 
-$images = [];
-
-if ($property) {
-
-    $sql_images = "SELECT image_path, is_main
-                   FROM property_images
-                   WHERE property_id = $property_id
-                   ORDER BY is_main DESC, image_id ASC";
-
-    $result_images = mysqli_query($conn, $sql_images);
-
-    if ($result_images) {
-
-        while ($image = mysqli_fetch_assoc($result_images)) {
-
-            $images[] = $image;
+        if ($insert) {
+            mysqli_stmt_bind_param($insert, 'iiss', $sessionUserId, $propertyId, $message, $status);
+            if (mysqli_stmt_execute($insert)) {
+                $inquirySuccess = true;
+                $inquiryMessage = 'Your inquiry has been sent successfully.';
+            } else {
+                $inquiryMessage = 'Unable to send the inquiry right now. Please try again.';
+            }
+            mysqli_stmt_close($insert);
+        } else {
+            $inquiryMessage = 'Unable to send the inquiry right now.';
         }
     }
 }
 
-?>
+/* -------------------------------------------------
+   GALLERY
+------------------------------------------------- */
+if ($property) {
+    $stmt = mysqli_prepare($conn, "
+        SELECT image_id, image_path, is_main
+        FROM property_images
+        WHERE property_id = ?
+        ORDER BY is_main DESC, image_id ASC
+    ");
+
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, 'i', $propertyId);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        while ($row = mysqli_fetch_assoc($result)) {
+            $images[] = $row;
+        }
+        mysqli_stmt_close($stmt);
+    }
+}
+
+/* -------------------------------------------------
+   AMENITIES
+------------------------------------------------- */
+if ($property) {
+    $stmt = mysqli_prepare($conn, "
+        SELECT a.amenity_id, a.amenity_name
+        FROM amenities a
+        INNER JOIN property_amenities pa
+            ON pa.amenity_id = a.amenity_id
+        WHERE pa.property_id = ?
+        ORDER BY a.amenity_id
+    ");
+
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, 'i', $propertyId);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        while ($row = mysqli_fetch_assoc($result)) {
+            $amenities[] = $row;
+        }
+        mysqli_stmt_close($stmt);
+    }
+}
+
+/* -------------------------------------------------
+   LISTED BY
+   Uses the existing users + roles + agent_profiles /
+   owner_profiles structure from the UrbanNest DB.
+------------------------------------------------- */
+if ($property) {
+    $stmt = mysqli_prepare($conn, "
+        SELECT
+            u.user_id,
+            u.full_name,
+            u.phoneno,
+            u.email,
+            r.role_name,
+            ap.profile_photo AS agent_photo,
+            ap.agency_name,
+            ap.experience,
+            ap.license_number,
+            ap.bio AS agent_bio,
+            op.profile_photo AS owner_photo,
+            op.property_count,
+            op.bio AS owner_bio
+        FROM users u
+        LEFT JOIN roles r
+            ON u.role_id = r.role_id
+        LEFT JOIN agent_profiles ap
+            ON u.user_id = ap.user_id
+        LEFT JOIN owner_profiles op
+            ON u.user_id = op.user_id
+        WHERE u.user_id = ?
+        LIMIT 1
+    ");
+
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, 'i', $property['user_id']);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $listedBy = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
+    }
+}
+
+/* -------------------------------------------------
+   OTHER PROPERTIES
+------------------------------------------------- */
+if ($property) {
+    $stmt = mysqli_prepare($conn, "
+        SELECT
+            p.property_id,
+            p.title,
+            p.listing_type,
+            p.price,
+            p.area_sqft,
+            p.bedrooms,
+            p.bathrooms,
+            p.city,
+            p.state,
+            s.subcategory_name,
+            pi.image_path
+        FROM properties p
+        LEFT JOIN sub_categories s
+            ON p.subcategory_id = s.subcategory_id
+        LEFT JOIN property_images pi
+            ON p.property_id = pi.property_id
+           AND pi.is_main = 1
+        WHERE p.property_id <> ?
+          AND p.subcategory_id = ?
+          AND p.approval_status = 'Approved'
+          AND p.status = 'Active'
+        ORDER BY p.created_at DESC
+        LIMIT 4
+    ");
+
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, 'ii', $propertyId, $property['subcategory_id']);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        while ($row = mysqli_fetch_assoc($result)) {
+            $otherProperties[] = $row;
+        }
+        mysqli_stmt_close($stmt);
+    }
+}
+
+$hasImages = !empty($images);
+$mainImage = $hasImages ? detailsPropertyImage($images[0]['image_path']) : detailsPropertyImage(null);
+$roleName = $listedBy['role_name'] ?? 'Property Lister';
+$profilePhoto = null;
+$profileBio = '';
+
+if ($listedBy) {
+    if (strcasecmp($roleName, 'Agent') === 0) {
+        $profilePhoto = $listedBy['agent_photo'] ?? null;
+        $profileBio = $listedBy['agent_bio'] ?? '';
+    } else {
+        $profilePhoto = $listedBy['owner_photo'] ?? null;
+        $profileBio = $listedBy['owner_bio'] ?? '';
+    }
+}
+
+if (!$property): ?>
+    <style>
+        .un-not-found { max-width: 900px; margin: 70px auto; padding: 60px 25px; text-align:center; background:#fff; border-radius:18px; box-shadow:0 8px 30px rgba(11,31,58,.08); }
+        .un-not-found h1 { color:#0b1f3a; margin-bottom:12px; }
+        .un-not-found p { color:#687386; margin-bottom:25px; }
+        .un-back { display:inline-block; padding:12px 22px; background:#0b1f3a; color:#fff; text-decoration:none; border-radius:8px; }
+    </style>
+    <div class="un-not-found">
+        <h1>Property Not Found</h1>
+        <p>The property may no longer be available, or the link may be invalid.</p>
+        <a class="un-back" href="../property-results.php?type=buy">Back to Properties</a>
+    </div>
+<?php else: ?>
 
 <style>
-    /* =====================================
-   PROPERTY DETAILS PAGE
-===================================== */
-
-    .details-section {
-        padding: 60px 0;
-        background: #f8f7f2;
+    .details-page { background:#f6f7fa; padding:42px 0 70px; }
+    .details-wrap { max-width:1180px; margin:0 auto; padding:0 18px; }
+    .details-breadcrumb { color:#748094; font-size:14px; margin-bottom:18px; }
+    .details-breadcrumb a { color:#0b1f3a; text-decoration:none; font-weight:600; }
+    .details-title-row { display:flex; justify-content:space-between; align-items:flex-end; gap:20px; margin-bottom:24px; }
+    .details-title-row h1 { color:#0b1f3a; font-size:32px; line-height:1.2; margin:0 0 9px; font-weight:750; }
+    .details-location { color:#697588; font-size:15px; }
+    .details-price { color:#b08d22; font-size:28px; font-weight:750; white-space:nowrap; }
+    .details-gallery-main { background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 5px 22px rgba(11,31,58,.08); }
+    .details-main-img { width:100%; height:500px; object-fit:cover; display:block; }
+    .details-thumbs { display:grid; grid-template-columns:repeat(6,1fr); gap:9px; padding:10px; }
+    .details-thumb { border:2px solid transparent; border-radius:9px; overflow:hidden; padding:0; background:none; cursor:pointer; }
+    .details-thumb.active { border-color:#b08d22; }
+    .details-thumb img { width:100%; height:78px; object-fit:cover; display:block; }
+    .details-layout { display:grid; grid-template-columns:minmax(0,1fr) 330px; gap:24px; margin-top:24px; }
+    .details-card { background:#fff; border:1px solid #e8ebf0; border-radius:16px; padding:27px; box-shadow:0 4px 18px rgba(11,31,58,.05); margin-bottom:20px; }
+    .details-card h2 { color:#0b1f3a; font-size:21px; margin:0 0 18px; }
+    .details-description { color:#5d6878; line-height:1.75; font-size:15px; }
+    .details-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+    .details-stat { background:#f7f8fb; border-radius:11px; padding:16px 13px; text-align:center; }
+    .details-stat i { color:#b08d22; font-size:18px; margin-bottom:7px; }
+    .details-stat strong { display:block; color:#0b1f3a; font-size:15px; }
+    .details-stat span { display:block; color:#788397; font-size:12px; margin-top:3px; }
+    .details-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:0; }
+    .details-info-item { padding:13px 0; border-bottom:1px solid #edf0f4; }
+    .details-info-item:nth-child(odd) { padding-right:18px; }
+    .details-info-item:nth-child(even) { padding-left:18px; border-left:1px solid #edf0f4; }
+    .details-info-label { display:block; color:#7a8494; font-size:12px; margin-bottom:4px; }
+    .details-info-value { color:#1c2940; font-weight:650; font-size:14px; }
+    .amenity-list { display:flex; flex-wrap:wrap; gap:10px; }
+    .amenity-chip { display:inline-flex; align-items:center; gap:7px; background:#f6f8fa; border:1px solid #e4e8ed; color:#26344b; padding:9px 12px; border-radius:9px; font-size:13px; }
+    .amenity-chip i { color:#b08d22; }
+    .listed-card { position:sticky; top:20px; }
+    .listed-heading { display:flex; align-items:center; gap:13px; margin-bottom:18px; }
+    .listed-avatar { width:60px; height:60px; border-radius:50%; object-fit:cover; background:#eef1f5; display:flex; align-items:center; justify-content:center; color:#0b1f3a; font-size:22px; overflow:hidden; }
+    .listed-heading h3 { color:#0b1f3a; margin:0 0 3px; font-size:18px; }
+    .listed-role { color:#b08d22; font-size:12px; font-weight:700; }
+    .listed-detail { color:#5f6b7d; font-size:13px; margin:9px 0; }
+    .listed-detail i { width:20px; color:#0b1f3a; }
+    .listed-bio { color:#687386; line-height:1.55; font-size:13px; margin:15px 0 18px; }
+    .inquiry-title { margin-top:23px !important; padding-top:20px; border-top:1px solid #edf0f4; }
+    .inquiry-form textarea { width:100%; min-height:105px; resize:vertical; border:1px solid #dce1e8; border-radius:10px; padding:12px; outline:none; font:inherit; font-size:13px; }
+    .inquiry-form textarea:focus { border-color:#b08d22; }
+    .inquiry-btn { width:100%; border:0; background:#0b1f3a; color:#fff; padding:12px; border-radius:9px; font-weight:700; cursor:pointer; margin-top:10px; }
+    .inquiry-note { color:#7b8492; font-size:12px; line-height:1.5; margin-top:9px; }
+    .inquiry-message { padding:10px 12px; border-radius:8px; margin-bottom:12px; font-size:13px; }
+    .inquiry-success { background:#eaf7ef; color:#247341; }
+    .inquiry-error { background:#fff0f0; color:#a33434; }
+    .other-section { margin-top:42px; }
+    .other-section h2 { color:#0b1f3a; margin-bottom:18px; font-size:25px; }
+    .other-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+    .other-card { background:#fff; border-radius:13px; overflow:hidden; border:1px solid #e8ebf0; box-shadow:0 4px 16px rgba(11,31,58,.05); }
+    .other-card img { width:100%; height:175px; object-fit:cover; display:block; }
+    .other-content { padding:16px; }
+    .other-content h3 { color:#0b1f3a; font-size:16px; line-height:1.35; margin:0 0 8px; }
+    .other-price { color:#b08d22; font-weight:750; margin-bottom:7px; }
+    .other-meta { color:#6d7889; font-size:12px; line-height:1.6; margin-bottom:12px; }
+    .other-btn { display:block; text-align:center; text-decoration:none; background:#0b1f3a; color:#fff; padding:9px; border-radius:7px; font-size:13px; font-weight:650; }
+    @media (max-width: 900px) {
+        .details-layout { grid-template-columns:1fr; }
+        .listed-card { position:static; }
+        .other-grid { grid-template-columns:repeat(2,1fr); }
     }
-
-
-    /* =====================================
-   PAGE HEADING
-===================================== */
-
-    .details-heading {
-        margin-bottom: 35px;
-    }
-
-    .details-heading h1 {
-        color: #0b1f3a;
-        font-size: 32px;
-        font-weight: 700;
-        margin-bottom: 12px;
-    }
-
-    .details-location {
-        color: #687386;
-        font-size: 15px;
-    }
-
-
-    /* =====================================
-   PROPERTY IMAGE
-===================================== */
-
-    .details-main-image {
-        width: 100%;
-        height: 450px;
-        object-fit: cover;
-        display: block;
-        border-radius: 12px;
-    }
-
-
-    /* =====================================
-   PROPERTY GALLERY
-===================================== */
-
-    .details-gallery {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 15px;
-        margin-top: 20px;
-    }
-
-    .details-gallery img {
-        width: 100%;
-        height: 140px;
-        object-fit: cover;
-        border-radius: 10px;
-    }
-
-
-    /* =====================================
-   PROPERTY INFORMATION
-===================================== */
-
-    .details-card {
-        background: #fff;
-        padding: 30px;
-        border-radius: 12px;
-        border: 1px solid #eee9dc;
-        box-shadow: 0 5px 18px rgba(11, 31, 58, 0.08);
-        margin-top: 30px;
-    }
-
-    .details-card h3 {
-        color: #0b1f3a;
-        font-size: 24px;
-        font-weight: 700;
-        margin-bottom: 20px;
-    }
-
-
-    /* =====================================
-   PROPERTY PRICE
-===================================== */
-
-    .details-price {
-        color: #b9922e;
-        font-size: 30px;
-        font-weight: 700;
-        margin-bottom: 20px;
-    }
-
-
-    /* =====================================
-   PROPERTY DESCRIPTION
-===================================== */
-
-    .details-description {
-        color: #687386;
-        font-size: 15px;
-        line-height: 1.8;
-    }
-
-
-    /* =====================================
-   PROPERTY FEATURES
-===================================== */
-
-    .details-info {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-        margin-top: 25px;
-    }
-
-    .details-info-box {
-        padding: 18px;
-        background: #f8f7f2;
-        border-radius: 8px;
-    }
-
-    .details-info-box strong {
-        display: block;
-        color: #0b1f3a;
-        font-size: 15px;
-        margin-bottom: 8px;
-    }
-
-    .details-info-box span {
-        color: #687386;
-        font-size: 14px;
-    }
-
-
-    /* =====================================
-   PROPERTY DESCRIPTION
-===================================== */
-
-    .details-text {
-        color: #555;
-        font-size: 15px;
-        line-height: 1.8;
-    }
-
-
-    /* =====================================
-   PROPERTY TYPE
-===================================== */
-
-    .details-badge {
-        display: inline-block;
-        background: #0b1f3a;
-        color: #fff;
-        padding: 8px 18px;
-        border-radius: 6px;
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 20px;
-    }
-
-
-    /* =====================================
-   BUTTONS
-===================================== */
-
-    .details-btn {
-        display: inline-block;
-        padding: 12px 25px;
-        background: #0b1f3a;
-        color: #fff;
-        text-decoration: none;
-        border-radius: 7px;
-        font-weight: 600;
-        transition: 0.3s;
-        margin-top: 20px;
-        margin-right: 10px;
-    }
-
-    .details-btn:hover {
-        background: #d4af37;
-        color: #0b1f3a;
-    }
-
-
-    /* =====================================
-   APPOINTMENT BUTTON
-===================================== */
-
-    .appointment-btn {
-        background: #d4af37;
-        color: #0b1f3a;
-    }
-
-    .appointment-btn:hover {
-        background: #0b1f3a;
-        color: #fff;
-    }
-
-
-    /* =====================================
-   NO PROPERTY MESSAGE
-===================================== */
-
-    .details-empty {
-        padding: 50px;
-        text-align: center;
-        background: #fff;
-        border-radius: 12px;
-    }
-
-    .details-empty h3 {
-        color: #0b1f3a;
-        margin-bottom: 15px;
-    }
-
-    .details-empty p {
-        color: #687386;
-    }
-
-
-    /* =====================================
-   MOBILE RESPONSIVE
-===================================== */
-
-    @media (max-width: 768px) {
-
-        .details-section {
-            padding: 40px 0;
-        }
-
-        .details-heading h1 {
-            font-size: 26px;
-        }
-
-        .details-main-image {
-            height: 300px;
-        }
-
-        .details-gallery {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .details-info {
-            grid-template-columns: 1fr;
-        }
-
-        .details-card {
-            padding: 20px;
-        }
-
-        .details-btn {
-            width: 100%;
-            text-align: center;
-            margin-right: 0;
-        }
+    @media (max-width: 650px) {
+        .details-page { padding-top:25px; }
+        .details-title-row { display:block; }
+        .details-title-row h1 { font-size:25px; }
+        .details-price { margin-top:10px; font-size:23px; }
+        .details-main-img { height:300px; }
+        .details-thumbs { grid-template-columns:repeat(4,1fr); }
+        .details-thumb img { height:65px; }
+        .details-stats { grid-template-columns:repeat(2,1fr); }
+        .details-info-grid { grid-template-columns:1fr; }
+        .details-info-item:nth-child(even) { padding-left:0; border-left:0; }
+        .details-info-item:nth-child(odd) { padding-right:0; }
+        .other-grid { grid-template-columns:1fr; }
     }
 </style>
 
+<section class="details-page">
+    <div class="details-wrap">
+        <div class="details-breadcrumb">
+            <a href="../property-results.php?type=<?= $property['listing_type'] === 'For Rent' ? 'rent' : 'buy' ?>">Properties</a>
+            <span> / <?= detailsEsc($property['subcategory_name'] ?? 'Property') ?></span>
+        </div>
 
-<!-- =====================================
-     PROPERTY DETAILS SECTION
-===================================== -->
-
-<section class="details-section">
-
-    <div class="container">
-
-        <?php if ($property) { ?>
-
-
-            <!-- =====================================
-                 PROPERTY HEADING
-            ===================================== -->
-
-            <div class="details-heading">
-
-                <h1>
-                    <?php echo htmlspecialchars($property['title']); ?>
-                </h1>
-
-                <p class="details-location">
-
+        <div class="details-title-row">
+            <div>
+                <h1><?= detailsEsc($property['title']) ?></h1>
+                <div class="details-location">
                     <i class="fa-solid fa-location-dot"></i>
-
-                    <?php echo htmlspecialchars($property['city']); ?>,
-
-                    <?php echo htmlspecialchars($property['state']); ?>
-
-                </p>
-
+                    <?= detailsEsc($property['address']) ?>, <?= detailsEsc($property['city']) ?>, <?= detailsEsc($property['state']) ?>
+                </div>
             </div>
+            <div class="details-price">
+                <?= detailsEsc(detailsFormatPrice($property['price'], $property['listing_type'])) ?>
+            </div>
+        </div>
 
+        <div class="details-gallery-main">
+            <img id="mainPropertyImage" class="details-main-img" src="<?= detailsEsc($mainImage) ?>" alt="<?= detailsEsc($property['title']) ?>">
 
-            <!-- =====================================
-                 PROPERTY IMAGES
-            ===================================== -->
+            <?php if ($hasImages): ?>
+                <div class="details-thumbs">
+                    <?php foreach ($images as $index => $image): ?>
+                        <button type="button" class="details-thumb <?= $index === 0 ? 'active' : '' ?>" data-image="<?= detailsEsc(detailsPropertyImage($image['image_path'])) ?>">
+                            <img src="<?= detailsEsc(detailsPropertyImage($image['image_path'])) ?>" alt="Property image <?= $index + 1 ?>">
+                        </button>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
 
-            <div class="row">
+        <div class="details-layout">
+            <main>
+                <div class="details-card">
+                    <h2>Property Overview</h2>
+                    <div class="details-stats">
+                        <div class="details-stat"><i class="fa-solid fa-ruler-combined"></i><strong><?= number_format((int)$property['area_sqft']) ?></strong><span>Sq. Ft.</span></div>
+                        <div class="details-stat"><i class="fa-solid fa-bed"></i><strong><?= $property['bedrooms'] !== null ? (int)$property['bedrooms'] . ' BHK' : 'N/A' ?></strong><span>Bedrooms</span></div>
+                        <div class="details-stat"><i class="fa-solid fa-bath"></i><strong><?= $property['bathrooms'] !== null ? (int)$property['bathrooms'] : 'N/A' ?></strong><span>Bathrooms</span></div>
+                        <div class="details-stat"><i class="fa-solid fa-car"></i><strong><?= $property['parking_spaces'] !== null ? (int)$property['parking_spaces'] : 'N/A' ?></strong><span>Parking</span></div>
+                    </div>
+                </div>
 
-                <div class="col-12">
+                <div class="details-card">
+                    <h2>Description</h2>
+                    <div class="details-description"><?= nl2br(detailsEsc($property['description'])) ?></div>
+                </div>
 
-                    <?php
+                <div class="details-card">
+                    <h2>Property Details</h2>
+                    <div class="details-info-grid">
+                        <div class="details-info-item"><span class="details-info-label">Listing Type</span><span class="details-info-value"><?= detailsEsc($property['listing_type']) ?></span></div>
+                        <div class="details-info-item"><span class="details-info-label">Property Type</span><span class="details-info-value"><?= detailsEsc($property['category_name'] ?? 'Property') ?></span></div>
+                        <div class="details-info-item"><span class="details-info-label">Subcategory</span><span class="details-info-value"><?= detailsEsc($property['subcategory_name'] ?? 'N/A') ?></span></div>
+                        <div class="details-info-item"><span class="details-info-label">Furnishing</span><span class="details-info-value"><?= detailsEsc($property['furnishing'] ?? 'N/A') ?></span></div>
+                        <div class="details-info-item"><span class="details-info-label">Condition</span><span class="details-info-value"><?= detailsEsc($property['property_condition'] ?? 'N/A') ?></span></div>
+                        <div class="details-info-item"><span class="details-info-label">Floor</span><span class="details-info-value"><?= $property['floor_number'] !== null ? (int)$property['floor_number'] . ' of ' . (int)$property['total_floors'] : 'N/A' ?></span></div>
+                        <?php if ($property['plot_length'] !== null): ?>
+                            <div class="details-info-item"><span class="details-info-label">Plot Size</span><span class="details-info-value"><?= detailsEsc($property['plot_length']) ?> × <?= detailsEsc($property['plot_width']) ?> ft</span></div>
+                        <?php endif; ?>
+                        <div class="details-info-item"><span class="details-info-label">City / State</span><span class="details-info-value"><?= detailsEsc($property['city']) ?>, <?= detailsEsc($property['state']) ?></span></div>
+                    </div>
+                </div>
 
-                    $mainImage = '';
+                <div class="details-card">
+                    <h2>Amenities</h2>
+                    <?php if ($amenities): ?>
+                        <div class="amenity-list">
+                            <?php foreach ($amenities as $amenity): ?>
+                                <span class="amenity-chip"><i class="fa-solid fa-check"></i><?= detailsEsc($amenity['amenity_name']) ?></span>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php else: ?>
+                        <p class="details-description">No amenities have been listed for this property.</p>
+                    <?php endif; ?>
+                </div>
+            </main>
 
-                    if (!empty($images)) {
+            <aside>
+                <div class="details-card listed-card">
+                    <h2>Listed By</h2>
 
-                        $mainImage = $images[0]['image_path'];
-                    }
-
-                    $mainImage = str_replace(
-                        'admin/property/../',
-                        'admin/',
-                        $mainImage
-                    );
-
-                    ?>
-
-
-                    <?php if (!empty($mainImage)) { ?>
-
-                        <img
-                            src="<?php echo htmlspecialchars($mainImage); ?>"
-                            class="details-main-image"
-                            alt="Property Image">
-
-                    <?php } else { ?>
-
-                        <img
-                            src="assets/images/hero.png"
-                            class="details-main-image"
-                            alt="Property Image">
-
-                    <?php } ?>
-
-
-                    <!-- =====================================
-                         PROPERTY GALLERY
-                    ===================================== -->
-
-                    <?php if (count($images) > 1) { ?>
-
-                        <div class="details-gallery">
-
-                            <?php
-
-                            $galleryCount = 0;
-
-                            foreach ($images as $image) {
-
-                                if ($galleryCount >= 4) {
-                                    break;
-                                }
-
-                                if ($image['image_path'] == $images[0]['image_path']) {
-                                    continue;
-                                }
-
-                                $galleryImage = str_replace(
-                                    'admin/property/../',
-                                    'admin/',
-                                    $image['image_path']
-                                );
-
-                            ?>
-
-                                <img
-                                    src="<?php echo htmlspecialchars($galleryImage); ?>"
-                                    alt="Property Image">
-
-                            <?php
-
-                                $galleryCount++;
-                            }
-
-                            ?>
-
+                    <?php if ($listedBy): ?>
+                        <div class="listed-heading">
+                            <div class="listed-avatar">
+                                <?php if (!empty($profilePhoto)): ?>
+                                    <img src="<?= detailsEsc('../admin/' . ltrim($profilePhoto, '/')) ?>" alt="<?= detailsEsc($listedBy['full_name']) ?>" style="width:100%;height:100%;object-fit:cover;">
+                                <?php else: ?>
+                                    <i class="fa-solid fa-user"></i>
+                                <?php endif; ?>
+                            </div>
+                            <div>
+                                <h3><?= detailsEsc($listedBy['full_name']) ?></h3>
+                                <div class="listed-role"><?= detailsEsc($roleName) ?></div>
+                            </div>
                         </div>
 
-                    <?php } ?>
+                        <?php if (!empty($listedBy['agency_name']) && strcasecmp($roleName, 'Agent') === 0): ?>
+                            <div class="listed-detail"><i class="fa-solid fa-building"></i><?= detailsEsc($listedBy['agency_name']) ?></div>
+                        <?php endif; ?>
 
+                        <?php if (!empty($listedBy['experience']) && strcasecmp($roleName, 'Agent') === 0): ?>
+                            <div class="listed-detail"><i class="fa-solid fa-briefcase"></i><?= (int)$listedBy['experience'] ?> years experience</div>
+                        <?php endif; ?>
+
+                        <div class="listed-detail"><i class="fa-solid fa-phone"></i><?= detailsEsc($listedBy['phoneno']) ?></div>
+                        <div class="listed-detail"><i class="fa-solid fa-envelope"></i><?= detailsEsc($listedBy['email']) ?></div>
+
+                        <?php if (!empty($profileBio)): ?>
+                            <div class="listed-bio"><?= nl2br(detailsEsc($profileBio)) ?></div>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <p class="details-description">Lister information is currently unavailable.</p>
+                    <?php endif; ?>
+
+                    <h2 class="inquiry-title">Send an Inquiry</h2>
+
+                    <?php if ($inquiryMessage): ?>
+                        <div class="inquiry-message <?= $inquirySuccess ? 'inquiry-success' : 'inquiry-error' ?>">
+                            <?= detailsEsc($inquiryMessage) ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <form method="POST" class="inquiry-form">
+                        <textarea name="message" placeholder="I am interested in this property. Please share more details..." required></textarea>
+                        <button type="submit" name="send_inquiry" class="inquiry-btn">
+                            <i class="fa-solid fa-paper-plane"></i> Send Inquiry
+                        </button>
+                        <?php if (empty($_SESSION['user_id'])): ?>
+                            <div class="inquiry-note">You need to be logged in to send an inquiry.</div>
+                        <?php else: ?>
+                            <div class="inquiry-note">Your inquiry will be sent to the property listing account.</div>
+                        <?php endif; ?>
+                    </form>
                 </div>
+            </aside>
+        </div>
 
-            </div>
-
-
-            <!-- =====================================
-                 PROPERTY INFORMATION
-            ===================================== -->
-
-            <div class="details-card">
-
-
-                <!-- PROPERTY TYPE -->
-
-                <span class="details-badge">
-
-                    <?php echo htmlspecialchars($property['listing_type']); ?>
-
-                </span>
-
-
-                <!-- PROPERTY PRICE -->
-
-                <div class="details-price">
-
-                    ₹<?php echo number_format($property['price']); ?>
-
+        <?php if ($otherProperties): ?>
+            <section class="other-section">
+                <h2>Other <?= detailsEsc($property['subcategory_name'] ?? 'Properties') ?></h2>
+                <div class="other-grid">
+                    <?php foreach ($otherProperties as $other): ?>
+                        <article class="other-card">
+                            <img src="<?= detailsEsc(detailsPropertyImage($other['image_path'])) ?>" alt="<?= detailsEsc($other['title']) ?>">
+                            <div class="other-content">
+                                <h3><?= detailsEsc($other['title']) ?></h3>
+                                <div class="other-price"><?= detailsEsc(detailsFormatPrice($other['price'], $other['listing_type'])) ?></div>
+                                <div class="other-meta">
+                                    <?= detailsEsc($other['city']) ?>, <?= detailsEsc($other['state']) ?><br>
+                                    <?= number_format((int)$other['area_sqft']) ?> sq.ft.
+                                    <?php if ($other['bedrooms'] !== null): ?> · <?= (int)$other['bedrooms'] ?> BHK<?php endif; ?>
+                                </div>
+                                <a class="other-btn" href="details.php?id=<?= (int)$other['property_id'] ?>">View Details</a>
+                            </div>
+                        </article>
+                    <?php endforeach; ?>
                 </div>
-
-
-                <!-- =====================================
-                     PROPERTY DESCRIPTION
-                ===================================== -->
-
-                <h3>Property Description</h3>
-
-                <p class="details-description">
-
-                    <?php
-                    echo nl2br(
-                        htmlspecialchars(
-                            $property['description'] ?? 'No description available.'
-                        )
-                    );
-                    ?>
-
-                </p>
-
-
-                <hr>
-
-
-                <!-- =====================================
-                     PROPERTY FEATURES
-                ===================================== -->
-
-                <h3>Property Information</h3>
-
-                <div class="details-info">
-
-
-                    <!-- AREA -->
-
-                    <div class="details-info-box">
-
-                        <strong>Area</strong>
-
-                        <span>
-
-                            <?php echo htmlspecialchars(
-                                $property['area_sqft'] ?? 'N/A'
-                            ); ?>
-
-                            sq.ft.
-
-                        </span>
-
-                    </div>
-
-
-                    <!-- BEDROOMS -->
-
-                    <div class="details-info-box">
-
-                        <strong>Bedrooms</strong>
-
-                        <span>
-
-                            <?php echo htmlspecialchars(
-                                $property['bedrooms'] ?? 'N/A'
-                            ); ?>
-
-                        </span>
-
-                    </div>
-
-
-                    <!-- BATHROOMS -->
-
-                    <div class="details-info-box">
-
-                        <strong>Bathrooms</strong>
-
-                        <span>
-
-                            <?php echo htmlspecialchars(
-                                $property['bathrooms'] ?? 'N/A'
-                            ); ?>
-
-                        </span>
-
-                    </div>
-
-
-                    <!-- FURNISHING -->
-
-                    <div class="details-info-box">
-
-                        <strong>Furnishing</strong>
-
-                        <span>
-
-                            <?php echo htmlspecialchars(
-                                $property['furnishing'] ?? 'N/A'
-                            ); ?>
-
-                        </span>
-
-                    </div>
-
-
-                    <!-- PARKING -->
-
-                    <div class="details-info-box">
-
-                        <strong>Parking Spaces</strong>
-
-                        <span>
-
-                            <?php echo htmlspecialchars(
-                                $property['parking_spaces'] ?? 'N/A'
-                            ); ?>
-
-                        </span>
-
-                    </div>
-
-
-                    <!-- FLOOR NUMBER -->
-
-                    <div class="details-info-box">
-
-                        <strong>Floor Number</strong>
-
-                        <span>
-
-                            <?php echo htmlspecialchars(
-                                $property['floor_number'] ?? 'N/A'
-                            ); ?>
-
-                        </span>
-
-                    </div>
-
-
-                    <!-- TOTAL FLOORS -->
-
-                    <div class="details-info-box">
-
-                        <strong>Total Floors</strong>
-
-                        <span>
-
-                            <?php echo htmlspecialchars(
-                                $property['total_floors'] ?? 'N/A'
-                            ); ?>
-
-                        </span>
-
-                    </div>
-
-
-                    <!-- PROPERTY CONDITION -->
-
-                    <div class="details-info-box">
-
-                        <strong>Property Condition</strong>
-
-                        <span>
-
-                            <?php echo htmlspecialchars(
-                                $property['property_condition'] ?? 'N/A'
-                            ); ?>
-
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <hr>
-
-
-                <!-- =====================================
-                     PROPERTY ADDRESS
-                ===================================== -->
-
-                <h3>Property Address</h3>
-
-                <p class="details-text">
-
-                    <i class="fa-solid fa-location-dot"></i>
-
-                    <?php echo htmlspecialchars(
-                        $property['address'] ?? 'Address not available'
-                    ); ?>,
-
-                    <?php echo htmlspecialchars(
-                        $property['city']
-                    ); ?>,
-
-                    <?php echo htmlspecialchars(
-                        $property['state']
-                    ); ?>
-
-                </p>
-
-
-                <!-- =====================================
-                     ACTION BUTTONS
-                ===================================== -->
-
-                <a
-                    href="javascript:history.back()"
-                    class="details-btn">
-
-                    <i class="fa-solid fa-arrow-left"></i>
-
-                    Back to Properties
-
-                </a>
-
-
-                <!-- BOOK A VISIT BUTTON -->
-
-                <a
-                    href="../appointment.php?id=<?php echo $property['property_id']; ?>"
-                    class="details-btn appointment-btn">
-
-                    <i class="fa-solid fa-calendar-check"></i>
-
-                    Book a Visit
-
-                </a>
-
-
-            </div>
-
-
-        <?php } else { ?>
-
-
-            <!-- =====================================
-                 NO PROPERTY FOUND
-            ===================================== -->
-
-            <div class="details-empty">
-
-                <h3>Property Not Found</h3>
-
-                <p>
-                    Sorry, this property is not available or has been removed.
-                </p>
-
-                <a
-                    href="../buy.php"
-                    class="details-btn">
-
-                    Browse Properties
-
-                </a>
-
-            </div>
-
-
-        <?php } ?>
-
+            </section>
+        <?php endif; ?>
     </div>
-
 </section>
 
+<script>
+    document.querySelectorAll('.details-thumb').forEach(function (button) {
+        button.addEventListener('click', function () {
+            document.getElementById('mainPropertyImage').src = this.dataset.image;
+            document.querySelectorAll('.details-thumb').forEach(function (item) {
+                item.classList.remove('active');
+            });
+            this.classList.add('active');
+        });
+    });
+</script>
 
-<?php
+<?php endif; ?>
 
-// =====================================
-// INCLUDE FOOTER
-// =====================================
-
-require_once __DIR__ . '/../includes/footer.php';
-
-?>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
