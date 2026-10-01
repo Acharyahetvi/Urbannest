@@ -1,267 +1,773 @@
 <?php
+
 session_start();
 
 require_once __DIR__ . '/../db_connection.php';
 
 $error = "";
 
-// ===============================
-// LOGIN FORM
-// ===============================
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+/* ================================
+   LOGIN
+================================ */
 
-    $email = trim($_POST['email'] ?? '');
-    $password = $_POST['password'] ?? '';
+if (isset($_POST['login'])) {
 
-    // CHECK USER LOGIN
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
     $sql = "SELECT * FROM users
-            WHERE email = ?
-            AND password = ?
-            AND role_id != 1
-            AND status = 'Active'";
+            WHERE email='$email'
+            AND password='$password'
+            AND status='Active'";
 
-    $stmt = mysqli_prepare($conn, $sql);
+    $result = mysqli_query($conn, $sql);
 
-    if ($stmt) {
+    if (mysqli_num_rows($result) == 1) {
 
-        mysqli_stmt_bind_param($stmt, "ss", $email, $password);
+        $user = mysqli_fetch_assoc($result);
 
-        mysqli_stmt_execute($stmt);
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['user_name'] = $user['full_name'];
+        $_SESSION['user_email'] = $user['email'];
+        $_SESSION['user_role'] = $user['role_id'];
 
-        $result = mysqli_stmt_get_result($stmt);
+        /* ================================
+           AFTER LOGIN
+        ================================= */
 
-        if (mysqli_num_rows($result) == 1) {
-
-            $user = mysqli_fetch_assoc($result);
-
-            // CREATE SESSION
-            session_regenerate_id(true);
-
-            $_SESSION['user_id'] = $user['user_id'];
-            $_SESSION['user_name'] = $user['full_name'];
-            $_SESSION['user_email'] = $user['email'];
-            $_SESSION['user_role'] = $user['role_id'];
-
-            // REDIRECT TO HOMEPAGE
-            mysqli_stmt_close($stmt);
-
-            header("Location: /urbannest/index.php");
-            exit;
-        } else {
-
-            $error = "Invalid email or password.";
-        }
-
-        mysqli_stmt_close($stmt);
+        header("Location: /urbannest/index.php");
+        exit();
     } else {
 
-        $error = "Database error. Please try again.";
+        $error = "Invalid email or password.";
     }
 }
+
 
 $pageTitle = "Login - UrbanNest";
 
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/navbar.php';
+
 ?>
 
+
 <style>
-    /* ===============================
-   LOGIN SECTION
-=============================== */
+    /* =====================================
+   LOGIN BACKGROUND
+===================================== */
 
     .login-section {
-        background:
-            linear-gradient(rgba(11, 31, 58, 0.55),
-                rgba(11, 31, 58, 0.55)),
+
+        min-height: 85vh;
+
+        padding: 55px 25px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        position: relative;
+
+        background-image:
+            linear-gradient(rgba(11, 31, 58, 0.68),
+                rgba(11, 31, 58, 0.68)),
             url('/urbannest/assets/images/hero.png');
 
         background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
 
-        padding: 60px 0;
-        min-height: 80vh;
+        background-position: center;
+
+        background-attachment: fixed;
+    }
+
+
+    /* =====================================
+   MAIN LOGIN CONTAINER
+===================================== */
+
+    .login-container {
+
+        width: 100%;
+
+        max-width: 1050px;
+
+        min-height: 560px;
 
         display: flex;
-        align-items: center;
+
+        overflow: hidden;
+
+        background: white;
+
+        border-radius: 18px;
+
+        border: 1px solid rgba(212, 175, 55, 0.55);
+
+        box-shadow:
+            0 25px 65px rgba(0, 0, 0, 0.35);
+
     }
 
-    /* ===============================
-   LOGIN BOX
-=============================== */
 
-    .login-box {
-        max-width: 450px;
-        margin: auto;
-        background: #ffffff;
-        padding: 35px;
+    /* =====================================
+   LEFT SIDE
+===================================== */
+
+    .login-image {
+
+        width: 50%;
+
+        min-height: 560px;
+
+        position: relative;
+
+        display: flex;
+
+        align-items: flex-end;
+
+        padding: 50px;
+
+        box-sizing: border-box;
+
+        background-image:
+            linear-gradient(rgba(11, 31, 58, 0.48),
+                rgba(11, 31, 58, 0.82)),
+            url('/urbannest/assets/images/hero.png');
+
+        background-size: cover;
+
+        background-position: center;
+    }
+
+
+    /* =====================================
+   GOLD BORDER
+===================================== */
+
+    .login-image::before {
+
+        content: "";
+
+        position: absolute;
+
+        top: 25px;
+
+        left: 25px;
+
+        right: 25px;
+
+        bottom: 25px;
+
+        border: 1px solid rgba(212, 175, 55, 0.65);
+
         border-radius: 12px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
     }
 
-    /* ===============================
-   LOGIN HEADING
-=============================== */
 
-    .login-box h2 {
-        color: #0b1f3a;
-        font-weight: 700;
-        margin-bottom: 10px;
+    /* =====================================
+   LEFT CONTENT
+===================================== */
+
+    .image-content {
+
+        position: relative;
+
+        z-index: 2;
+
+        max-width: 400px;
+
+        color: white;
     }
 
-    /* ===============================
-   INPUT FIELDS
-=============================== */
 
-    .form-control {
-        padding: 12px;
-        border-radius: 7px;
-        border: 1px solid #ddd;
-    }
+    .small-title {
 
-    .form-control:focus {
-        border-color: #d4af37;
-        box-shadow: 0 0 0 0.15rem rgba(212, 175, 55, 0.15);
-    }
-
-    /* ===============================
-   LOGIN BUTTON
-=============================== */
-
-    .btn-login {
-        width: 100%;
-        padding: 12px;
-        background: #0b1f3a;
-        color: #ffffff;
-        border: none;
-        border-radius: 7px;
-        font-weight: 600;
-        transition: 0.3s;
-    }
-
-    .btn-login:hover {
-        background: #d4af37;
-        color: #0b1f3a;
-    }
-
-    /* ===============================
-   REGISTER LINK
-=============================== */
-
-    .register-link {
         color: #d4af37;
+
+        font-size: 12px;
+
         font-weight: 600;
+
+        letter-spacing: 3px;
+
+        text-transform: uppercase;
+
+        margin-bottom: 17px;
+    }
+
+
+    .gold-line {
+
+        width: 60px;
+
+        height: 3px;
+
+        background: #d4af37;
+
+        margin-bottom: 22px;
+    }
+
+
+    .image-content h1 {
+
+        color: white;
+
+        font-size: 39px;
+
+        line-height: 1.16;
+
+        font-weight: 700;
+
+        margin: 0 0 18px 0;
+    }
+
+
+    .image-content p {
+
+        color: rgba(255, 255, 255, 0.87);
+
+        font-size: 14px;
+
+        line-height: 1.8;
+
+        margin: 0;
+
+        max-width: 380px;
+    }
+
+
+    /* =====================================
+   BADGE
+===================================== */
+
+    .luxury-badge {
+
+        display: inline-block;
+
+        margin-top: 25px;
+
+        padding: 9px 16px;
+
+        border: 1px solid rgba(212, 175, 55, 0.55);
+
+        border-radius: 30px;
+
+        background: rgba(0, 0, 0, 0.18);
+
+        color: white;
+
+        font-size: 12px;
+    }
+
+
+    .badge-dot {
+
+        display: inline-block;
+
+        width: 7px;
+
+        height: 7px;
+
+        background: #d4af37;
+
+        border-radius: 50%;
+
+        margin-right: 7px;
+    }
+
+
+    /* =====================================
+   RIGHT LOGIN AREA
+===================================== */
+
+    .login-form-section {
+
+        width: 50%;
+
+        padding: 55px 65px;
+
+        box-sizing: border-box;
+
+        display: flex;
+
+        align-items: center;
+
+        position: relative;
+
+        background: rgba(255, 255, 255, 0.98);
+    }
+
+
+    /* =====================================
+   GOLD SIDE LINE
+===================================== */
+
+    .login-form-section::before {
+
+        content: "";
+
+        position: absolute;
+
+        left: 0;
+
+        top: 50%;
+
+        transform: translateY(-50%);
+
+        width: 3px;
+
+        height: 120px;
+
+        background: #d4af37;
+    }
+
+
+    /* =====================================
+   FORM
+===================================== */
+
+    .login-form {
+
+        width: 100%;
+
+        max-width: 390px;
+
+        margin: auto;
+    }
+
+
+    /* =====================================
+   WELCOME HEADING
+===================================== */
+
+    .login-form h2 {
+
+        color: #0b1f3a;
+
+        font-size: 34px;
+
+        font-weight: 700;
+
+        margin: 0 0 10px 0;
+    }
+
+
+    .subtitle {
+
+        color: #777;
+
+        font-size: 14px;
+
+        line-height: 1.7;
+
+        margin: 0 0 32px 0;
+    }
+
+
+    /* =====================================
+   ACCOUNT LOGIN TITLE
+===================================== */
+
+    .form-title {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+
+        margin-bottom: 25px;
+    }
+
+
+    .form-title-line {
+
+        width: 35px;
+
+        height: 2px;
+
+        background: #d4af37;
+    }
+
+
+    .form-title-text {
+
+        color: #999;
+
+        font-size: 11px;
+
+        letter-spacing: 1.5px;
+
+        text-transform: uppercase;
+    }
+
+
+    /* =====================================
+   ERROR
+===================================== */
+
+    .error {
+
+        background: #fff0f0;
+
+        border: 1px solid #edcccc;
+
+        color: #a00000;
+
+        padding: 11px;
+
+        border-radius: 7px;
+
+        text-align: center;
+
+        font-size: 13px;
+
+        margin-bottom: 20px;
+    }
+
+
+    /* =====================================
+   LABEL
+===================================== */
+
+    label {
+
+        display: block;
+
+        color: #0b1f3a;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+        margin-bottom: 8px;
+    }
+
+
+    /* =====================================
+   INPUT
+===================================== */
+
+    input {
+
+        width: 100%;
+
+        height: 51px;
+
+        padding: 0 15px;
+
+        box-sizing: border-box;
+
+        border: 1px solid #dcdcdc;
+
+        border-radius: 8px;
+
+        background: #faf9f6;
+
+        color: #0b1f3a;
+
+        outline: none;
+
+        margin-bottom: 21px;
+
+        font-size: 14px;
+    }
+
+
+    input::placeholder {
+
+        color: #999;
+    }
+
+
+    input:focus {
+
+        border-color: #d4af37;
+
+        background: white;
+
+        box-shadow:
+            0 0 0 3px rgba(212, 175, 55, 0.10);
+    }
+
+
+    /* =====================================
+   LOGIN BUTTON
+===================================== */
+
+    .login-btn {
+
+        width: 100%;
+
+        height: 52px;
+
+        border: none;
+
+        border-radius: 8px;
+
+        background: #0b1f3a;
+
+        color: white;
+
+        font-size: 15px;
+
+        font-weight: 600;
+
+        cursor: pointer;
+
+        margin-top: 5px;
+
+        box-shadow:
+            0 8px 20px rgba(11, 31, 58, 0.18);
+    }
+
+
+    .login-btn:hover {
+
+        background: #d4af37;
+
+        color: #0b1f3a;
+    }
+
+
+    /* =====================================
+   REGISTER
+===================================== */
+
+    .register {
+
+        text-align: center;
+
+        border-top: 1px solid #eeeeee;
+
+        margin-top: 28px;
+
+        padding-top: 22px;
+
+        color: #777;
+
+        font-size: 13px;
+    }
+
+
+    .register a {
+
+        color: #b28c27;
+
+        font-weight: 600;
+
         text-decoration: none;
     }
 
-    .register-link:hover {
+
+    .register a:hover {
+
         color: #0b1f3a;
+    }
+
+
+    /* =====================================
+   BOTTOM TEXT
+===================================== */
+
+    .footer-text {
+
+        text-align: center;
+
+        color: #aaa;
+
+        font-size: 11px;
+
+        margin-top: 18px;
     }
 </style>
 
 
-<!-- ===============================
+<!-- =====================================
      LOGIN SECTION
-=============================== -->
+===================================== -->
 
 <section class="login-section">
 
-    <div class="container">
 
-        <div class="login-box">
-
-            <!-- HEADING -->
-
-            <h2>Welcome Back</h2>
-
-            <p class="text-muted mb-4">
-                Sign in to continue to your account.
-            </p>
+    <div class="login-container">
 
 
-            <!-- ERROR MESSAGE -->
+        <!-- =================================
+             LEFT SIDE
+        ================================== -->
 
-            <?php if ($error != ""): ?>
+        <div class="login-image">
 
-                <div class="alert alert-danger">
-                    <?= htmlspecialchars($error) ?>
+            <div class="image-content">
+
+                <div class="small-title">
+
+                    UrbanNest Real Estate
+
                 </div>
 
-            <?php endif; ?>
+
+                <div class="gold-line"></div>
 
 
-            <!-- LOGIN FORM -->
+                <h1>
 
-            <form method="POST">
+                    Find a place you'll love to call home.
 
-                <!-- EMAIL -->
+                </h1>
 
-                <div class="mb-3">
 
-                    <label class="form-label">
-                        Email
+                <p>
+
+                    Discover beautiful properties and find
+                    the perfect space for your next chapter.
+
+                </p>
+
+
+                <div class="luxury-badge">
+
+                    <span class="badge-dot"></span>
+
+                    Premium Property Experience
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================
+             RIGHT SIDE
+        ================================== -->
+
+        <div class="login-form-section">
+
+
+            <div class="login-form">
+
+
+                <!-- WELCOME -->
+
+                <h2>
+
+                    Welcome Back
+
+                </h2>
+
+
+                <p class="subtitle">
+
+                    Sign in to your account and continue
+                    exploring properties with UrbanNest.
+
+                </p>
+
+
+                <!-- ACCOUNT LOGIN -->
+
+                <div class="form-title">
+
+                    <div class="form-title-line"></div>
+
+                    <div class="form-title-text">
+
+                        Account Login
+
+                    </div>
+
+                </div>
+
+
+                <!-- ERROR -->
+
+                <?php
+
+                if ($error != "") {
+
+                    echo "<div class='error'>$error</div>";
+                }
+
+                ?>
+
+
+                <!-- FORM -->
+
+                <form method="POST">
+
+
+                    <label>
+
+                        Email Address
+
                     </label>
+
 
                     <input
                         type="email"
                         name="email"
-                        class="form-control"
                         placeholder="Enter your email"
-                        autocomplete="username"
                         required>
 
-                </div>
 
+                    <label>
 
-                <!-- PASSWORD -->
-
-                <div class="mb-4">
-
-                    <label class="form-label">
                         Password
+
                     </label>
+
 
                     <input
                         type="password"
                         name="password"
-                        class="form-control"
                         placeholder="Enter your password"
-                        autocomplete="current-password"
                         required>
+
+
+                    <button
+                        type="submit"
+                        name="login"
+                        class="login-btn">
+
+                        Sign In
+
+                    </button>
+
+
+                </form>
+
+
+                <!-- REGISTER -->
+
+                <div class="register">
+
+                    Don't have an account?
+
+                    <a href="/urbannest/auth/register.php">
+
+                        Create Account
+
+                    </a>
 
                 </div>
 
 
-                <!-- LOGIN BUTTON -->
+                <!-- BOTTOM TEXT -->
 
-                <button
-                    type="submit"
-                    class="btn-login">
+                <div class="footer-text">
 
-                    Sign In
+                    Your journey to the perfect home starts here.
 
-                </button>
-
-            </form>
+                </div>
 
 
-            <!-- REGISTER LINK -->
-
-            <p class="text-center mt-4 mb-0">
-
-                Don't have an account?
-
-                <a
-                    href="/urbannest/auth/register.php"
-                    class="register-link">
-
-                    Create Account
-
-                </a>
-
-            </p>
+            </div>
 
         </div>
 
@@ -270,4 +776,8 @@ require_once __DIR__ . '/../includes/navbar.php';
 </section>
 
 
-<?php require_once __DIR__ . '/../includes/footer.php'; ?>
+<?php
+
+require_once __DIR__ . '/../includes/footer.php';
+
+?>

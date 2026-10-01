@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 require_once __DIR__ . '/../db_connection.php';
@@ -6,80 +7,72 @@ require_once __DIR__ . '/../db_connection.php';
 $error = "";
 $success = "";
 
-$full_name = "";
-$email = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+/* ================================
+   REGISTER
+================================ */
 
-    $full_name = trim($_POST['full_name'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    $password = $_POST['password'] ?? '';
-    $confirm_password = $_POST['confirm_password'] ?? '';
+if (isset($_POST['register'])) {
 
-    // Check empty fields
+    $full_name = $_POST['full_name'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
+
+
+    /* CHECK EMPTY FIELDS */
+
     if (
-        empty($full_name) ||
-        empty($email) ||
-        empty($password) ||
-        empty($confirm_password)
+        $full_name == "" ||
+        $email == "" ||
+        $password == "" ||
+        $confirm_password == ""
     ) {
+
         $error = "Please fill in all fields.";
     }
 
-    // Validate email
-    elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error = "Please enter a valid email address.";
-    }
 
-    // Password length
-    elseif (strlen($password) < 8) {
-        $error = "Password must be at least 8 characters long.";
-    }
+    /* CHECK PASSWORD */ elseif ($password != $confirm_password) {
 
-    // Confirm password
-    elseif ($password !== $confirm_password) {
         $error = "Passwords do not match.";
+    }
+
+
+    /* CHECK PASSWORD LENGTH */ elseif (strlen($password) < 8) {
+
+        $error = "Password must be at least 8 characters.";
     } else {
 
-        // Check if email already exists
-        $sql = "SELECT user_id FROM users WHERE email = ?";
+        /* CHECK EMAIL */
 
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "s", $email);
-        mysqli_stmt_execute($stmt);
+        $sql = "SELECT * FROM users
+                WHERE email='$email'";
 
-        $result = mysqli_stmt_get_result($stmt);
+        $result = mysqli_query($conn, $sql);
+
 
         if (mysqli_num_rows($result) > 0) {
 
             $error = "This email is already registered.";
         } else {
 
-            // Hash password securely
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            /* DEFAULT USER ROLE */
 
-            // Default role_id = 2 (normal user)
             $role_id = 2;
+
             $status = "Active";
 
-            // Insert new user
+
+            /* INSERT USER */
+
             $sql = "INSERT INTO users
-                    (full_name, email, password, role_id, status)
-                    VALUES (?, ?, ?, ?, ?)";
+                    (role_id, full_name, email, password, status)
+                    VALUES
+                    ('$role_id', '$full_name', '$email', '$password', '$status')";
 
-            $stmt = mysqli_prepare($conn, $sql);
 
-            mysqli_stmt_bind_param(
-                $stmt,
-                "sssis",
-                $full_name,
-                $email,
-                $hashed_password,
-                $role_id,
-                $status
-            );
-
-            if (mysqli_stmt_execute($stmt)) {
+            if (mysqli_query($conn, $sql)) {
 
                 $success = "Registration successful! You can now login.";
 
@@ -90,244 +83,854 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $error = "Registration failed. Please try again.";
             }
         }
-
-        mysqli_stmt_close($stmt);
     }
 }
 
-$pageTitle = "Register | UrbanNest";
+
+$pageTitle = "Register - UrbanNest";
 
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/navbar.php';
+
 ?>
 
+
 <style>
-    /* REGISTER SECTION */
+    /* =====================================
+   REGISTER BACKGROUND
+===================================== */
 
     .register-section {
-        background:
-            linear-gradient(rgba(11, 31, 58, 0.60),
-                rgba(11, 31, 58, 0.60)),
-            url('/urbannest/assets/images/hero.png') center / cover no-repeat;
 
-        min-height: 100vh;
-        padding: 60px 15px;
+        min-height: 85vh;
+
+        padding: 55px 25px;
 
         display: flex;
+
         align-items: center;
+
         justify-content: center;
+
+        position: relative;
+
+        background-image:
+            linear-gradient(rgba(11, 31, 58, 0.68),
+                rgba(11, 31, 58, 0.68)),
+            url('/urbannest/assets/images/hero.png');
+
+        background-size: cover;
+
+        background-position: center;
+
+        background-attachment: fixed;
     }
 
-    /* REGISTER CARD */
 
-    .register-card {
+    /* =====================================
+   MAIN CONTAINER
+===================================== */
+
+    .register-container {
+
         width: 100%;
-        max-width: 500px;
 
-        background: #ffffff;
-        padding: 35px;
+        max-width: 1050px;
 
-        border-radius: 15px;
+        min-height: 560px;
 
-        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+        display: flex;
+
+        overflow: hidden;
+
+        background: white;
+
+        border-radius: 18px;
+
+        border: 1px solid rgba(212, 175, 55, 0.55);
+
+        box-shadow:
+            0 25px 65px rgba(0, 0, 0, 0.35);
     }
 
-    /* HEADING */
 
-    .register-title {
-        text-align: center;
-        color: #0b1f3a;
-        font-size: 30px;
-        font-weight: 700;
-        margin-bottom: 8px;
+    /* =====================================
+   LEFT IMAGE
+===================================== */
+
+    .register-image {
+
+        width: 50%;
+
+        min-height: 560px;
+
+        position: relative;
+
+        display: flex;
+
+        align-items: flex-end;
+
+        padding: 50px;
+
+        box-sizing: border-box;
+
+        background-image:
+            linear-gradient(rgba(11, 31, 58, 0.48),
+                rgba(11, 31, 58, 0.82)),
+            url('/urbannest/assets/images/hero.png');
+
+        background-size: cover;
+
+        background-position: center;
     }
 
-    .register-subtitle {
-        text-align: center;
-        color: #777;
-        font-size: 14px;
-        margin-bottom: 25px;
+
+    /* =====================================
+   GOLD BORDER
+===================================== */
+
+    .register-image::before {
+
+        content: "";
+
+        position: absolute;
+
+        top: 25px;
+
+        left: 25px;
+
+        right: 25px;
+
+        bottom: 25px;
+
+        border: 1px solid rgba(212, 175, 55, 0.65);
+
+        border-radius: 12px;
     }
 
-    /* LABEL */
 
-    .register-card label {
+    /* =====================================
+   LEFT CONTENT
+===================================== */
+
+    .image-content {
+
+        position: relative;
+
+        z-index: 2;
+
+        max-width: 400px;
+
+        color: white;
+    }
+
+
+    .small-title {
+
+        color: #d4af37;
+
+        font-size: 12px;
+
         font-weight: 600;
-        color: #0b1f3a;
-        margin-bottom: 7px;
+
+        letter-spacing: 3px;
+
+        text-transform: uppercase;
+
+        margin-bottom: 17px;
     }
 
-    /* INPUT */
 
-    .register-card .form-control {
-        height: 48px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 10px 14px;
+    .gold-line {
+
+        width: 60px;
+
+        height: 3px;
+
+        background: #d4af37;
+
+        margin-bottom: 22px;
+    }
+
+
+    .image-content h1 {
+
+        color: white;
+
+        font-size: 39px;
+
+        line-height: 1.16;
+
+        font-weight: 700;
+
+        margin: 0 0 18px 0;
+    }
+
+
+    .image-content p {
+
+        color: rgba(255, 255, 255, 0.87);
+
+        font-size: 14px;
+
+        line-height: 1.8;
+
+        margin: 0;
+
+        max-width: 380px;
+    }
+
+
+    /* =====================================
+   BADGE
+===================================== */
+
+    .luxury-badge {
+
+        display: inline-block;
+
+        margin-top: 25px;
+
+        padding: 9px 16px;
+
+        border: 1px solid rgba(212, 175, 55, 0.55);
+
+        border-radius: 30px;
+
+        background: rgba(0, 0, 0, 0.18);
+
+        color: white;
+
+        font-size: 12px;
+    }
+
+
+    /* =====================================
+   RIGHT REGISTER AREA
+===================================== */
+
+    .register-form-section {
+
+        width: 50%;
+
+        padding: 48px 65px;
+
+        box-sizing: border-box;
+
+        display: flex;
+
+        align-items: center;
+
+        position: relative;
+
+        background: rgba(255, 255, 255, 0.98);
+    }
+
+
+    /* =====================================
+   GOLD SIDE LINE
+===================================== */
+
+    .register-form-section::before {
+
+        content: "";
+
+        position: absolute;
+
+        left: 0;
+
+        top: 50%;
+
+        transform: translateY(-50%);
+
+        width: 3px;
+
+        height: 120px;
+
+        background: #d4af37;
+    }
+
+
+    /* =====================================
+   FORM
+===================================== */
+
+    .register-form {
+
+        width: 100%;
+
+        max-width: 390px;
+
+        margin: auto;
+    }
+
+
+    /* =====================================
+   HEADING
+===================================== */
+
+    .register-form h2 {
+
+        color: #0b1f3a;
+
+        font-size: 34px;
+
+        font-weight: 700;
+
+        margin: 0 0 10px 0;
+    }
+
+
+    .subtitle {
+
+        color: #777;
+
+        font-size: 14px;
+
+        line-height: 1.7;
+
+        margin: 0 0 27px 0;
+    }
+
+
+    /* =====================================
+   FORM TITLE
+===================================== */
+
+    .form-title {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+
+        margin-bottom: 22px;
+    }
+
+
+    .form-title-line {
+
+        width: 35px;
+
+        height: 2px;
+
+        background: #d4af37;
+    }
+
+
+    .form-title-text {
+
+        color: #999;
+
+        font-size: 11px;
+
+        letter-spacing: 1.5px;
+
+        text-transform: uppercase;
+    }
+
+
+    /* =====================================
+   ERROR
+===================================== */
+
+    .error {
+
+        background: #fff0f0;
+
+        border: 1px solid #edcccc;
+
+        color: #a00000;
+
+        padding: 10px;
+
+        border-radius: 7px;
+
+        text-align: center;
+
+        font-size: 13px;
+
         margin-bottom: 18px;
     }
 
-    .register-card .form-control:focus {
-        border-color: #d4af37;
-        box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+
+    /* =====================================
+   SUCCESS
+===================================== */
+
+    .success {
+
+        background: #effaf2;
+
+        border: 1px solid #c9e6d0;
+
+        color: #27743b;
+
+        padding: 10px;
+
+        border-radius: 7px;
+
+        text-align: center;
+
+        font-size: 13px;
+
+        margin-bottom: 18px;
     }
 
-    /* BUTTON */
 
-    .register-btn {
-        width: 100%;
-        background: #0b1f3a;
-        color: #ffffff;
+    /* =====================================
+   LABEL
+===================================== */
 
-        border: none;
-        border-radius: 8px;
+    label {
 
-        padding: 13px;
-        font-size: 16px;
+        display: block;
+
+        color: #0b1f3a;
+
+        font-size: 13px;
+
         font-weight: 600;
 
-        transition: 0.3s;
+        margin-bottom: 7px;
     }
 
-    .register-btn:hover {
-        background: #d4af37;
+
+    /* =====================================
+   INPUT
+===================================== */
+
+    input {
+
+        width: 100%;
+
+        height: 47px;
+
+        padding: 0 14px;
+
+        box-sizing: border-box;
+
+        border: 1px solid #dcdcdc;
+
+        border-radius: 8px;
+
+        background: #faf9f6;
+
         color: #0b1f3a;
-    }
 
-    /* LOGIN LINK */
+        outline: none;
 
-    .login-link {
-        text-align: center;
-        margin-top: 22px;
+        margin-bottom: 15px;
+
         font-size: 14px;
     }
 
-    .login-link a {
+
+    input::placeholder {
+
+        color: #999;
+    }
+
+
+    input:focus {
+
+        border-color: #d4af37;
+
+        background: white;
+
+        box-shadow:
+            0 0 0 3px rgba(212, 175, 55, 0.10);
+    }
+
+
+    /* =====================================
+   REGISTER BUTTON
+===================================== */
+
+    .register-btn {
+
+        width: 100%;
+
+        height: 50px;
+
+        border: none;
+
+        border-radius: 8px;
+
+        background: #0b1f3a;
+
+        color: white;
+
+        font-size: 15px;
+
+        font-weight: 600;
+
+        cursor: pointer;
+
+        margin-top: 5px;
+
+        box-shadow:
+            0 8px 20px rgba(11, 31, 58, 0.18);
+    }
+
+
+    .register-btn:hover {
+
+        background: #d4af37;
+
         color: #0b1f3a;
-        font-weight: 700;
+    }
+
+
+    /* =====================================
+   LOGIN LINK
+===================================== */
+
+    .login-link {
+
+        text-align: center;
+
+        border-top: 1px solid #eeeeee;
+
+        margin-top: 22px;
+
+        padding-top: 18px;
+
+        color: #777;
+
+        font-size: 13px;
+    }
+
+
+    .login-link a {
+
+        color: #b28c27;
+
+        font-weight: 600;
+
         text-decoration: none;
     }
 
+
     .login-link a:hover {
-        color: #d4af37;
+
+        color: #0b1f3a;
     }
 
-    /* RESPONSIVE */
+
+    /* =====================================
+   MOBILE
+===================================== */
+
+    @media (max-width: 850px) {
+
+        .register-container {
+
+            flex-direction: column;
+
+            max-width: 600px;
+        }
+
+
+        .register-image {
+
+            width: 100%;
+
+            min-height: 330px;
+
+            padding: 40px;
+        }
+
+
+        .register-form-section {
+
+            width: 100%;
+
+            padding: 45px;
+        }
+
+
+        .register-form-section::before {
+
+            display: none;
+        }
+
+    }
+
 
     @media (max-width: 576px) {
-        .register-card {
-            padding: 25px 20px;
+
+        .register-section {
+
+            padding: 25px 15px;
         }
 
-        .register-title {
-            font-size: 25px;
+
+        .register-image {
+
+            min-height: 300px;
+
+            padding: 30px;
         }
+
+
+        .register-image::before {
+
+            top: 18px;
+
+            left: 18px;
+
+            right: 18px;
+
+            bottom: 18px;
+        }
+
+
+        .image-content h1 {
+
+            font-size: 29px;
+        }
+
+
+        .register-form-section {
+
+            padding: 35px 25px;
+        }
+
+
+        .register-form h2 {
+
+            font-size: 28px;
+        }
+
     }
 </style>
 
+
+<!-- =====================================
+     REGISTER SECTION
+===================================== -->
+
 <section class="register-section">
 
-    <div class="register-card">
 
-        <h2 class="register-title">Create Account</h2>
+    <div class="register-container">
 
-        <p class="register-subtitle">
-            Join UrbanNest and discover your dream property.
-        </p>
 
-        <!-- Error Message -->
+        <!-- =================================
+             LEFT SIDE
+        ================================== -->
 
-        <?php if (!empty($error)) { ?>
+        <div class="register-image">
 
-            <div class="alert alert-danger">
-                <?php echo htmlspecialchars($error); ?>
+
+            <div class="image-content">
+
+
+                <div class="small-title">
+
+                    UrbanNest Real Estate
+
+                </div>
+
+
+                <div class="gold-line"></div>
+
+
+                <h1>
+
+                    Your next chapter starts with the right home.
+
+                </h1>
+
+
+                <p>
+
+                    Create your UrbanNest account and explore
+                    beautiful properties that match your needs.
+
+                </p>
+
+
+                <div class="luxury-badge">
+
+                    Premium Property Experience
+
+                </div>
+
+
             </div>
 
-        <?php } ?>
+        </div>
 
-        <!-- Success Message -->
 
-        <?php if (!empty($success)) { ?>
+        <!-- =================================
+             RIGHT SIDE
+        ================================== -->
 
-            <div class="alert alert-success">
-                <?php echo htmlspecialchars($success); ?>
+        <div class="register-form-section">
+
+
+            <div class="register-form">
+
+
+                <!-- HEADING -->
+
+                <h2>
+
+                    Create Account
+
+                </h2>
+
+
+                <p class="subtitle">
+
+                    Join UrbanNest and start exploring
+                    your perfect property.
+
+                </p>
+
+
+                <!-- FORM TITLE -->
+
+                <div class="form-title">
+
+                    <div class="form-title-line"></div>
+
+                    <div class="form-title-text">
+
+                        Create Your Account
+
+                    </div>
+
+                </div>
+
+
+                <!-- ERROR -->
+
+                <?php
+
+                if ($error != "") {
+
+                    echo "<div class='error'>$error</div>";
+                }
+
+                ?>
+
+
+                <!-- SUCCESS -->
+
+                <?php
+
+                if ($success != "") {
+
+                    echo "<div class='success'>$success</div>";
+                }
+
+                ?>
+
+
+                <!-- REGISTER FORM -->
+
+                <form method="POST">
+
+
+                    <!-- FULL NAME -->
+
+                    <label>
+
+                        Full Name
+
+                    </label>
+
+
+                    <input
+                        type="text"
+                        name="full_name"
+                        placeholder="Enter your full name"
+                        required>
+
+
+                    <!-- EMAIL -->
+
+                    <label>
+
+                        Email Address
+
+                    </label>
+
+
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required>
+
+
+                    <!-- PASSWORD -->
+
+                    <label>
+
+                        Password
+
+                    </label>
+
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter password"
+                        required>
+
+
+                    <!-- CONFIRM PASSWORD -->
+
+                    <label>
+
+                        Confirm Password
+
+                    </label>
+
+
+                    <input
+                        type="password"
+                        name="confirm_password"
+                        placeholder="Re-enter your password"
+                        required>
+
+
+                    <!-- BUTTON -->
+
+                    <button
+                        type="submit"
+                        name="register"
+                        class="register-btn">
+
+                        Create Account
+
+                    </button>
+
+
+                </form>
+
+
+                <!-- LOGIN -->
+
+                <div class="login-link">
+
+                    Already have an account?
+
+                    <a href="/urbannest/auth/login.php">
+
+                        Login Here
+
+                    </a>
+
+                </div>
+
+
             </div>
-
-        <?php } ?>
-
-        <!-- Registration Form -->
-
-        <form method="POST" action="">
-
-            <!-- Full Name -->
-
-            <label for="full_name">Full Name</label>
-
-            <input
-                type="text"
-                name="full_name"
-                id="full_name"
-                class="form-control"
-                placeholder="Enter your full name"
-                value="<?php echo htmlspecialchars($full_name); ?>"
-                required>
-
-            <!-- Email -->
-
-            <label for="email">Email Address</label>
-
-            <input
-                type="email"
-                name="email"
-                id="email"
-                class="form-control"
-                placeholder="Enter your email"
-                value="<?php echo htmlspecialchars($email); ?>"
-                required>
-
-            <!-- Password -->
-
-            <label for="password">Password</label>
-
-            <input
-                type="password"
-                name="password"
-                id="password"
-                class="form-control"
-                placeholder="Enter password (minimum 8 characters)"
-                minlength="8"
-                required>
-
-            <!-- Confirm Password -->
-
-            <label for="confirm_password">Confirm Password</label>
-
-            <input
-                type="password"
-                name="confirm_password"
-                id="confirm_password"
-                class="form-control"
-                placeholder="Re-enter your password"
-                minlength="8"
-                required>
-
-            <!-- Submit Button -->
-
-            <button type="submit" class="register-btn">
-                Create Account
-            </button>
-
-        </form>
-
-        <!-- Login Link -->
-
-        <div class="login-link">
-
-            Already have an account?
-
-            <a href="/urbannest/auth/login.php">
-                Login Here
-            </a>
 
         </div>
 
@@ -335,6 +938,9 @@ require_once __DIR__ . '/../includes/navbar.php';
 
 </section>
 
+
 <?php
+
 require_once __DIR__ . '/../includes/footer.php';
+
 ?>

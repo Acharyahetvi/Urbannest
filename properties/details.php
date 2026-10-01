@@ -229,7 +229,7 @@ if ($property) {
 
 
     /* =====================================
-   BACK BUTTON
+   BUTTONS
 ===================================== */
 
     .details-btn {
@@ -242,11 +242,27 @@ if ($property) {
         font-weight: 600;
         transition: 0.3s;
         margin-top: 20px;
+        margin-right: 10px;
     }
 
     .details-btn:hover {
         background: #d4af37;
         color: #0b1f3a;
+    }
+
+
+    /* =====================================
+   APPOINTMENT BUTTON
+===================================== */
+
+    .appointment-btn {
+        background: #d4af37;
+        color: #0b1f3a;
+    }
+
+    .appointment-btn:hover {
+        background: #0b1f3a;
+        color: #fff;
     }
 
 
@@ -268,6 +284,44 @@ if ($property) {
 
     .details-empty p {
         color: #687386;
+    }
+
+
+    /* =====================================
+   MOBILE RESPONSIVE
+===================================== */
+
+    @media (max-width: 768px) {
+
+        .details-section {
+            padding: 40px 0;
+        }
+
+        .details-heading h1 {
+            font-size: 26px;
+        }
+
+        .details-main-image {
+            height: 300px;
+        }
+
+        .details-gallery {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .details-info {
+            grid-template-columns: 1fr;
+        }
+
+        .details-card {
+            padding: 20px;
+        }
+
+        .details-btn {
+            width: 100%;
+            text-align: center;
+            margin-right: 0;
+        }
     }
 </style>
 
@@ -331,6 +385,7 @@ if ($property) {
 
                     ?>
 
+
                     <?php if (!empty($mainImage)) { ?>
 
                         <img
@@ -348,7 +403,9 @@ if ($property) {
                     <?php } ?>
 
 
-                    <!-- PROPERTY GALLERY -->
+                    <!-- =====================================
+                         PROPERTY GALLERY
+                    ===================================== -->
 
                     <?php if (count($images) > 1) { ?>
 
@@ -402,6 +459,7 @@ if ($property) {
 
             <div class="details-card">
 
+
                 <!-- PROPERTY TYPE -->
 
                 <span class="details-badge">
@@ -420,13 +478,21 @@ if ($property) {
                 </div>
 
 
-                <!-- PROPERTY DESCRIPTION -->
+                <!-- =====================================
+                     PROPERTY DESCRIPTION
+                ===================================== -->
 
                 <h3>Property Description</h3>
 
                 <p class="details-description">
 
-                    <?php echo nl2br(htmlspecialchars($property['description'] ?? 'No description available.')); ?>
+                    <?php
+                    echo nl2br(
+                        htmlspecialchars(
+                            $property['description'] ?? 'No description available.'
+                        )
+                    );
+                    ?>
 
                 </p>
 
@@ -450,8 +516,13 @@ if ($property) {
                         <strong>Area</strong>
 
                         <span>
-                            <?php echo htmlspecialchars($property['area_sqft'] ?? 'N/A'); ?>
+
+                            <?php echo htmlspecialchars(
+                                $property['area_sqft'] ?? 'N/A'
+                            ); ?>
+
                             sq.ft.
+
                         </span>
 
                     </div>
@@ -464,7 +535,11 @@ if ($property) {
                         <strong>Bedrooms</strong>
 
                         <span>
-                            <?php echo htmlspecialchars($property['bedrooms'] ?? 'N/A'); ?>
+
+                            <?php echo htmlspecialchars(
+                                $property['bedrooms'] ?? 'N/A'
+                            ); ?>
+
                         </span>
 
                     </div>
@@ -477,7 +552,11 @@ if ($property) {
                         <strong>Bathrooms</strong>
 
                         <span>
-                            <?php echo htmlspecialchars($property['bathrooms'] ?? 'N/A'); ?>
+
+                            <?php echo htmlspecialchars(
+                                $property['bathrooms'] ?? 'N/A'
+                            ); ?>
+
                         </span>
 
                     </div>
@@ -490,7 +569,11 @@ if ($property) {
                         <strong>Furnishing</strong>
 
                         <span>
-                            <?php echo htmlspecialchars($property['furnishing'] ?? 'N/A'); ?>
+
+                            <?php echo htmlspecialchars(
+                                $property['furnishing'] ?? 'N/A'
+                            ); ?>
+
                         </span>
 
                     </div>
@@ -503,7 +586,11 @@ if ($property) {
                         <strong>Parking Spaces</strong>
 
                         <span>
-                            <?php echo htmlspecialchars($property['parking_spaces'] ?? 'N/A'); ?>
+
+                            <?php echo htmlspecialchars(
+                                $property['parking_spaces'] ?? 'N/A'
+                            ); ?>
+
                         </span>
 
                     </div>
@@ -516,7 +603,11 @@ if ($property) {
                         <strong>Floor Number</strong>
 
                         <span>
-                            <?php echo htmlspecialchars($property['floor_number'] ?? 'N/A'); ?>
+
+                            <?php echo htmlspecialchars(
+                                $property['floor_number'] ?? 'N/A'
+                            ); ?>
+
                         </span>
 
                     </div>
@@ -529,7 +620,11 @@ if ($property) {
                         <strong>Total Floors</strong>
 
                         <span>
-                            <?php echo htmlspecialchars($property['total_floors'] ?? 'N/A'); ?>
+
+                            <?php echo htmlspecialchars(
+                                $property['total_floors'] ?? 'N/A'
+                            ); ?>
+
                         </span>
 
                     </div>
@@ -542,7 +637,11 @@ if ($property) {
                         <strong>Property Condition</strong>
 
                         <span>
-                            <?php echo htmlspecialchars($property['property_condition'] ?? 'N/A'); ?>
+
+                            <?php echo htmlspecialchars(
+                                $property['property_condition'] ?? 'N/A'
+                            ); ?>
+
                         </span>
 
                     </div>
@@ -563,26 +662,48 @@ if ($property) {
 
                     <i class="fa-solid fa-location-dot"></i>
 
-                    <?php echo htmlspecialchars($property['address'] ?? 'Address not available'); ?>,
+                    <?php echo htmlspecialchars(
+                        $property['address'] ?? 'Address not available'
+                    ); ?>,
 
-                    <?php echo htmlspecialchars($property['city']); ?>,
+                    <?php echo htmlspecialchars(
+                        $property['city']
+                    ); ?>,
 
-                    <?php echo htmlspecialchars($property['state']); ?>
+                    <?php echo htmlspecialchars(
+                        $property['state']
+                    ); ?>
 
                 </p>
 
 
                 <!-- =====================================
-                     BACK BUTTON
+                     ACTION BUTTONS
                 ===================================== -->
 
-                <a href="javascript:history.back()" class="details-btn">
+                <a
+                    href="javascript:history.back()"
+                    class="details-btn">
 
                     <i class="fa-solid fa-arrow-left"></i>
 
                     Back to Properties
 
                 </a>
+
+
+                <!-- BOOK A VISIT BUTTON -->
+
+                <a
+                    href="../appointment.php?id=<?php echo $property['property_id']; ?>"
+                    class="details-btn appointment-btn">
+
+                    <i class="fa-solid fa-calendar-check"></i>
+
+                    Book a Visit
+
+                </a>
+
 
             </div>
 
@@ -602,7 +723,9 @@ if ($property) {
                     Sorry, this property is not available or has been removed.
                 </p>
 
-                <a href="buy.php" class="details-btn">
+                <a
+                    href="../buy.php"
+                    class="details-btn">
 
                     Browse Properties
 
