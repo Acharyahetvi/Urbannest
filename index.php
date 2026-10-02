@@ -9,22 +9,22 @@ require_once __DIR__ . '/includes/data.php';
 require_once __DIR__ . '/includes/navbar.php';
 
 
-// =====================================
-// GET REVIEWS FROM DATABASE
-// =====================================
+// ===================================== 
+// GET REVIEWS FROM DATABASE 
+// ===================================== 
 
 $reviews = [];
 
-$sql = "SELECT users.full_name, reviews.rating, reviews.review, reviews.created_at
-        FROM reviews
-        INNER JOIN users ON reviews.user_id = users.user_id
-        ORDER BY reviews.created_at DESC
-        LIMIT 6";
+$sql = "SELECT users.full_name, reviews.rating, reviews.review, reviews.created_at 
+        FROM reviews 
+        INNER JOIN users ON reviews.user_id = users.user_id 
+        ORDER BY reviews.created_at DESC 
+        LIMIT 10";
 
 $result = mysqli_query($conn, $sql);
 
 
-// STORE REVIEWS
+// STORE REVIEWS 
 
 if ($result) {
 
@@ -37,8 +37,8 @@ if ($result) {
 ?>
 
 <style>
-    /* =====================================
-   URBANNEST HOME PAGE
+    /* ===================================== 
+   URBANNEST HOME PAGE 
 ===================================== */
 
 
@@ -216,36 +216,45 @@ if ($result) {
         font-size: 13px;
     }
 
+
     /* =====================================
    BUY / RENT / SELL SECTION
 ===================================== */
 
-    /* PURPOSE SECTION */
-
     .un-purpose-section {
+
         position: relative;
         z-index: 2;
+
         margin-top: -45px;
+
         padding-bottom: 65px;
     }
 
 
-    /* PURPOSE HEADING */
-
     .un-purpose-heading {
+
         margin-bottom: 24px;
+
         color: #021020;
+
         text-align: center;
     }
 
+
     .un-purpose-heading h2 {
+
         margin-bottom: 8px;
+
         font-size: 30px;
         font-weight: 700;
     }
 
+
     .un-purpose-heading p {
+
         margin: 0;
+
         color: #687386;
     }
 
@@ -255,6 +264,7 @@ if ($result) {
 ===================================== */
 
     .un-purpose-card {
+
         display: flex;
         flex-direction: column;
         align-items: stretch;
@@ -276,9 +286,8 @@ if ($result) {
     }
 
 
-    /* CARD HOVER */
-
     .un-purpose-card:hover {
+
         border-color: #d4af37;
 
         box-shadow: 0 14px 30px rgba(11, 31, 58, 0.13);
@@ -292,6 +301,7 @@ if ($result) {
 ===================================== */
 
     .un-purpose-image {
+
         width: 100%;
         height: 220px;
 
@@ -302,7 +312,9 @@ if ($result) {
         flex-shrink: 0;
     }
 
+
     .un-purpose-image img {
+
         width: 100%;
         height: 100%;
 
@@ -314,9 +326,8 @@ if ($result) {
     }
 
 
-    /* IMAGE HOVER */
-
     .un-purpose-card:hover .un-purpose-image img {
+
         transform: scale(1.05);
     }
 
@@ -326,6 +337,7 @@ if ($result) {
 ===================================== */
 
     .un-purpose-icon {
+
         display: flex;
         flex-shrink: 0;
 
@@ -349,12 +361,15 @@ if ($result) {
 ===================================== */
 
     .un-purpose-info {
+
         flex: 1;
         min-width: 0;
         width: 100%;
     }
 
+
     .un-purpose-info h3 {
+
         margin: 0 0 10px;
 
         color: #0b1f3a;
@@ -365,7 +380,9 @@ if ($result) {
         line-height: 1.4;
     }
 
+
     .un-purpose-info p {
+
         margin: 0;
 
         color: #687386;
@@ -382,6 +399,7 @@ if ($result) {
 ===================================== */
 
     .un-purpose-arrow {
+
         flex-shrink: 0;
 
         align-self: flex-end;
@@ -395,190 +413,252 @@ if ($result) {
         transition: transform 0.25s;
     }
 
+
     .un-purpose-card:hover .un-purpose-arrow {
+
         transform: translateX(5px);
     }
 
 
     /* =====================================
-   USER REVIEWS SECTION
+   LUXURY USER REVIEWS SECTION
 ===================================== */
 
     .un-review-section {
-        padding: 65px 0;
-        background: #f8f7f2;
+
+        position: relative;
+
+        padding: 85px 0;
+
+        background:
+            linear-gradient(180deg,
+                #f8f7f2 0%,
+                #f5f2e9 100%);
     }
 
 
-    /* REVIEW HEADING */
+    /* GOLD DECORATIVE LINE */
+
+    .un-review-section::before {
+
+        content: "";
+
+        display: block;
+
+        width: 70px;
+        height: 3px;
+
+        margin: 0 auto 28px;
+
+        background: #d4af37;
+
+        border-radius: 10px;
+    }
+
+
+    /* =====================================
+   REVIEW HEADING
+===================================== */
 
     .un-review-heading {
-        margin-bottom: 35px;
+
+        margin-bottom: 50px;
+
         text-align: center;
     }
 
+
     .un-review-heading h2 {
-        margin-bottom: 10px;
+
+        margin-bottom: 12px;
 
         color: #0b1f3a;
 
-        font-size: 32px;
+        font-size: 38px;
         font-weight: 700;
+
+        letter-spacing: -0.5px;
     }
+
 
     .un-review-heading p {
+
         margin: 0;
+
         color: #687386;
+
+        font-size: 16px;
     }
 
 
-    /* REVIEW CARD */
+    /* =====================================
+   REVIEW CARD
+===================================== */
 
     .un-review-card {
+
+        position: relative;
+
         height: 100%;
-        padding: 25px;
+        min-height: 250px;
+
+        padding: 32px 28px;
+
+        overflow: hidden;
 
         background: #fff;
 
-        border: 1px solid #eee9dc;
-        border-radius: 12px;
+        border: 1px solid #eee5cf;
+        border-radius: 16px;
 
-        box-shadow: 0 5px 18px rgba(11, 31, 58, 0.07);
+        box-shadow: 0 8px 25px rgba(11, 31, 58, 0.07);
 
-        transition: 0.25s;
+        transition: all 0.3s ease;
     }
+
+
+    /* GOLD TOP LINE */
+
+    .un-review-card::before {
+
+        content: "";
+
+        position: absolute;
+
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 4px;
+
+        background: #d4af37;
+    }
+
+
+    /* QUOTE MARK */
+
+    .un-review-card::after {
+
+        content: "“";
+
+        position: absolute;
+
+        top: 8px;
+        right: 20px;
+
+        font-family: Georgia, serif;
+
+        font-size: 75px;
+
+        line-height: 1;
+
+        color: rgba(212, 175, 55, 0.12);
+    }
+
+
+    /* CARD HOVER */
 
     .un-review-card:hover {
-        transform: translateY(-4px);
 
-        box-shadow: 0 10px 25px rgba(11, 31, 58, 0.12);
+        transform: translateY(-8px);
+
+        border-color: rgba(212, 175, 55, 0.55);
+
+        box-shadow: 0 18px 40px rgba(11, 31, 58, 0.13);
     }
 
 
-    /* REVIEW STARS */
+    /* =====================================
+   REVIEW STARS
+===================================== */
 
     .un-review-stars {
-        margin-bottom: 15px;
+
+        position: relative;
+
+        z-index: 2;
+
+        margin-bottom: 22px;
 
         color: #d4af37;
 
         font-size: 20px;
+
+        letter-spacing: 3px;
     }
 
 
-    /* REVIEW TEXT */
+    /* =====================================
+   REVIEW TEXT
+===================================== */
 
     .un-review-text {
-        margin-bottom: 20px;
 
-        color: #555;
+        position: relative;
 
-        line-height: 1.7;
+        z-index: 2;
+
+        min-height: 55px;
+
+        margin-bottom: 25px;
+
+        color: #596273;
+
+        font-size: 15px;
+
+        line-height: 1.8;
 
         overflow-wrap: anywhere;
     }
 
 
-    /* REVIEW NAME */
+    /* =====================================
+   CUSTOMER NAME
+===================================== */
 
     .un-review-name {
+
+        position: relative;
+
+        z-index: 2;
+
         margin-bottom: 5px;
 
         color: #0b1f3a;
 
         font-size: 17px;
+
         font-weight: 700;
     }
 
 
-    /* REVIEW DATE */
+    /* =====================================
+   REVIEW DATE
+===================================== */
 
     .un-review-date {
-        color: #888;
+
+        position: relative;
+
+        z-index: 2;
+
+        color: #8a919c;
+
         font-size: 13px;
     }
 
 
-    /* NO REVIEW */
+    /* =====================================
+   NO REVIEW
+===================================== */
 
     .un-no-review {
-        padding: 20px;
+
+        padding: 30px;
 
         color: #687386;
 
         text-align: center;
-    }
-
-
-    /* =====================================
-   RESPONSIVE DESIGN
-===================================== */
-
-    @media (max-width: 768px) {
-
-        /* HERO */
-
-        .un-hero {
-            min-height: auto;
-            padding: 65px 0 80px;
-            background-position: center;
-        }
-
-        .un-hero h1 {
-            font-size: 38px;
-        }
-
-        .un-hero p {
-            font-size: 15px;
-        }
-
-        .un-hero-stats {
-            gap: 25px;
-            margin-top: 35px;
-        }
-
-        .un-stat .num {
-            font-size: 23px;
-        }
-
-
-        /* PURPOSE SECTION */
-
-        .un-purpose-section {
-            margin-top: -35px;
-        }
-
-        .un-purpose-heading h2 {
-            font-size: 25px;
-        }
-
-
-        /* PURPOSE CARD */
-
-        .un-purpose-card {
-            padding: 15px;
-            gap: 12px;
-        }
-
-        .un-purpose-image {
-            height: 200px;
-        }
-
-        .un-purpose-info h3 {
-            font-size: 19px;
-        }
-
-        .un-purpose-info p {
-            font-size: 13px;
-        }
-
-
-        /* REVIEW */
-
-        .un-review-heading h2 {
-            font-size: 27px;
-        }
-
     }
 </style>
 
@@ -712,35 +792,48 @@ if ($result) {
                 <a href="buy.php" class="un-purpose-card">
 
                     <!-- Property Image -->
+
                     <div class="un-purpose-image">
+
                         <img src="assets/images/buy.jpg"
                             alt="Buy a Property">
+
                     </div>
+
 
                     <div class="un-purpose-info">
 
                         <h3>Buy a Property</h3>
 
                         <p>
+
                             Find your dream home from our property listings.
+
                         </p>
 
                     </div>
+
 
                     <i class="fa-solid fa-arrow-right un-purpose-arrow"></i>
 
                 </a>
 
-            </div> <!-- RENT PROPERTY -->
+            </div>
+
+
+            <!-- RENT PROPERTY -->
 
             <div class="col-md-4">
 
                 <a href="rent.php" class="un-purpose-card">
 
                     <!-- Property Image -->
+
                     <div class="un-purpose-image">
+
                         <img src="assets/images/rent.jpg"
-                            alt="Buy a Property">
+                            alt="Rent a Property">
+
                     </div>
 
 
@@ -749,7 +842,9 @@ if ($result) {
                         <h3>Rent a Property</h3>
 
                         <p>
+
                             Explore homes and spaces available for rent.
+
                         </p>
 
                     </div>
@@ -769,9 +864,12 @@ if ($result) {
                 <a href="sale.php" class="un-purpose-card">
 
                     <!-- Property Image -->
+
                     <div class="un-purpose-image">
+
                         <img src="assets/images/sell.jpg"
-                            alt="Buy a Property">
+                            alt="Sell a Property">
+
                     </div>
 
 
@@ -780,7 +878,9 @@ if ($result) {
                         <h3>Sale a Property</h3>
 
                         <p>
+
                             List your property and connect with buyers.
+
                         </p>
 
                     </div>
@@ -815,7 +915,9 @@ if ($result) {
             <h2>What Our Customers Say</h2>
 
             <p>
+
                 Read reviews from our valued customers.
+
             </p>
 
         </div>

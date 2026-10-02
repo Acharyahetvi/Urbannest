@@ -76,6 +76,14 @@
                         </a>
                     </li>
 
+                    <!-- About -->
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="/urbannest/about.php">
+                            About Us
+                        </a>
+                    </li>
+
                     <!-- Login -->
                     <li class="nav-item">
                         <a class="nav-link"
