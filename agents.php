@@ -6,10 +6,15 @@ require_once __DIR__ . '/includes/db.php';
 
 
 // Get all active agents
-$sql = "SELECT * FROM users
-        WHERE role_id = 3
-        AND status = 'Active'
-        ORDER BY full_name ASC";
+$sql = "SELECT 
+            u.*,
+            ap.profile_photo
+        FROM users u
+        LEFT JOIN agent_profiles ap
+            ON u.user_id = ap.user_id
+        WHERE u.role_id = 3
+        AND u.status = 'Active'
+        ORDER BY u.full_name ASC";
 
 $result = mysqli_query($con, $sql);
 
@@ -89,6 +94,13 @@ $result = mysqli_query($con, $sql);
         justify-content: center;
 
         overflow: hidden;
+    }
+
+    .agent-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
     }
 
 
@@ -274,6 +286,16 @@ $result = mysqli_query($con, $sql);
 
                             <div class="agent-image">
 
+                            <?php if (!empty($agent['profile_photo'])) { ?>
+
+                                <img
+                                    src="admin/assets/images/agents/<?php echo htmlspecialchars($agent['profile_photo']); ?>"
+                                    alt="<?php echo htmlspecialchars($agent['full_name']); ?>"
+                                    class="agent-photo"
+                                >
+
+                            <?php } else { ?>
+
                                 <div class="agent-placeholder">
 
                                     <?php
@@ -282,7 +304,9 @@ $result = mysqli_query($con, $sql);
 
                                 </div>
 
-                            </div>
+                            <?php } ?>
+
+                        </div>
 
 
                             <!-- Agent Information -->
@@ -316,11 +340,10 @@ $result = mysqli_query($con, $sql);
 
 
 
-                                <a href="contact.php" class="agent-btn">
+                                <a href="agent-details.php?id=<?php echo (int)$agent['user_id']; ?>" class="agent-btn">
 
-                                    <i class="fa-solid fa-envelope"></i>
-
-                                    Contact Agent
+                                  <i class="fa-solid fa-user"></i>
+                                    View Profile
 
                                 </a>
 

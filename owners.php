@@ -12,10 +12,15 @@ require_once __DIR__ . '/includes/navbar.php';
 
 
 // Get all active owners
-$sql = "SELECT * FROM users
-        WHERE role_id = 5
-        AND status = 'Active'
-        ORDER BY full_name ASC";
+$sql = "SELECT 
+            u.*,
+            op.profile_photo
+        FROM users u
+        LEFT JOIN owner_profiles op
+            ON u.user_id = op.user_id
+        WHERE u.role_id = 5
+        AND u.status = 'Active'
+        ORDER BY u.full_name ASC";
 
 $result = mysqli_query($conn, $sql);
 
@@ -95,6 +100,13 @@ $result = mysqli_query($conn, $sql);
         justify-content: center;
 
         overflow: hidden;
+    }
+
+    .owner-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
     }
 
 
@@ -271,19 +283,20 @@ $result = mysqli_query($conn, $sql);
 
 
                             <!-- Owner Letter -->
-
                             <div class="owner-image">
-
-                                <div class="owner-placeholder">
-
-                                    <?php
-                                    echo strtoupper(substr($owner['full_name'], 0, 1));
-                                    ?>
-
-                                </div>
-
+                                <?php if (!empty($owner['profile_photo'])) { ?>
+                                    <img
+                                        src="admin/assets/images/owners/<?php echo htmlspecialchars($owner['profile_photo']); ?>"
+                                        alt="<?php echo htmlspecialchars($owner['full_name']); ?>"
+                                        class="owner-photo"
+                                    >
+                                <?php } else { ?>
+                                    <div class="owner-placeholder">
+                                        <?php echo strtoupper(substr($owner['full_name'], 0, 1)); ?>
+                                    </div>
+                                <?php } ?>
                             </div>
-
+                              
 
                             <!-- Owner Information -->
 
@@ -310,12 +323,14 @@ $result = mysqli_query($conn, $sql);
 
 
 
+                                <a href="owner-details.php?id=<?php echo (int)$owner['user_id']; ?>" class="owner-btn">
+                                    <i class="fa-solid fa-user"></i>
+                                    View Profile
+                                </a>
+
                                 <a href="contact.php" class="owner-btn">
-
                                     <i class="fa-solid fa-envelope"></i>
-
                                     Contact Owner
-
                                 </a>
 
                             </div>
