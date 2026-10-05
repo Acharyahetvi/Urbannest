@@ -13,34 +13,74 @@ $error = "";
 
 if (isset($_POST['login'])) {
 
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
 
-    $sql = "SELECT * FROM users
-            WHERE email='$email'
-            AND password='$password'
-            AND status='Active'";
 
-    $result = mysqli_query($conn, $sql);
+    /* CHECK EMPTY FIELDS */
 
-    if (mysqli_num_rows($result) == 1) {
+    if ($email === "" || $password === "") {
 
-        $user = mysqli_fetch_assoc($result);
+        $error = "Please enter your email and password.";
 
-        $_SESSION['user_id'] = $user['user_id'];
-        $_SESSION['user_name'] = $user['full_name'];
-        $_SESSION['user_email'] = $user['email'];
-        $_SESSION['user_role'] = $user['role_id'];
-
-        /* ================================
-           AFTER LOGIN
-        ================================= */
-
-        header("Location: /urbannest/index.php");
-        exit();
     } else {
 
-        $error = "Invalid email or password.";
+        /* FIND ACTIVE USER */
+
+        $stmt = mysqli_prepare(
+            $conn,
+            "SELECT user_id, full_name, email, password, role_id
+             FROM users
+             WHERE email = ?
+             AND status = 'Active'
+             LIMIT 1"
+        );
+
+        mysqli_stmt_bind_param(
+            $stmt,
+            "s",
+            $email
+        );
+
+        mysqli_stmt_execute($stmt);
+
+        $result = mysqli_stmt_get_result($stmt);
+
+
+        if (mysqli_num_rows($result) === 1) {
+
+            $user = mysqli_fetch_assoc($result);
+
+
+            /* CHECK PASSWORD */
+
+            if ($password === $user['password']) {
+
+                /* CREATE LOGIN SESSION */
+
+                $_SESSION['user_id'] = $user['user_id'];
+                $_SESSION['user_name'] = $user['full_name'];
+                $_SESSION['user_email'] = $user['email'];
+                $_SESSION['user_role'] = $user['role_id'];
+
+
+                /* GO TO HOME */
+
+                header("Location: /urbannest/index.php");
+                exit();
+
+            } else {
+
+                $error = "Invalid email or password.";
+            }
+
+        } else {
+
+            $error = "Invalid email or password.";
+        }
+
+
+        mysqli_stmt_close($stmt);
     }
 }
 

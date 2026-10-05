@@ -1,3 +1,14 @@
+<?php
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$isLoggedIn = isset($_SESSION['user_id']);
+$userName = $_SESSION['user_name'] ?? '';
+
+?>
+
 <nav class="navbar navbar-expand-lg un-navbar sticky-top">
 
     <div class="container">
@@ -84,7 +95,10 @@
                         </a>
                     </li>
 
+                    <?php if (!$isLoggedIn) { ?>
+
                     <!-- Login -->
+
                     <li class="nav-item">
                         <a class="nav-link"
                             href="/urbannest/auth/login.php">
@@ -92,7 +106,9 @@
                         </a>
                     </li>
 
+
                     <!-- Register -->
+
                     <li class="nav-item">
                         <a class="nav-link"
                             href="/urbannest/auth/register.php">
@@ -100,13 +116,70 @@
                         </a>
                     </li>
 
-                    <!-- Sell/Rent Property -->
-                    <li class="nav-item">
-                        <a class="nav-link"
-                            href="/urbannest/add-property.php">
-                            Sell/Rent Property
-                        </a>
-                    </li>
+                    <?php } else { ?>
+
+                        <!-- Profile -->
+
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link dropdown-toggle"
+                                href="#"
+                                id="profileDropdown"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+
+                                <i class="fa-solid fa-user"></i>
+                                <?= htmlspecialchars($userName) ?>
+
+                            </a>
+
+
+                        <ul class="dropdown-menu dropdown-menu-end"
+                            aria-labelledby="profileDropdown">
+
+                            <li>
+                                <a class="dropdown-item"
+                                    href="/urbannest/add-property.php">
+
+                                    <i class="fa-solid fa-house"></i>
+                                    Sell Property
+
+                                </a>
+                            </li>
+
+
+            <li>
+                <a class="dropdown-item"
+                    href="/urbannest/wishlist.php">
+
+                    <i class="fa-solid fa-heart"></i>
+                    Wishlist
+
+                </a>
+            </li>
+
+
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+
+
+            <li>
+                <a class="dropdown-item"
+                    href="/urbannest/auth/logout.php">
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Logout
+
+                </a>
+            </li>
+
+        </ul>
+
+    </li>
+
+<?php } ?>
 
                 </ul>
 

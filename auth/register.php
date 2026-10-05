@@ -14,75 +14,114 @@ $success = "";
 
 if (isset($_POST['register'])) {
 
-    $full_name = $_POST['full_name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
+    $full_name = trim($_POST['full_name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $confirm_password = $_POST['confirm_password'] ?? '';
 
 
     /* CHECK EMPTY FIELDS */
 
     if (
-        $full_name == "" ||
-        $email == "" ||
-        $password == "" ||
-        $confirm_password == ""
+        $full_name === "" ||
+        $email === "" ||
+        $password === "" ||
+        $confirm_password === ""
     ) {
 
         $error = "Please fill in all fields.";
+
     }
 
 
-    /* CHECK PASSWORD */ elseif ($password != $confirm_password) {
+    /* CHECK PASSWORD */
+
+    elseif ($password !== $confirm_password) {
 
         $error = "Passwords do not match.";
+
     }
 
 
-    /* CHECK PASSWORD LENGTH */ elseif (strlen($password) < 8) {
+    /* CHECK PASSWORD LENGTH */
+
+    elseif (strlen($password) < 8) {
 
         $error = "Password must be at least 8 characters.";
-    } else {
 
-        /* CHECK EMAIL */
+    }
 
-        $sql = "SELECT * FROM users
-                WHERE email='$email'";
 
-        $result = mysqli_query($conn, $sql);
+    /* CHECK EMAIL */
 
+    else {
+
+        $check = mysqli_prepare(
+            $conn,
+            "SELECT user_id
+             FROM users
+             WHERE email = ?
+             LIMIT 1"
+        );
+
+        mysqli_stmt_bind_param(
+            $check,
+            "s",
+            $email
+        );
+
+        mysqli_stmt_execute($check);
+
+        $result = mysqli_stmt_get_result($check);
 
         if (mysqli_num_rows($result) > 0) {
 
             $error = "This email is already registered.";
+
         } else {
 
-            /* DEFAULT USER ROLE */
+            /* DEFAULT BUYER ROLE */
 
             $role_id = 2;
-
             $status = "Active";
 
 
             /* INSERT USER */
 
-            $sql = "INSERT INTO users
-                    (role_id, full_name, email, password, status)
-                    VALUES
-                    ('$role_id', '$full_name', '$email', '$password', '$status')";
+            $insert = mysqli_prepare(
+                $conn,
+                "INSERT INTO users
+                (role_id, full_name, email, password, status)
+                VALUES (?, ?, ?, ?, ?)"
+            );
+
+            mysqli_stmt_bind_param(
+                $insert,
+                "issss",
+                $role_id,
+                $full_name,
+                $email,
+                $password,
+                $status
+            );
 
 
-            if (mysqli_query($conn, $sql)) {
+            if (mysqli_stmt_execute($insert)) {
 
                 $success = "Registration successful! You can now login.";
 
                 $full_name = "";
                 $email = "";
+
             } else {
 
                 $error = "Registration failed. Please try again.";
             }
+
+            mysqli_stmt_close($insert);
         }
+
+        mysqli_stmt_close($check);
     }
 }
 
@@ -93,7 +132,6 @@ require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/navbar.php';
 
 ?>
-
 
 <style>
     /* =====================================
