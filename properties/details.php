@@ -71,6 +71,42 @@ if ($propertyId > 0) {
     }
 }
 
+/* -------------------------------------------------
+   WISHLIST
+------------------------------------------------- */
+
+$wishlistUserId = 2; // TEMPORARY until login is fixed
+$isWishlisted = false;
+
+if ($property) {
+
+    $wishlistCheck = mysqli_prepare(
+        $conn,
+        "SELECT wishlist_id
+         FROM wishlist
+         WHERE user_id = ? AND property_id = ?
+         LIMIT 1"
+    );
+
+    if ($wishlistCheck) {
+
+        mysqli_stmt_bind_param(
+            $wishlistCheck,
+            'ii',
+            $wishlistUserId,
+            $propertyId
+        );
+
+        mysqli_stmt_execute($wishlistCheck);
+
+        $wishlistResult = mysqli_stmt_get_result($wishlistCheck);
+
+        $isWishlisted = mysqli_num_rows($wishlistResult) > 0;
+
+        mysqli_stmt_close($wishlistCheck);
+    }
+}
+
 /* ------------------------------------------------- 
    INQUIRY 
 ------------------------------------------------- */
@@ -635,6 +671,38 @@ if (!$property): ?>
             color: #d4af37;
         }
 
+        .wishlist-detail-form {
+            margin-top: 10px;
+        }
+
+        .wishlist-detail-btn {
+            width: 100%;
+            padding: 11px 18px;
+            background: #fff;
+            color: #0b1f3a;
+            border: 2px solid #d4af37;
+            border-radius: 7px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .wishlist-detail-btn i {
+            margin-right: 6px;
+            color: #b08d22;
+        }
+
+        .wishlist-detail-btn:hover {
+            background: #0b1f3a;
+            color: #fff;
+            border-color: #0b1f3a;
+        }
+
+        .wishlist-detail-btn:hover i {
+            color: #d4af37;
+        }
+
         .inquiry-message {
             padding: 10px 12px;
             border-radius: 8px;
@@ -934,6 +1002,38 @@ if (!$property): ?>
                             Book a Visit
 
                         </a>
+
+                        <!-- WISHLIST BUTTON -->
+
+                        <form method="POST" action="../wishlist.php" class="wishlist-detail-form">
+
+                            <input
+                                type="hidden"
+                                name="action"
+                                value="<?= $isWishlisted ? 'remove' : 'add' ?>"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="property_id"
+                                value="<?= (int)$property['property_id'] ?>"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="redirect"
+                                value="properties/details.php?id=<?= (int)$property['property_id'] ?>"
+                            >
+
+                            <button type="submit" class="wishlist-detail-btn">
+
+                                <i class="fa-<?= $isWishlisted ? 'solid' : 'regular' ?> fa-heart"></i>
+
+                                <?= $isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist' ?>
+
+                            </button>
+
+</form>
 
                     </div>
                 </aside>
