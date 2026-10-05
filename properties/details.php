@@ -277,10 +277,17 @@ $profileBio = '';
 
 if ($listedBy) {
     if (strcasecmp($roleName, 'Agent') === 0) {
-        $profilePhoto = $listedBy['agent_photo'] ?? null;
+        if (!empty($listedBy['agent_photo'])) {
+            $profilePhoto = '../admin/assets/images/agents/' . $listedBy['agent_photo'];
+        }
+
         $profileBio = $listedBy['agent_bio'] ?? '';
+
     } else {
-        $profilePhoto = $listedBy['owner_photo'] ?? null;
+        if (!empty($listedBy['owner_photo'])) {
+            $profilePhoto = '../admin/assets/images/owners/' . $listedBy['owner_photo'];
+        }
+
         $profileBio = $listedBy['owner_bio'] ?? '';
     }
 }
@@ -943,8 +950,8 @@ if (!$property): ?>
                             <div class="listed-heading">
                                 <div class="listed-avatar">
                                     <?php if (!empty($profilePhoto)): ?>
-                                        <img src="<?= detailsEsc('../admin/' . ltrim($profilePhoto, '/')) ?>" alt="<?= detailsEsc($listedBy['full_name']) ?>" style="width:100%;height:100%;object-fit:cover;">
-                                    <?php else: ?>
+                                        <img src="<?= detailsEsc($profilePhoto) ?>" alt="<?= detailsEsc($listedBy['full_name']) ?>" style="width:100%;height:100%;object-fit:cover;">
+                                        <?php else: ?>
                                         <i class="fa-solid fa-user"></i>
                                     <?php endif; ?>
                                 </div>

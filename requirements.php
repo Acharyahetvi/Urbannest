@@ -817,7 +817,7 @@ function propertyImage(string $path = null): string
 
                                         <a
                                             class="property-details-link"
-                                            href="details.php?id=<?= (int)$property['property_id'] ?>"
+                                            href="properties/details.php?id=<?= (int)$property['property_id'] ?>"
                                         >
                                             View Property
                                         </a>

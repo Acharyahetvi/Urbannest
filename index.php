@@ -421,14 +421,14 @@ if ($result) {
 
 
     /* =====================================
-   LUXURY USER REVIEWS SECTION
+   USER REVIEWS SECTION
 ===================================== */
 
     .un-review-section {
 
         position: relative;
 
-        padding: 85px 0;
+        padding: 70px 0;
 
         background:
             linear-gradient(180deg,
@@ -448,7 +448,7 @@ if ($result) {
         width: 70px;
         height: 3px;
 
-        margin: 0 auto 28px;
+        margin: 0 auto 25px;
 
         background: #d4af37;
 
@@ -462,7 +462,7 @@ if ($result) {
 
     .un-review-heading {
 
-        margin-bottom: 50px;
+        margin-bottom: 32px;
 
         text-align: center;
     }
@@ -470,14 +470,12 @@ if ($result) {
 
     .un-review-heading h2 {
 
-        margin-bottom: 12px;
+        margin-bottom: 8px;
 
         color: #0b1f3a;
 
-        font-size: 38px;
+        font-size: 34px;
         font-weight: 700;
-
-        letter-spacing: -0.5px;
     }
 
 
@@ -487,7 +485,51 @@ if ($result) {
 
         color: #687386;
 
-        font-size: 16px;
+        font-size: 15px;
+    }
+
+
+    /* =====================================
+   REVIEW SLIDER
+===================================== */
+
+    .un-review-slider-wrapper {
+
+        position: relative;
+
+        width: 100%;
+
+        overflow: hidden;
+
+        touch-action: pan-y;
+    }
+
+
+    .un-review-track {
+
+        display: flex;
+
+        width: 100%;
+
+        transition: transform 0.4s ease;
+    }
+
+
+    .un-review-slide {
+
+        flex: 0 0 100%;
+
+        width: 100%;
+    }
+
+
+    .un-review-slide-row {
+
+        display: grid;
+
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 20px;
     }
 
 
@@ -499,25 +541,22 @@ if ($result) {
 
         position: relative;
 
-        height: 100%;
-        min-height: 250px;
+        min-height: 205px;
 
-        padding: 32px 28px;
+        padding: 25px 24px;
 
         overflow: hidden;
 
         background: #fff;
 
         border: 1px solid #eee5cf;
-        border-radius: 16px;
+        border-radius: 14px;
 
-        box-shadow: 0 8px 25px rgba(11, 31, 58, 0.07);
+        box-shadow: 0 7px 22px rgba(11, 31, 58, 0.07);
 
-        transition: all 0.3s ease;
+        transition: 0.25s;
     }
 
-
-    /* GOLD TOP LINE */
 
     .un-review-card::before {
 
@@ -535,36 +574,13 @@ if ($result) {
     }
 
 
-    /* QUOTE MARK */
-
-    .un-review-card::after {
-
-        content: "“";
-
-        position: absolute;
-
-        top: 8px;
-        right: 20px;
-
-        font-family: Georgia, serif;
-
-        font-size: 75px;
-
-        line-height: 1;
-
-        color: rgba(212, 175, 55, 0.12);
-    }
-
-
-    /* CARD HOVER */
-
     .un-review-card:hover {
 
-        transform: translateY(-8px);
+        transform: translateY(-5px);
 
         border-color: rgba(212, 175, 55, 0.55);
 
-        box-shadow: 0 18px 40px rgba(11, 31, 58, 0.13);
+        box-shadow: 0 14px 30px rgba(11, 31, 58, 0.11);
     }
 
 
@@ -574,17 +590,13 @@ if ($result) {
 
     .un-review-stars {
 
-        position: relative;
-
-        z-index: 2;
-
-        margin-bottom: 22px;
+        margin-bottom: 13px;
 
         color: #d4af37;
 
-        font-size: 20px;
+        font-size: 18px;
 
-        letter-spacing: 3px;
+        letter-spacing: 2px;
     }
 
 
@@ -594,19 +606,15 @@ if ($result) {
 
     .un-review-text {
 
-        position: relative;
+        min-height: 66px;
 
-        z-index: 2;
-
-        min-height: 55px;
-
-        margin-bottom: 25px;
+        margin-bottom: 18px;
 
         color: #596273;
 
-        font-size: 15px;
+        font-size: 14px;
 
-        line-height: 1.8;
+        line-height: 1.65;
 
         overflow-wrap: anywhere;
     }
@@ -618,15 +626,11 @@ if ($result) {
 
     .un-review-name {
 
-        position: relative;
-
-        z-index: 2;
-
-        margin-bottom: 5px;
+        margin-bottom: 4px;
 
         color: #0b1f3a;
 
-        font-size: 17px;
+        font-size: 16px;
 
         font-weight: 700;
     }
@@ -638,13 +642,90 @@ if ($result) {
 
     .un-review-date {
 
-        position: relative;
-
-        z-index: 2;
-
         color: #8a919c;
 
-        font-size: 13px;
+        font-size: 12px;
+    }
+
+
+    /* =====================================
+   REVIEW CONTROLS
+===================================== */
+
+    .un-review-controls {
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        gap: 14px;
+
+        margin-top: 22px;
+    }
+
+
+    .un-review-arrow {
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        width: 36px;
+        height: 36px;
+
+        border: 1px solid #d4af37;
+        border-radius: 50%;
+
+        background: #fff;
+
+        color: #0b1f3a;
+
+        cursor: pointer;
+
+        transition: 0.2s;
+    }
+
+
+    .un-review-arrow:hover {
+
+        background: #d4af37;
+
+        color: #0b1f3a;
+    }
+
+
+    .un-review-dots {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 6px;
+    }
+
+
+    .un-review-dot {
+
+        width: 7px;
+        height: 7px;
+
+        border-radius: 50%;
+
+        background: #d6d6d6;
+
+        transition: 0.2s;
+    }
+
+
+    .un-review-dot.active {
+
+        width: 20px;
+
+        border-radius: 10px;
+
+        background: #d4af37;
     }
 
 
@@ -659,6 +740,35 @@ if ($result) {
         color: #687386;
 
         text-align: center;
+    }
+
+
+    /* =====================================
+   RESPONSIVE
+===================================== */
+
+    @media (max-width: 767px) {
+
+        .un-review-section {
+
+            padding: 55px 0;
+        }
+
+        .un-review-heading h2 {
+
+            font-size: 29px;
+        }
+
+        .un-review-slide-row {
+
+            grid-template-columns: 1fr;
+        }
+
+        .un-review-card {
+
+            min-height: 190px;
+        }
+
     }
 </style>
 
@@ -915,118 +1025,308 @@ if ($result) {
             <h2>What Our Customers Say</h2>
 
             <p>
-
                 Read reviews from our valued customers.
-
             </p>
 
         </div>
 
 
-        <!-- REVIEW CARDS -->
+        <?php if (count($reviews) > 0) { ?>
 
-        <div class="row g-4">
+            <?php $reviewSlides = array_chunk($reviews, 3); ?>
 
-            <?php if (count($reviews) > 0) { ?>
+            <div class="un-review-slider-wrapper" id="reviewSliderWrapper">
 
-                <?php foreach ($reviews as $review) { ?>
+                <div class="un-review-track" id="reviewTrack">
 
-                    <div class="col-md-4">
+                    <?php foreach ($reviewSlides as $slide) { ?>
 
-                        <div class="un-review-card">
+                        <div class="un-review-slide">
+
+                            <div class="un-review-slide-row">
+
+                                <?php foreach ($slide as $review) { ?>
+
+                                    <div class="un-review-card">
+
+                                        <!-- RATING -->
+
+                                        <div class="un-review-stars">
+
+                                            <?php
+
+                                            $rating = (int)$review["rating"];
+
+                                            for ($i = 1; $i <= 5; $i++) {
+
+                                                echo ($i <= $rating) ? "★" : "☆";
+
+                                            }
+
+                                            ?>
+
+                                        </div>
 
 
-                            <!-- RATING -->
+                                        <!-- REVIEW TEXT -->
 
-                            <div class="un-review-stars">
+                                        <p class="un-review-text">
 
-                                <?php
+                                            <?php
+                                            echo htmlspecialchars($review["review"]);
+                                            ?>
 
-                                $rating = (int) $review["rating"];
+                                        </p>
 
-                                for ($i = 1; $i <= 5; $i++) {
 
-                                    if ($i <= $rating) {
+                                        <!-- CUSTOMER NAME -->
 
-                                        echo "★";
-                                    } else {
+                                        <div class="un-review-name">
 
-                                        echo "☆";
-                                    }
-                                }
+                                            <?php
+                                            echo htmlspecialchars($review["full_name"]);
+                                            ?>
 
-                                ?>
+                                        </div>
+
+
+                                        <!-- REVIEW DATE -->
+
+                                        <div class="un-review-date">
+
+                                            <?php
+
+                                            echo date(
+                                                "d M Y",
+                                                strtotime($review["created_at"])
+                                            );
+
+                                            ?>
+
+                                        </div>
+
+                                    </div>
+
+                                <?php } ?>
 
                             </div>
-
-
-                            <!-- REVIEW TEXT -->
-
-                            <p class="un-review-text">
-
-                                <?php
-
-                                echo htmlspecialchars($review["review"]);
-
-                                ?>
-
-                            </p>
-
-
-                            <!-- CUSTOMER NAME -->
-
-                            <div class="un-review-name">
-
-                                <?php
-
-                                echo htmlspecialchars($review["full_name"]);
-
-                                ?>
-
-                            </div>
-
-
-                            <!-- REVIEW DATE -->
-
-                            <div class="un-review-date">
-
-                                <?php
-
-                                echo date(
-                                    "d M Y",
-                                    strtotime($review["created_at"])
-                                );
-
-                                ?>
-
-                            </div>
-
 
                         </div>
 
+                    <?php } ?>
+
+                </div>
+
+            </div>
+
+
+            <!-- REVIEW CONTROLS -->
+
+            <?php if (count($reviewSlides) > 1) { ?>
+
+                <div class="un-review-controls">
+
+                    <button
+                        type="button"
+                        class="un-review-arrow"
+                        id="reviewPrev"
+                        aria-label="Previous reviews">
+
+                        <i class="fa-solid fa-chevron-left"></i>
+
+                    </button>
+
+
+                    <div class="un-review-dots" id="reviewDots">
+
+                        <?php foreach ($reviewSlides as $index => $slide) { ?>
+
+                            <span
+                                class="un-review-dot <?php echo ($index === 0) ? 'active' : ''; ?>">
+                            </span>
+
+                        <?php } ?>
+
                     </div>
 
-                <?php } ?>
 
-            <?php } else { ?>
+                    <button
+                        type="button"
+                        class="un-review-arrow"
+                        id="reviewNext"
+                        aria-label="Next reviews">
 
-                <div class="col-12">
+                        <i class="fa-solid fa-chevron-right"></i>
 
-                    <p class="un-no-review">
-
-                        No reviews available yet.
-
-                    </p>
+                    </button>
 
                 </div>
 
             <?php } ?>
 
-        </div>
+
+        <?php } else { ?>
+
+            <div class="un-no-review">
+
+                No reviews available yet.
+
+            </div>
+
+        <?php } ?>
 
     </div>
 
 </section>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const track = document.getElementById("reviewTrack");
+    const wrapper = document.getElementById("reviewSliderWrapper");
+    const prevButton = document.getElementById("reviewPrev");
+    const nextButton = document.getElementById("reviewNext");
+    const dots = document.querySelectorAll(".un-review-dot");
+
+    if (!track || !wrapper) {
+        return;
+    }
+
+
+    const slides = track.querySelectorAll(".un-review-slide");
+
+    if (slides.length <= 1) {
+        return;
+    }
+
+
+    let currentSlide = 0;
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+
+    function updateSlider() {
+
+        track.style.transform =
+            "translateX(-" + (currentSlide * 100) + "%)";
+
+
+        dots.forEach(function (dot, index) {
+
+            dot.classList.toggle(
+                "active",
+                index === currentSlide
+            );
+
+        });
+
+    }
+
+
+    function showNext() {
+
+        if (currentSlide < slides.length - 1) {
+
+            currentSlide++;
+
+        } else {
+
+            currentSlide = 0;
+
+        }
+
+        updateSlider();
+
+    }
+
+
+    function showPrevious() {
+
+        if (currentSlide > 0) {
+
+            currentSlide--;
+
+        } else {
+
+            currentSlide = slides.length - 1;
+
+        }
+
+        updateSlider();
+
+    }
+
+
+    if (nextButton) {
+
+        nextButton.addEventListener(
+            "click",
+            showNext
+        );
+
+    }
+
+
+    if (prevButton) {
+
+        prevButton.addEventListener(
+            "click",
+            showPrevious
+        );
+
+    }
+
+
+    dots.forEach(function (dot, index) {
+
+        dot.addEventListener("click", function () {
+
+            currentSlide = index;
+
+            updateSlider();
+
+        });
+
+    });
+
+
+    /* Swipe */
+
+    wrapper.addEventListener("touchstart", function (event) {
+
+        touchStartX = event.changedTouches[0].screenX;
+
+    }, { passive: true });
+
+
+    wrapper.addEventListener("touchend", function (event) {
+
+        touchEndX = event.changedTouches[0].screenX;
+
+        const swipeDistance = touchStartX - touchEndX;
+
+        if (Math.abs(swipeDistance) < 50) {
+            return;
+        }
+
+
+        if (swipeDistance > 0) {
+
+            showNext();
+
+        } else {
+
+            showPrevious();
+
+        }
+
+    }, { passive: true });
+
+});
+
+</script>
 
 
 <?php

@@ -30,6 +30,16 @@ $amenity_active = (
     $current_folder === "amenities" &&
     $current_page === "view.php"
 );
+
+$inquiry_active = (
+    $current_folder === "inquiries" &&
+    $current_page === "view.php"
+);
+
+$appointment_active = (
+    $current_folder === "appointments" &&
+    $current_page === "view.php"
+);
 ?>
 
 <!-- SIDEBAR -->
@@ -49,10 +59,7 @@ $amenity_active = (
 
     </div>
 
-    <!-- SIDEBAR TITLE -->
-    <div class="un-sidebar-title">
-        Admin Panel
-    </div>
+    
 
     <!-- NAVIGATION -->
     <nav class="un-sidebar-nav">
@@ -116,6 +123,26 @@ $amenity_active = (
                     class="un-nav-link <?= $amenity_active ? 'active' : ''; ?>">
                     <i class="fa-solid fa-star"></i>
                     <span>Amenities</span>
+                </a>
+            </li>
+
+            <!-- INQUIRIES -->
+            <li class="un-nav-item">
+                <a
+                    href="/urbannest/admin/inquiries.php"
+                    class="un-nav-link <?= $inquiry_active ? 'active' : ''; ?>">
+                    <i class="fa-solid fa-envelope"></i>
+                    <span>Inquiries</span>
+                </a>
+            </li>
+
+            <!-- APPOINTMENTS -->
+            <li class="un-nav-item">
+                <a
+                    href="/urbannest/admin/appointments.php"
+                    class="un-nav-link <?= $appointment_active ? 'active' : ''; ?>">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>Appointments</span>
                 </a>
             </li>
 
