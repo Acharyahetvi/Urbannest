@@ -41,6 +41,10 @@ if ($result) {
    URBANNEST HOME PAGE 
 ===================================== */
 
+    body {
+        background-color: #f8f7f2;
+    }
+
 
     /* =====================================
    HERO SECTION
@@ -226,9 +230,11 @@ if ($result) {
         position: relative;
         z-index: 2;
 
-        margin-top: -45px;
+        margin-top: 0;
 
+        padding-top: 45px;
         padding-bottom: 65px;
+        background: #f8f7f2;
     }
 
 
@@ -428,12 +434,9 @@ if ($result) {
 
         position: relative;
 
-        padding: 70px 0;
+        padding: 58px 0;
 
-        background:
-            linear-gradient(180deg,
-                #f8f7f2 0%,
-                #f5f2e9 100%);
+        background: #f8f7f2;
     }
 
 
@@ -499,11 +502,25 @@ if ($result) {
 
         width: 100%;
 
-        overflow: hidden;
+        overflow-x: auto;
 
-        touch-action: pan-y;
+        touch-action: pan-x pan-y;
+        cursor: grab;
+        user-select: none;
+        scroll-behavior: smooth;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
     }
 
+    .un-review-slider-wrapper::-webkit-scrollbar {
+        display: none;
+    }
+
+    .un-review-slider-wrapper.is-dragging {
+        cursor: grabbing;
+        scroll-snap-type: none;
+        scroll-behavior: auto;
+    }
 
     .un-review-track {
 
@@ -511,7 +528,6 @@ if ($result) {
 
         width: 100%;
 
-        transition: transform 0.4s ease;
     }
 
 
@@ -520,6 +536,7 @@ if ($result) {
         flex: 0 0 100%;
 
         width: 100%;
+        scroll-snap-align: start;
     }
 
 
@@ -649,7 +666,7 @@ if ($result) {
 
 
     /* =====================================
-   REVIEW CONTROLS
+   REVIEW PAGINATION
 ===================================== */
 
     .un-review-controls {
@@ -662,37 +679,6 @@ if ($result) {
         gap: 14px;
 
         margin-top: 22px;
-    }
-
-
-    .un-review-arrow {
-
-        display: flex;
-
-        align-items: center;
-        justify-content: center;
-
-        width: 36px;
-        height: 36px;
-
-        border: 1px solid #d4af37;
-        border-radius: 50%;
-
-        background: #fff;
-
-        color: #0b1f3a;
-
-        cursor: pointer;
-
-        transition: 0.2s;
-    }
-
-
-    .un-review-arrow:hover {
-
-        background: #d4af37;
-
-        color: #0b1f3a;
     }
 
 
@@ -744,14 +730,151 @@ if ($result) {
 
 
     /* =====================================
+   PROPERTY CATEGORY CAROUSEL
+===================================== */
+
+    .un-category-section {
+        padding: 54px 0 46px;
+        background: #f8f7f2;
+    }
+
+    .un-category-heading {
+        margin-bottom: 26px;
+        text-align: center;
+    }
+
+    .un-category-heading h2 {
+        margin: 0 0 8px;
+        color: #0b1f3a;
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    .un-category-heading p {
+        margin: 0;
+        color: #687386;
+    }
+
+    .un-category-carousel {
+        position: relative;
+    }
+
+    .un-category-track {
+        display: flex;
+        gap: 20px;
+        overflow-x: auto;
+        padding: 2px 2px 12px;
+        scroll-behavior: smooth;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        touch-action: pan-x pan-y;
+        cursor: grab;
+        user-select: none;
+    }
+
+    .un-category-track.is-dragging {
+        cursor: grabbing;
+        scroll-snap-type: none;
+    }
+
+    .un-category-track::-webkit-scrollbar {
+        display: none;
+    }
+
+    .un-category-card {
+        position: relative;
+        display: flex;
+        min-width: 0;
+        flex: 0 0 calc((100% - 40px) / 3);
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid #eee5cf;
+        border-radius: 14px;
+        background: #fff;
+        box-shadow: 0 7px 22px rgba(11, 31, 58, 0.07);
+        color: inherit;
+        scroll-snap-align: start;
+        text-decoration: none;
+        transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .un-category-card:hover {
+        transform: translateY(-5px);
+        border-color: #d4af37;
+        box-shadow: 0 14px 30px rgba(11, 31, 58, 0.13);
+        color: inherit;
+    }
+
+    .un-category-image {
+        width: 100%;
+        height: 190px;
+        overflow: hidden;
+        background: #f6f3ec;
+    }
+
+    .un-category-image img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.35s ease;
+    }
+
+    .un-category-card:hover .un-category-image img {
+        transform: scale(1.04);
+    }
+
+    .un-category-content {
+        padding: 17px 18px 19px;
+    }
+
+    .un-category-content h3 {
+        margin: 0 0 7px;
+        color: #0b1f3a;
+        font-size: 19px;
+        font-weight: 700;
+    }
+
+    .un-category-content p {
+        margin: 0;
+        color: #687386;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    /* =====================================
    RESPONSIVE
 ===================================== */
+
+    @media (max-width: 991px) {
+        .un-category-card {
+            flex-basis: calc((100% - 20px) / 2);
+        }
+    }
+
+    @media (max-width: 575px) {
+        .un-purpose-section {
+            padding-top: 32px;
+        }
+
+        .un-category-section {
+            padding: 42px 0 38px;
+        }
+
+        .un-category-card {
+            flex-basis: 100%;
+        }
+
+        .un-category-image {
+            height: 205px;
+        }
+    }
 
     @media (max-width: 767px) {
 
         .un-review-section {
 
-            padding: 55px 0;
+            padding: 46px 0 55px;
         }
 
         .un-review-heading h2 {
@@ -1011,6 +1134,79 @@ if ($result) {
 
 
 <!-- =====================================
+     PROPERTY CATEGORY CAROUSEL
+===================================== -->
+
+<section class="un-category-section" aria-labelledby="category-heading">
+
+    <div class="container">
+
+        <div class="un-category-heading">
+            <h2 id="category-heading">Explore Property Categories</h2>
+            <p>Find a space that fits your plans and lifestyle.</p>
+        </div>
+
+        <div class="un-category-carousel">
+            <div class="un-category-track" id="categoryTrack">
+                <a class="un-category-card" href="requirements.php">
+                    <div class="un-category-image">
+                        <img src="admin/assets/images/category/residential.png" alt="Residential homes">
+                    </div>
+                    <div class="un-category-content">
+                        <h3>Residential</h3>
+                        <p>Discover welcoming homes and apartments for every chapter.</p>
+                    </div>
+                </a>
+
+                <a class="un-category-card" href="requirements.php">
+                    <div class="un-category-image">
+                        <img src="admin/assets/images/category/commercial.jpeg" alt="Commercial property">
+                    </div>
+                    <div class="un-category-content">
+                        <h3>Commercial</h3>
+                        <p>Explore practical spaces for your business and next venture.</p>
+                    </div>
+                </a>
+
+                <a class="un-category-card" href="requirements.php">
+                    <div class="un-category-image">
+                        <img src="admin/assets/images/category/luxury.jpeg" alt="Luxury property">
+                    </div>
+                    <div class="un-category-content">
+                        <h3>Luxury</h3>
+                        <p>Experience distinctive homes with considered details.</p>
+                    </div>
+                </a>
+
+                <a class="un-category-card" href="requirements.php">
+                    <div class="un-category-image">
+                        <img src="admin/assets/images/category/land.jpeg" alt="Land and plots">
+                    </div>
+                    <div class="un-category-content">
+                        <h3>Land &amp; Plots</h3>
+                        <p>Find land with room to plan and build for the future.</p>
+                    </div>
+                </a>
+
+                <a class="un-category-card" href="requirements.php">
+                    <div class="un-category-image">
+                        <img src="admin/assets/images/category/industrial.webp" alt="Industrial property">
+                    </div>
+                    <div class="un-category-content">
+                        <h3>Industrial</h3>
+                        <p>Browse adaptable spaces for operations and production.</p>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================
      USER REVIEWS SECTION
 ===================================== -->
 
@@ -1125,18 +1321,6 @@ if ($result) {
             <?php if (count($reviewSlides) > 1) { ?>
 
                 <div class="un-review-controls">
-
-                    <button
-                        type="button"
-                        class="un-review-arrow"
-                        id="reviewPrev"
-                        aria-label="Previous reviews">
-
-                        <i class="fa-solid fa-chevron-left"></i>
-
-                    </button>
-
-
                     <div class="un-review-dots" id="reviewDots">
 
                         <?php foreach ($reviewSlides as $index => $slide) { ?>
@@ -1149,16 +1333,6 @@ if ($result) {
 
                     </div>
 
-
-                    <button
-                        type="button"
-                        class="un-review-arrow"
-                        id="reviewNext"
-                        aria-label="Next reviews">
-
-                        <i class="fa-solid fa-chevron-right"></i>
-
-                    </button>
 
                 </div>
 
@@ -1180,149 +1354,149 @@ if ($result) {
 </section>
 
 <script>
-
 document.addEventListener("DOMContentLoaded", function () {
+    const track = document.getElementById("categoryTrack");
 
-    const track = document.getElementById("reviewTrack");
-    const wrapper = document.getElementById("reviewSliderWrapper");
-    const prevButton = document.getElementById("reviewPrev");
-    const nextButton = document.getElementById("reviewNext");
-    const dots = document.querySelectorAll(".un-review-dot");
-
-    if (!track || !wrapper) {
+    if (!track) {
         return;
     }
 
+    let dragStartX = 0;
+    let dragStartScroll = 0;
+    let isDragging = false;
+    let suppressClick = false;
 
-    const slides = track.querySelectorAll(".un-review-slide");
+    track.addEventListener("pointerdown", function (event) {
+        if (event.pointerType !== "mouse" || event.button !== 0) {
+            return;
+        }
+
+        dragStartX = event.clientX;
+        dragStartScroll = track.scrollLeft;
+        isDragging = true;
+        suppressClick = false;
+        track.classList.add("is-dragging");
+    });
+
+    track.addEventListener("pointermove", function (event) {
+        if (isDragging) {
+            const distance = event.clientX - dragStartX;
+            if (Math.abs(distance) > 5) {
+                if (!suppressClick) {
+                    track.setPointerCapture(event.pointerId);
+                }
+                suppressClick = true;
+                track.scrollLeft = dragStartScroll - distance;
+            }
+        }
+    });
+
+    function finishCategoryDrag() {
+        isDragging = false;
+        track.classList.remove("is-dragging");
+    }
+
+    track.addEventListener("pointerup", finishCategoryDrag);
+    track.addEventListener("pointercancel", finishCategoryDrag);
+    track.addEventListener("click", function (event) {
+        if (suppressClick) {
+            event.preventDefault();
+            event.stopPropagation();
+            suppressClick = false;
+        }
+    }, true);
+
+    track.addEventListener("dragstart", function (event) {
+        event.preventDefault();
+    });
+});
+</script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const wrapper = document.getElementById("reviewSliderWrapper");
+    const dots = document.querySelectorAll(".un-review-dot");
+
+    if (!wrapper) {
+        return;
+    }
+
+    const slides = wrapper.querySelectorAll(".un-review-slide");
 
     if (slides.length <= 1) {
         return;
     }
 
+    let dragStartX = 0;
+    let dragStartScroll = 0;
+    let isDragging = false;
+    let suppressClick = false;
 
-    let currentSlide = 0;
-
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-
-    function updateSlider() {
-
-        track.style.transform =
-            "translateX(-" + (currentSlide * 100) + "%)";
-
-
+    function updateDots() {
+        const currentSlide = Math.round(wrapper.scrollLeft / wrapper.clientWidth);
         dots.forEach(function (dot, index) {
-
             dot.classList.toggle(
                 "active",
                 index === currentSlide
             );
-
         });
-
     }
-
-
-    function showNext() {
-
-        if (currentSlide < slides.length - 1) {
-
-            currentSlide++;
-
-        } else {
-
-            currentSlide = 0;
-
-        }
-
-        updateSlider();
-
-    }
-
-
-    function showPrevious() {
-
-        if (currentSlide > 0) {
-
-            currentSlide--;
-
-        } else {
-
-            currentSlide = slides.length - 1;
-
-        }
-
-        updateSlider();
-
-    }
-
-
-    if (nextButton) {
-
-        nextButton.addEventListener(
-            "click",
-            showNext
-        );
-
-    }
-
-
-    if (prevButton) {
-
-        prevButton.addEventListener(
-            "click",
-            showPrevious
-        );
-
-    }
-
 
     dots.forEach(function (dot, index) {
-
         dot.addEventListener("click", function () {
-
-            currentSlide = index;
-
-            updateSlider();
-
+            wrapper.scrollTo({
+                left: index * wrapper.clientWidth,
+                behavior: "smooth"
+            });
         });
-
     });
 
-
-    /* Swipe */
-
-    wrapper.addEventListener("touchstart", function (event) {
-
-        touchStartX = event.changedTouches[0].screenX;
-
-    }, { passive: true });
-
-
-    wrapper.addEventListener("touchend", function (event) {
-
-        touchEndX = event.changedTouches[0].screenX;
-
-        const swipeDistance = touchStartX - touchEndX;
-
-        if (Math.abs(swipeDistance) < 50) {
+    wrapper.addEventListener("pointerdown", function (event) {
+        if (event.pointerType !== "mouse" || event.button !== 0) {
             return;
         }
 
+        dragStartX = event.clientX;
+        dragStartScroll = wrapper.scrollLeft;
+        isDragging = true;
+        wrapper.classList.add("is-dragging");
+        wrapper.setPointerCapture(event.pointerId);
+    });
 
-        if (swipeDistance > 0) {
-
-            showNext();
-
-        } else {
-
-            showPrevious();
-
+    wrapper.addEventListener("pointermove", function (event) {
+        if (isDragging) {
+            const distance = event.clientX - dragStartX;
+            if (Math.abs(distance) > 5) {
+                suppressClick = true;
+                wrapper.scrollLeft = dragStartScroll - distance;
+            }
         }
+    });
 
-    }, { passive: true });
+    function finishReviewDrag() {
+        isDragging = false;
+        wrapper.classList.remove("is-dragging");
+    }
+
+    wrapper.addEventListener("pointerup", finishReviewDrag);
+    wrapper.addEventListener("pointercancel", finishReviewDrag);
+    wrapper.addEventListener("click", function (event) {
+        if (suppressClick) {
+            event.preventDefault();
+            event.stopPropagation();
+            suppressClick = false;
+        }
+    }, true);
+
+    wrapper.addEventListener("dragstart", function (event) {
+        event.preventDefault();
+    });
+
+    wrapper.addEventListener("scroll", updateDots, { passive: true });
+    window.addEventListener("resize", updateDots);
+    updateDots();
 
 });
 

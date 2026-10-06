@@ -96,6 +96,23 @@ if ($categoryResult) {
     }
 }
 
+$selectedCategoryId = filter_var(
+    $_GET['category_id'] ?? null,
+    FILTER_VALIDATE_INT,
+    ['options' => ['min_range' => 1]]
+);
+
+if (
+    $selectedCategoryId !== false
+    && !in_array(
+        $selectedCategoryId,
+        array_map('intval', array_column($categories, 'category_id')),
+        true
+    )
+) {
+    $selectedCategoryId = null;
+}
+
 $subcategoryResult = mysqli_query(
     $conn,
     "SELECT subcategory_id, category_id, subcategory_name
@@ -172,7 +189,7 @@ function propertyImage(string $path = null): string
 
 <style>
     .requirements-page {
-        background: #f5f6fa;
+        background: #f6f3ec;
         padding: 38px 0 70px;
     }
 
@@ -277,10 +294,17 @@ function propertyImage(string $path = null): string
         color: #26364d;
         outline: none;
         background: #fff;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease;
     }
 
-    .requirements-sidebar input:focus,
-    .requirements-sidebar select:focus {
+    .requirements-sidebar input[type="text"]:hover,
+    .requirements-sidebar input[type="number"]:hover,
+    .requirements-sidebar select:hover {
+        border-color: #c9ced7;
+    }
+
+    .requirements-sidebar input:focus-visible,
+    .requirements-sidebar select:focus-visible {
         border-color: #b08d22;
         box-shadow: 0 0 0 3px rgba(176,141,34,.09);
     }
@@ -321,7 +345,7 @@ function propertyImage(string $path = null): string
     .amenity-options {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 5px;
+        gap: 0;
     }
 
     .amenity-option {
@@ -330,9 +354,9 @@ function propertyImage(string $path = null): string
         gap: 8px;
         padding: 6px 7px;
         border-radius: 7px;
-        margin: 0;
+        margin: 0 0 5px;
         cursor: pointer;
-        transition: .15s ease;
+        transition: background-color 0.18s ease, color 0.18s ease;
     }
 
     .amenity-option:hover {
@@ -344,6 +368,16 @@ function propertyImage(string $path = null): string
         height: 14px;
         margin: 0;
         accent-color: #0b1f3a;
+        cursor: pointer;
+        transition: transform 0.15s ease;
+    }
+
+    .amenity-option input:checked {
+        transform: scale(1.08);
+    }
+
+    .amenity-option:focus-within {
+        background: #f8f5ea;
     }
 
     .amenity-option span {
@@ -352,11 +386,25 @@ function propertyImage(string $path = null): string
     }
 
     .amenity-hidden {
-        display: none;
+        display: flex;
+        max-height: 0;
+        overflow: hidden;
+        min-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: max-height 0.18s ease, opacity 0.18s ease, padding 0.18s ease;
     }
 
     .amenities-filter.expanded .amenity-hidden {
-        display: flex;
+        max-height: 40px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        margin-bottom: 5px;
+        opacity: 1;
+        pointer-events: auto;
     }
 
     .show-more-btn {
@@ -367,6 +415,17 @@ function propertyImage(string $path = null): string
         font-size: 11px;
         font-weight: 700;
         cursor: pointer;
+        transition: color 0.18s ease;
+    }
+
+    .show-more-btn:hover {
+        color: #0b1f3a;
+    }
+
+    .show-more-btn:focus-visible {
+        outline: 2px solid #d4af37;
+        outline-offset: 3px;
+        border-radius: 2px;
     }
 
     .requirement-actions {
@@ -386,6 +445,25 @@ function propertyImage(string $path = null): string
         font-size: 12px;
         font-weight: 700;
         cursor: pointer;
+        transition: background-color 0.18s ease, box-shadow 0.18s ease, transform 0.15s ease;
+    }
+
+    .btn-find:hover,
+    .mobile-filter-button:hover {
+        background: #142e50;
+        box-shadow: 0 4px 10px rgba(11, 31, 58, .12);
+    }
+
+    .btn-find:active,
+    .mobile-filter-button:active {
+        transform: translateY(1px);
+    }
+
+    .btn-find:focus-visible,
+    .btn-reset:focus-visible,
+    .mobile-filter-button:focus-visible {
+        outline: 2px solid #d4af37;
+        outline-offset: 3px;
     }
 
     .btn-reset {
@@ -400,6 +478,13 @@ function propertyImage(string $path = null): string
         text-decoration: none;
         font-size: 12px;
         font-weight: 600;
+        transition: color 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+    }
+
+    .btn-reset:hover {
+        border-color: #d4af37;
+        background: #fbf8ef;
+        color: #0b1f3a;
     }
 
     .requirements-main {
@@ -436,31 +521,42 @@ function propertyImage(string $path = null): string
     .property-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-rows: 1fr;
+        align-items: stretch;
         gap: 18px;
     }
 
     .property-card {
+        display: flex;
+        flex-direction: column;
         background: #fff;
-        border: 1px solid #eceef2;
-        border-radius: 12px;
+        border: 1px solid #e4ddd0;
+        border-top: 3px solid #d4af37;
+        border-radius: 8px;
         overflow: hidden;
-        transition: .2s ease;
-        height: 100%;
+        box-shadow: 0 4px 14px rgba(11, 31, 58, .04);
+        transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
     }
 
     .property-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 22px rgba(0,0,0,.10);
+        transform: translateY(-2px);
+        border-color: #d4c6a4;
+        border-top-color: #d4af37;
+        box-shadow: 0 8px 18px rgba(11, 31, 58, .09);
     }
 
     .property-card img {
         width: 100%;
-        height: 175px;
+        height: 185px;
         object-fit: cover;
         display: block;
+        flex: 0 0 185px;
     }
 
     .property-card-content {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
         padding: 15px;
     }
 
@@ -478,8 +574,13 @@ function propertyImage(string $path = null): string
     .property-card h3 {
         color: #0b1f3a;
         font-size: 16px;
-        margin: 0 0 7px;
+        margin: 0 0 8px;
         line-height: 1.35;
+        min-height: 2.7em;
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
     }
 
     .property-price {
@@ -505,14 +606,29 @@ function propertyImage(string $path = null): string
     .property-details-link {
         display: block;
         text-align: center;
-        margin-top: 11px;
+        margin-top: auto;
+        padding: 9px 10px;
         background: #0b1f3a;
         color: #fff;
         text-decoration: none;
-        border-radius: 7px;
-        padding: 8px;
+        border-radius: 5px;
         font-size: 12px;
         font-weight: 700;
+        transition: background-color 0.18s ease, color 0.18s ease, transform 0.15s ease;
+    }
+
+    .property-details-link:hover {
+        background: #d4af37;
+        color: #0b1f3a;
+    }
+
+    .property-details-link:active {
+        transform: translateY(1px);
+    }
+
+    .property-details-link:focus-visible {
+        outline: 2px solid #d4af37;
+        outline-offset: 3px;
     }
 
     .empty-properties {
@@ -531,6 +647,8 @@ function propertyImage(string $path = null): string
         color: #fff;
         font-weight: 700;
         margin-bottom: 18px;
+        cursor: pointer;
+        transition: background-color 0.18s ease, box-shadow 0.18s ease, transform 0.15s ease;
     }
 
     @media (max-width: 991px) {
@@ -607,7 +725,10 @@ function propertyImage(string $path = null): string
                         <select name="category_id" id="category_id">
                             <option value="">All categories</option>
                             <?php foreach ($categories as $category): ?>
-                                <option value="<?= (int)$category['category_id'] ?>">
+                                <option
+                                    value="<?= (int)$category['category_id'] ?>"
+                                    <?= (int)$category['category_id'] === $selectedCategoryId ? 'selected' : '' ?>
+                                >
                                     <?= htmlspecialchars($category['category_name']) ?>
                                 </option>
                             <?php endforeach; ?>
@@ -903,6 +1024,7 @@ function propertyImage(string $path = null): string
     }
 
     categorySelect.addEventListener('change', loadSubcategories);
+    loadSubcategories();
 
     const filterToggle = document.getElementById('filterToggle');
     const requirementsSidebar = document.getElementById('requirementsSidebar');

@@ -25,183 +25,169 @@ $sql = "SELECT
 $result = mysqli_query($conn, $sql);
 
 ?>
-
 <style>
     body {
-        background-color: #f8f7f2;
+        background-color: #f6f3ec;
     }
-
-
-    /* Owners Section */
 
     .owners-section {
-        padding: 70px 0;
+        padding: 42px 0 52px;
     }
 
-
-    /* Page Heading */
+    .owners-wrap {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0 22px;
+    }
 
     .section-title {
         text-align: center;
-        margin-bottom: 50px;
+        margin-bottom: 28px;
     }
 
     .section-title h1 {
         color: #0b1f3a;
-        font-size: 42px;
-        font-weight: 700;
-        margin-bottom: 10px;
-    }
-
-    .section-title p {
-        color: #687386;
-        font-size: 16px;
-        margin: 0;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 36px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        margin: 0 0 10px;
     }
 
     .title-line {
-        width: 70px;
-        height: 3px;
+        width: 48px;
+        height: 2px;
         background-color: #d4af37;
-        margin: 18px auto;
+        margin: 0 auto 12px;
     }
 
+    .section-title p {
+        color: #5f6b7a;
+        font-size: 14px;
+        line-height: 1.55;
+        margin: 0 auto;
+        max-width: 520px;
+    }
 
-    /* Owner Card */
+    .owners-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        column-gap: 20px;
+        row-gap: 24px;
+        justify-content: start;
+        align-items: stretch;
+    }
 
     .owner-card {
+        display: flex;
+        flex-direction: column;
         background: #ffffff;
-        border-radius: 12px;
+        border: 1px solid #e4ddd0;
+        border-top: 3px solid #d4af37;
+        border-radius: 8px;
         overflow: hidden;
-        border: 1px solid #eeeeee;
-        box-shadow: 0 5px 20px rgba(11, 31, 58, 0.08);
-        transition: 0.3s;
-        height: 100%;
+        box-shadow: 0 6px 18px rgba(11, 31, 58, 0.05);
+        min-height: 100%;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     .owner-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 10px 30px rgba(11, 31, 58, 0.15);
+        border-color: #d4c6a4;
+        border-top-color: #d4af37;
+        box-shadow: 0 10px 22px rgba(11, 31, 58, 0.08);
     }
 
-
-    /* Owner Image Area */
-
     .owner-image {
-        height: 240px;
-
-        background:
-            linear-gradient(rgba(11, 31, 58, 0.55),
-                rgba(11, 31, 58, 0.55)),
-            #0b1f3a;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
+        height: 205px;
+        background: #0b1f3a;
         overflow: hidden;
+        flex-shrink: 0;
     }
 
     .owner-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 50% 18%;
+        display: block;
     }
 
-
-    /* Transparent Round Circle */
+    .owner-card:nth-child(4) .owner-photo,
+    .owner-card:nth-child(5) .owner-photo,
+    .owner-card:nth-child(6) .owner-photo {
+    object-fit: cover;
+    object-position: center center;
+    }
+    .owner-card:nth-child(7) .owner-photo {
+        object-position: 50% 12%;
+    }
 
     .owner-placeholder {
-        width: 90px;
-        height: 90px;
-
-        border-radius: 50%;
-
-        background: rgba(255, 255, 255, 0.12);
-
-        border: 1px solid rgba(212, 175, 55, 0.8);
-
-        color: #d4af37;
-
+        width: 100%;
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-
-        font-size: 38px;
+        color: #d4af37;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 42px;
         font-weight: 600;
-
-        backdrop-filter: blur(4px);
-
-        box-shadow:
-            0 0 18px rgba(212, 175, 55, 0.12);
-
-        transition: 0.3s;
+        letter-spacing: 0.04em;
+        border-bottom: 2px solid #d4af37;
     }
-
-
-    /* Circle Hover */
-
-    .owner-card:hover .owner-placeholder {
-        background: rgba(255, 255, 255, 0.18);
-
-        border-color: #d4af37;
-
-        box-shadow:
-            0 0 25px rgba(212, 175, 55, 0.25);
-
-        transform: scale(1.05);
-    }
-
-
-    /* Owner Information */
 
     .owner-info {
-        padding: 25px;
-        text-align: center;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 18px 18px 20px;
+        text-align: left;
     }
 
     .owner-info h3 {
         color: #0b1f3a;
-        font-size: 22px;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 21px;
         font-weight: 600;
-        margin-bottom: 15px;
+        line-height: 1.25;
+        margin: 0 0 12px;
     }
 
     .owner-info p {
-        color: #687386;
-        font-size: 14px;
-        margin-bottom: 8px;
+        color: #5f6b7a;
+        font-size: 13px;
+        margin-bottom: 0;
+        word-break: break-word;
     }
 
     .owner-info i {
         color: #d4af37;
-        width: 20px;
+        width: 16px;
+        margin-right: 6px;
+        font-size: 12px;
     }
 
-
-    /* Contact Button */
+    .owner-email {
+        margin-bottom: 16px !important;
+    }
 
     .owner-btn {
-        display: inline-block;
-
-        margin-top: 18px;
-
-        padding: 10px 22px;
-
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 160px;
+        margin-top: auto;
+        padding: 9px 16px;
         background-color: #0b1f3a;
-
         color: #ffffff;
-
         text-decoration: none;
-
-        border-radius: 6px;
-
+        border-radius: 5px;
         font-size: 14px;
-
-        font-weight: 500;
-
-        transition: 0.3s;
+        font-weight: 600;
+        transition: background-color 0.2s ease, color 0.2s ease;
+        align-self: center;
+        text-align: center;
     }
 
     .owner-btn:hover {
@@ -209,45 +195,59 @@ $result = mysqli_query($conn, $sql);
         color: #0b1f3a;
     }
 
-
-    /* No Owner */
-
     .no-owner {
+        grid-column: 1 / -1;
         text-align: center;
-        padding: 50px 20px;
-        color: #687386;
+        padding: 36px 20px;
+        color: #5f6b7a;
+        background: #ffffff;
+        border: 1px solid #e4ddd0;
+        border-radius: 10px;
     }
 
+    .no-owner h4 {
+        color: #0b1f3a;
+        font-family: "Playfair Display", Georgia, serif;
+        margin-bottom: 8px;
+    }
 
-    /* Responsive */
-
-    @media (max-width: 768px) {
-
-        .owners-section {
-            padding: 45px 15px;
+    @media (max-width: 991px) {
+        .owners-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
         .section-title h1 {
             font-size: 32px;
         }
+    }
+
+    @media (max-width: 639px) {
+        .owners-section {
+            padding: 28px 0 36px;
+        }
+
+        .owners-grid {
+            grid-template-columns: 1fr;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        .section-title h1 {
+            font-size: 30px;
+        }
 
         .owner-image {
-            height: 220px;
+            height: 200px;
         }
-
-        .owner-placeholder {
-            width: 80px;
-            height: 80px;
-            font-size: 34px;
-        }
-
     }
+
+
 </style>
 
 
 <section class="owners-section">
 
-    <div class="container">
+    <div class="owners-wrap">
 
 
         <!-- Page Heading -->
@@ -267,7 +267,7 @@ $result = mysqli_query($conn, $sql);
 
         <!-- Owner Cards -->
 
-        <div class="row g-4">
+        <div class="owners-grid">
 
             <?php
 
@@ -277,9 +277,7 @@ $result = mysqli_query($conn, $sql);
 
             ?>
 
-                    <div class="col-lg-4 col-md-6">
-
-                        <div class="owner-card">
+                    <article class="owner-card">
 
 
                             <!-- Owner Letter -->
@@ -309,7 +307,7 @@ $result = mysqli_query($conn, $sql);
                                 </h3>
 
 
-                                <p>
+                                <p class="owner-email">
 
                                     <i class="fa-solid fa-envelope"></i>
 
@@ -324,20 +322,12 @@ $result = mysqli_query($conn, $sql);
 
 
                                 <a href="owner-details.php?id=<?php echo (int)$owner['user_id']; ?>" class="owner-btn">
-                                    <i class="fa-solid fa-user"></i>
                                     View Profile
-                                </a>
-
-                                <a href="contact.php" class="owner-btn">
-                                    <i class="fa-solid fa-envelope"></i>
-                                    Contact Owner
                                 </a>
 
                             </div>
 
-                        </div>
-
-                    </div>
+                    </article>
 
 
                 <?php
@@ -347,9 +337,7 @@ $result = mysqli_query($conn, $sql);
 
                 ?>
 
-                <div class="col-12">
-
-                    <div class="no-owner">
+                <div class="no-owner">
 
                         <h4>
                             No property owners found.
@@ -358,8 +346,6 @@ $result = mysqli_query($conn, $sql);
                         <p>
                             There are currently no active property owners available.
                         </p>
-
-                    </div>
 
                 </div>
 

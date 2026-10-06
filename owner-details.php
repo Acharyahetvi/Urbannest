@@ -32,7 +32,11 @@ $sql = "SELECT
             u.phoneno,
             u.email,
             op.profile_photo,
-            op.property_count,
+            (
+                SELECT COUNT(*)
+                FROM properties p
+                WHERE p.user_id = u.user_id
+            ) AS property_count,
             op.bio
         FROM users u
         LEFT JOIN owner_profiles op
@@ -99,545 +103,489 @@ $propertyResult = mysqli_stmt_get_result($propertyStmt);
 ?>
 
 <style>
+    html {
+        overflow-x: hidden;
+    }
 
-body {
-    background-color: #f8f7f2;
-}
+    body {
+        background-color: #f6f3ec;
+    }
 
-.owner-details-section {
-    padding: 70px 0;
-}
-
-.owner-profile-card {
-    background: #ffffff;
-    border-radius: 15px;
-    padding: 35px;
-    box-shadow: 0 5px 20px rgba(11, 31, 58, 0.08);
-    border: 1px solid #eeeeee;
-    margin-bottom: 50px;
-}
-
-.owner-profile-image {
-    width: 230px;
-    height: 230px;
-    border-radius: 12px;
-    overflow: hidden;
-    margin: 0 auto;
-    background: #0b1f3a;
-}
-
-.owner-profile-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.owner-profile-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #d4af37;
-    font-size: 80px;
-    font-weight: 600;
-}
-
-.owner-info {
-    padding: 10px 20px;
-}
-
-.owner-info h1 {
-    color: #0b1f3a;
-    font-size: 36px;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.owner-role {
-    color: #b08d22;
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 20px;
-}
-
-.owner-detail {
-    color: #687386;
-    font-size: 15px;
-    margin-bottom: 12px;
-}
-
-.owner-detail i {
-    color: #d4af37;
-    width: 25px;
-}
-
-.owner-bio {
-    color: #555;
-    line-height: 1.7;
-    margin-top: 20px;
-    margin-bottom: 25px;
-}
-
-.contact-owner-btn {
-    display: inline-block;
-    padding: 11px 24px;
-    background: #0b1f3a;
-    color: #ffffff;
-    text-decoration: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: 0.3s;
-}
-
-.contact-owner-btn:hover {
-    background: #d4af37;
-    color: #0b1f3a;
-}
-
-.properties-heading {
-    text-align: center;
-    margin-bottom: 35px;
-}
-
-.properties-heading h2 {
-    color: #0b1f3a;
-    font-size: 30px;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.properties-heading p {
-    color: #687386;
-    margin: 0;
-}
-
-.property-card {
-    background: #ffffff;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid #eeeeee;
-    box-shadow: 0 5px 18px rgba(11, 31, 58, 0.08);
-    height: 100%;
-    transition: 0.3s;
-}
-
-.property-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(11, 31, 58, 0.15);
-}
-
-.property-image {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    display: block;
-}
-
-.property-no-image {
-    width: 100%;
-    height: 220px;
-    background: #0b1f3a;
-    color: #d4af37;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 45px;
-}
-
-.property-content {
-    padding: 20px;
-}
-
-.property-content h3 {
-    color: #0b1f3a;
-    font-size: 19px;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.property-price {
-    color: #b08d22;
-    font-size: 21px;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.property-location {
-    color: #687386;
-    font-size: 14px;
-    margin-bottom: 12px;
-}
-
-.property-location i {
-    color: #d4af37;
-    margin-right: 5px;
-}
-
-.property-info {
-    color: #555;
-    font-size: 14px;
-    margin-bottom: 15px;
-}
-
-.property-info span {
-    margin-right: 15px;
-}
-
-.property-info i {
-    color: #d4af37;
-    margin-right: 4px;
-}
-
-.view-property-btn {
-    display: block;
-    text-align: center;
-    padding: 10px;
-    background: #0b1f3a;
-    color: #ffffff;
-    text-decoration: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: 0.3s;
-}
-
-.view-property-btn:hover {
-    background: #d4af37;
-    color: #0b1f3a;
-}
-
-.no-properties {
-    text-align: center;
-    background: #ffffff;
-    padding: 45px 20px;
-    border-radius: 12px;
-    border: 1px solid #eeeeee;
-    color: #687386;
-}
-
-@media (max-width: 768px) {
-
-    .owner-details-section {
-        padding: 45px 15px;
+    .owner-details-page {
+        max-width: 1224px;
+        margin: 0 auto;
+        padding: 42px 22px 52px;
     }
 
     .owner-profile-card {
-        padding: 25px 20px;
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        padding: 26px;
+        background: #ffffff;
+        border: 1px solid #e4ddd0;
+        border-top: 3px solid #d4af37;
+        border-radius: 8px;
+        box-shadow: 0 6px 18px rgba(11, 31, 58, 0.05);
     }
 
     .owner-profile-image {
-        width: 190px;
-        height: 190px;
-        margin-bottom: 25px;
+        width: 270px;
+        height: 300px;
+        flex: 0 0 270px;
+        overflow: hidden;
+        border: 1px solid #e4ddd0;
+        border-radius: 8px;
+        background: #0b1f3a;
     }
 
-    .owner-info {
-        padding: 10px 0;
+    .owner-profile-image img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 18%;
+    }
+
+    .owner-profile-placeholder {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        color: #d4af37;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 70px;
+        font-weight: 600;
+    }
+
+    .owner-profile-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .owner-profile-info h1,
+    .owner-section-heading h2,
+    .owner-about h2 {
+        color: #0b1f3a;
+        font-family: "Playfair Display", Georgia, serif;
+        font-weight: 600;
+    }
+
+    .owner-profile-info h1 {
+        margin: 0 0 6px;
+        font-size: 32px;
+        line-height: 1.2;
+    }
+
+    .owner-role {
+        margin-bottom: 18px;
+        color: #b08d22;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .owner-profile-rule {
+        width: 48px;
+        height: 2px;
+        margin-bottom: 18px;
+        background: #d4af37;
+    }
+
+    .owner-info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 13px 22px;
+    }
+
+    .owner-info-item {
+        min-width: 0;
+        color: #5f6b7a;
+        font-size: 14px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    .owner-info-item strong {
+        display: block;
+        margin-bottom: 2px;
+        color: #0b1f3a;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .contact-owner-btn,
+    .view-property-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 40px;
+        padding: 9px 18px;
+        border: 0;
+        border-radius: 5px;
+        background: #0b1f3a;
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .contact-owner-btn {
+        margin-top: 20px;
+    }
+
+    .contact-owner-btn:hover,
+    .view-property-btn:hover {
+        background: #d4af37;
+        color: #0b1f3a;
+    }
+
+    .owner-about {
+        max-width: 1180px;
+        margin: 38px auto 0;
+        padding: 0 4px;
+    }
+
+    .owner-about h2 {
+        margin: 0 0 10px;
+        font-size: 24px;
+    }
+
+    .owner-about-rule,
+    .owner-heading-rule {
+        width: 48px;
+        height: 2px;
+        margin: 0 auto 14px;
+        background: #d4af37;
+    }
+
+    .owner-about-rule {
+        margin-left: 0;
+    }
+
+    .owner-about p {
+        max-width: 900px;
+        margin: 0;
+        color: #5f6b7a;
+        font-size: 14px;
+        line-height: 1.75;
+        overflow-wrap: anywhere;
+    }
+
+    .owner-properties-section {
+        margin-top: 42px;
+    }
+
+    .owner-section-heading {
+        margin-bottom: 26px;
         text-align: center;
     }
 
-    .owner-info h1 {
+    .owner-section-heading h2 {
+        margin: 0 0 10px;
         font-size: 30px;
+        line-height: 1.25;
     }
 
-}
+    .owner-section-heading p {
+        margin: 0;
+        color: #5f6b7a;
+        font-size: 14px;
+        line-height: 1.55;
+    }
 
+    .owner-properties-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: stretch;
+        gap: 22px 20px;
+    }
+
+    .owner-property-card {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid #e4ddd0;
+        border-top: 3px solid #d4af37;
+        border-radius: 8px;
+        background: #ffffff;
+        box-shadow: 0 6px 18px rgba(11, 31, 58, 0.05);
+    }
+
+    .owner-property-image {
+        height: 205px;
+        flex: 0 0 205px;
+        overflow: hidden;
+        background: #0b1f3a;
+    }
+
+    .owner-property-image img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .owner-property-no-image {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        color: #d4af37;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 15px;
+    }
+
+    .owner-property-content {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        padding: 17px 18px 18px;
+    }
+
+    .owner-property-content h3 {
+        margin: 0 0 8px;
+        color: #0b1f3a;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+
+    .owner-property-price {
+        margin: 0 0 8px;
+        color: #9a791f;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .owner-property-type,
+    .owner-property-location {
+        margin: 0 0 8px;
+        color: #5f6b7a;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .owner-property-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 14px;
+        margin: 2px 0 16px;
+        color: #5f6b7a;
+        font-size: 13px;
+    }
+
+    .owner-property-meta span {
+        white-space: nowrap;
+    }
+
+    .owner-property-meta i,
+    .owner-property-location i {
+        margin-right: 4px;
+        color: #d4af37;
+    }
+
+    .owner-property-content .view-property-btn {
+        width: 100%;
+        margin-top: auto;
+    }
+
+    .owner-no-properties {
+        margin: 0;
+        padding: 30px 20px;
+        border: 1px solid #e4ddd0;
+        border-radius: 8px;
+        background: #ffffff;
+        color: #5f6b7a;
+        text-align: center;
+    }
+
+    @media (max-width: 900px) {
+        .owner-profile-card {
+            gap: 24px;
+        }
+
+        .owner-profile-image {
+            width: 235px;
+            flex-basis: 235px;
+        }
+
+        .owner-properties-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 639px) {
+        .owner-details-page {
+            padding: 28px 18px 36px;
+        }
+
+        .owner-profile-card {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 20px;
+            padding: 18px;
+        }
+
+        .owner-profile-image {
+            width: 100%;
+            height: 260px;
+            flex-basis: auto;
+        }
+
+        .owner-profile-info h1 {
+            font-size: 28px;
+        }
+
+        .owner-info-grid {
+            grid-template-columns: 1fr;
+            gap: 11px;
+        }
+
+        .owner-about {
+            margin-top: 30px;
+        }
+
+        .owner-properties-section {
+            margin-top: 34px;
+        }
+
+        .owner-section-heading {
+            margin-bottom: 20px;
+        }
+
+        .owner-section-heading h2 {
+            font-size: 26px;
+        }
+
+        .owner-properties-grid {
+            grid-template-columns: 1fr;
+            max-width: 440px;
+            margin: 0 auto;
+        }
+    }
 </style>
 
-
-<section class="owner-details-section">
-
-    <div class="container">
-
-        <!-- OWNER PROFILE -->
-
-        <div class="owner-profile-card">
-
-            <div class="row align-items-center">
-
-                <div class="col-lg-4 text-center">
-
-                    <div class="owner-profile-image">
-
-                        <?php
-                        if (!empty($owner['profile_photo'])) {
-                        ?>
-
-                            <img
-                                src="admin/assets/images/owners/<?php echo htmlspecialchars($owner['profile_photo']); ?>"
-                                alt="<?php echo htmlspecialchars($owner['full_name']); ?>"
-                            >
-
-                        <?php
-                        } else {
-                        ?>
-
-                            <div class="owner-profile-placeholder">
-
-                                <?php
-                                echo strtoupper(
-                                    substr($owner['full_name'], 0, 1)
-                                );
-                                ?>
-
-                            </div>
-
-                        <?php
-                        }
-                        ?>
-
-                    </div>
-
+<main class="owner-details-page">
+    <section class="owner-profile-card" aria-label="Owner profile">
+        <div class="owner-profile-image">
+            <?php if (!empty($owner['profile_photo'])) { ?>
+                <img
+                    src="admin/assets/images/owners/<?php echo htmlspecialchars($owner['profile_photo']); ?>"
+                    alt="<?php echo htmlspecialchars($owner['full_name']); ?>"
+                >
+            <?php } else { ?>
+                <div class="owner-profile-placeholder">
+                    <?php echo strtoupper(substr($owner['full_name'], 0, 1)); ?>
                 </div>
+            <?php } ?>
+        </div>
 
+        <div class="owner-profile-info">
+            <h1><?php echo htmlspecialchars($owner['full_name']); ?></h1>
+            <div class="owner-role">Property Owner</div>
+            <div class="owner-profile-rule"></div>
 
-                <div class="col-lg-8">
-
-                    <div class="owner-info">
-
-                        <h1>
-                            <?php echo htmlspecialchars($owner['full_name']); ?>
-                        </h1>
-
-                        <div class="owner-role">
-                            Property Owner
-                        </div>
-
-                        <div class="owner-detail">
-                            <i class="fa-solid fa-envelope"></i>
-                            <?php echo htmlspecialchars($owner['email']); ?>
-                        </div>
-
-                        <div class="owner-detail">
-                            <i class="fa-solid fa-phone"></i>
-                            <?php echo htmlspecialchars($owner['phoneno']); ?>
-                        </div>
-
-                        <?php
-                        if (!empty($owner['bio'])) {
-                        ?>
-
-                            <div class="owner-bio">
-                                <?php
-                                echo nl2br(
-                                    htmlspecialchars($owner['bio'])
-                                );
-                                ?>
-                            </div>
-
-                        <?php
-                        }
-                        ?>
-
-                        <a
-                            href="contact.php"
-                            class="contact-owner-btn"
-                        >
-                            <i class="fa-solid fa-envelope"></i>
-                            Contact Owner
-                        </a>
-
-                    </div>
-
+            <div class="owner-info-grid">
+                <div class="owner-info-item">
+                    <strong>Email</strong>
+                    <?php echo htmlspecialchars($owner['email']); ?>
                 </div>
-
+                <div class="owner-info-item">
+                    <strong>Phone</strong>
+                    <?php echo htmlspecialchars($owner['phoneno']); ?>
+                </div>
+                <div class="owner-info-item">
+                    <strong>Properties Listed</strong>
+                    <?php echo (int)$owner['property_count']; ?>
+                </div>
             </div>
 
+            <a href="contact.php" class="contact-owner-btn">Contact Owner</a>
+        </div>
+    </section>
+
+    <?php if (!empty($owner['bio'])) { ?>
+        <section class="owner-about">
+            <h2>About <?php echo htmlspecialchars($owner['full_name']); ?></h2>
+            <div class="owner-about-rule"></div>
+            <p><?php echo nl2br(htmlspecialchars($owner['bio'])); ?></p>
+        </section>
+    <?php } ?>
+
+    <section class="owner-properties-section">
+        <div class="owner-section-heading">
+            <h2>Properties Listed by <?php echo htmlspecialchars($owner['full_name']); ?></h2>
+            <div class="owner-heading-rule"></div>
+            <p>Explore properties currently available from this owner.</p>
         </div>
 
-
-        <!-- OWNER PROPERTIES -->
-
-        <div class="properties-heading">
-
-            <h2>
-                Properties Listed by
-                <?php echo htmlspecialchars($owner['full_name']); ?>
-            </h2>
-
-            <p>
-                Explore properties currently available from this owner.
-            </p>
-
-        </div>
-
-
-        <div class="row g-4">
-
-            <?php
-            if (mysqli_num_rows($propertyResult) > 0) {
-
-                while ($property = mysqli_fetch_assoc($propertyResult)) {
-            ?>
-
-                    <div class="col-lg-4 col-md-6">
-
-                        <div class="property-card">
-
-                            <?php
-                            if (!empty($property['image_path'])) {
-                            ?>
-
+        <?php if (mysqli_num_rows($propertyResult) > 0) { ?>
+            <div class="owner-properties-grid">
+                <?php while ($property = mysqli_fetch_assoc($propertyResult)) { ?>
+                    <article class="owner-property-card">
+                        <div class="owner-property-image">
+                            <?php if (!empty($property['image_path'])) { ?>
                                 <img
                                     src="admin/<?php echo htmlspecialchars($property['image_path']); ?>"
                                     alt="<?php echo htmlspecialchars($property['title']); ?>"
-                                    class="property-image"
                                 >
-
-                            <?php
-                            } else {
-                            ?>
-
-                                <div class="property-no-image">
-                                    <i class="fa-solid fa-house"></i>
-                                </div>
-
-                            <?php
-                            }
-                            ?>
-
-
-                            <div class="property-content">
-
-                                <h3>
-                                    <?php
-                                    echo htmlspecialchars(
-                                        $property['title']
-                                    );
-                                    ?>
-                                </h3>
-
-                                <div class="property-price">
-
-                                    ₹<?php
-                                    echo number_format(
-                                        (float)$property['price']
-                                    );
-                                    ?>
-
-                                    <?php
-                                    if ($property['listing_type'] === 'For Rent') {
-                                        echo '/month';
-                                    }
-                                    ?>
-
-                                </div>
-
-
-                                <div class="property-location">
-
-                                    <i class="fa-solid fa-location-dot"></i>
-
-                                    <?php
-                                    echo htmlspecialchars(
-                                        $property['city']
-                                    );
-                                    ?>,
-                                    <?php
-                                    echo htmlspecialchars(
-                                        $property['state']
-                                    );
-                                    ?>
-
-                                </div>
-
-
-                                <div class="property-info">
-
-                                    <?php
-                                    if (!empty($property['area_sqft'])) {
-                                    ?>
-
-                                        <span>
-                                            <i class="fa-solid fa-ruler-combined"></i>
-                                            <?php echo (int)$property['area_sqft']; ?>
-                                            sqft
-                                        </span>
-
-                                    <?php
-                                    }
-                                    ?>
-
-
-                                    <?php
-                                    if (!empty($property['bedrooms'])) {
-                                    ?>
-
-                                        <span>
-                                            <i class="fa-solid fa-bed"></i>
-                                            <?php echo (int)$property['bedrooms']; ?>
-                                            Beds
-                                        </span>
-
-                                    <?php
-                                    }
-                                    ?>
-
-
-                                    <?php
-                                    if (!empty($property['bathrooms'])) {
-                                    ?>
-
-                                        <span>
-                                            <i class="fa-solid fa-bath"></i>
-                                            <?php echo (int)$property['bathrooms']; ?>
-                                            Baths
-                                        </span>
-
-                                    <?php
-                                    }
-                                    ?>
-
-                                </div>
-
-
-                                <a
-                                    href="properties/details.php?id=<?php echo (int)$property['property_id']; ?>"
-                                    class="view-property-btn"
-                                >
-                                    View Property
-                                </a>
-
-                            </div>
-
+                            <?php } else { ?>
+                                <div class="owner-property-no-image">No Image</div>
+                            <?php } ?>
                         </div>
 
-                    </div>
-
-            <?php
-                }
-
-            } else {
-            ?>
-
-                <div class="col-12">
-
-                    <div class="no-properties">
-
-                        <h4>
-                            No properties listed yet.
-                        </h4>
-
-                        <p>
-                            This owner currently has no approved and active properties.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            <?php
-            }
-            ?>
-
-        </div>
-
-    </div>
-
-</section>
+                        <div class="owner-property-content">
+                            <h3><?php echo htmlspecialchars($property['title']); ?></h3>
+                            <p class="owner-property-price">
+                                ₹<?php echo number_format((float)$property['price']); ?>
+                                <?php if ($property['listing_type'] === 'For Rent') { ?>/month<?php } ?>
+                            </p>
+                            <p class="owner-property-type">
+                                <?php echo htmlspecialchars($property['listing_type']); ?>
+                            </p>
+                            <p class="owner-property-location">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <?php echo htmlspecialchars($property['city']); ?>,
+                                <?php echo htmlspecialchars($property['state']); ?>
+                            </p>
+                            <div class="owner-property-meta">
+                                <?php if (!empty($property['area_sqft'])) { ?>
+                                    <span><i class="fa-solid fa-ruler-combined"></i><?php echo (int)$property['area_sqft']; ?> sqft</span>
+                                <?php } ?>
+                                <?php if (!empty($property['bedrooms'])) { ?>
+                                    <span><i class="fa-solid fa-bed"></i><?php echo (int)$property['bedrooms']; ?> Beds</span>
+                                <?php } ?>
+                                <?php if (!empty($property['bathrooms'])) { ?>
+                                    <span><i class="fa-solid fa-bath"></i><?php echo (int)$property['bathrooms']; ?> Baths</span>
+                                <?php } ?>
+                            </div>
+                            <a
+                                href="properties/details.php?id=<?php echo (int)$property['property_id']; ?>"
+                                class="view-property-btn"
+                            >View Property</a>
+                        </div>
+                    </article>
+                <?php } ?>
+            </div>
+        <?php } else { ?>
+            <div class="owner-no-properties">
+                <p>No properties listed yet.</p>
+                <p>This owner currently has no approved and active properties.</p>
+            </div>
+        <?php } ?>
+    </section>
+</main>
 
 
 <?php

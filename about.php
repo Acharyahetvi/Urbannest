@@ -64,6 +64,8 @@ require_once __DIR__ . '/includes/navbar.php';
 
         margin-bottom: 18px;
 
+        color: #fff;
+
         font-size: clamp(40px, 5vw, 60px);
 
         line-height: 1.15;
@@ -116,7 +118,7 @@ require_once __DIR__ . '/includes/navbar.php';
 
         margin-bottom: 10px;
 
-        color: #d4af37;
+        color: #8a6d1d;
 
         font-size: 13px;
 
@@ -144,7 +146,7 @@ require_once __DIR__ . '/includes/navbar.php';
 
     .un-about-content h2 span {
 
-        color: #b9922e;
+        color: #8a6d1d;
 
     }
 

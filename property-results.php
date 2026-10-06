@@ -156,21 +156,15 @@ if ($parking !== '' && ctype_digit($parking)) {
 |--------------------------------------------------------------------------
 */
 
-$amenityJoin = '';
-
-if (!empty($amenities)) {
-    $placeholders = implode(',', array_fill(0, count($amenities), '?'));
-
-    $amenityJoin = "
-        INNER JOIN property_amenities pa_filter
-            ON pa_filter.property_id = p.property_id
-            AND pa_filter.amenity_id IN ($placeholders)
-    ";
-
-    foreach ($amenities as $amenityId) {
-        $params[] = $amenityId;
-        $types .= "i";
-    }
+foreach ($amenities as $amenityId) {
+    $where[] = "EXISTS (
+        SELECT 1
+        FROM property_amenities pa_filter
+        WHERE pa_filter.property_id = p.property_id
+          AND pa_filter.amenity_id = ?
+    )";
+    $params[] = $amenityId;
+    $types .= "i";
 }
 
 
@@ -206,7 +200,6 @@ $sql = "
     LEFT JOIN property_images pi
         ON p.property_id = pi.property_id
         AND pi.is_main = 1
-    $amenityJoin
     WHERE " . implode(" AND ", $where) . "
     ORDER BY p.property_id ASC
 ";
@@ -494,7 +487,7 @@ $typeLabel = ($type === 'rent') ? 'Rental' : 'Properties for Sale';
                                 </h5>
 
                                 <div class="result-price">
-                                    ₹<?php echo number_format((float)$property['price']); ?>
+                                    ₹<?php echo number_format((float)$property['price']); ?><?php if ($property['listing_type'] === 'For Rent') echo ' / month'; ?>
                                 </div>
 
                                 <div class="result-location">

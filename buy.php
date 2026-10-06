@@ -145,6 +145,18 @@ $result = mysqli_query($conn, $sql);
         margin-bottom: 10px;
     }
 
+    .buy-room-info {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0 16px;
+    }
+
+    @media (max-width: 360px) {
+        .buy-room-info {
+            grid-template-columns: 1fr;
+        }
+    }
+
 
     /* =====================================
    VIEW DETAILS BUTTON
@@ -376,26 +388,21 @@ $result = mysqli_query($conn, $sql);
                                 </p>
 
 
-                                <!-- BEDROOMS -->
+                                <div class="buy-room-info">
 
-                                <p class="buy-info">
+                                    <!-- BEDROOMS -->
+                                    <p class="buy-info">
+                                        <strong>Bedrooms:</strong>
+                                        <?php echo htmlspecialchars($property['bedrooms'] ?? 'N/A'); ?>
+                                    </p>
 
-                                    <strong>Bedrooms:</strong>
+                                    <!-- BATHROOMS -->
+                                    <p class="buy-info">
+                                        <strong>Bathrooms:</strong>
+                                        <?php echo htmlspecialchars($property['bathrooms'] ?? 'N/A'); ?>
+                                    </p>
 
-                                    <?php echo htmlspecialchars($property['bedrooms'] ?? 'N/A'); ?>
-
-                                </p>
-
-
-                                <!-- BATHROOMS -->
-
-                                <p class="buy-info">
-
-                                    <strong>Bathrooms:</strong>
-
-                                    <?php echo htmlspecialchars($property['bathrooms'] ?? 'N/A'); ?>
-
-                                </p>
+                                </div>
 
 
                                 <!-- VIEW DETAILS BUTTON -->

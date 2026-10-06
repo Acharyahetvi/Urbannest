@@ -134,15 +134,18 @@ require_once __DIR__ . '/../includes/navbar.php';
 ?>
 
 <style>
+    .un-topbar {
+        display: none !important;
+    }
+
+
     /* =====================================
    REGISTER BACKGROUND
 ===================================== */
 
     .register-section {
 
-        min-height: 85vh;
-
-        padding: 55px 25px;
+        padding: 40px 24px 14px;
 
         display: flex;
 
@@ -161,7 +164,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         background-position: center;
 
-        background-attachment: fixed;
+        background-attachment: scroll;
     }
 
 
@@ -173,9 +176,9 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         width: 100%;
 
-        max-width: 1050px;
+        max-width: 900px;
 
-        min-height: 560px;
+        min-height: 480px;
 
         display: flex;
 
@@ -200,15 +203,15 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         width: 50%;
 
-        min-height: 560px;
+        min-height: 480px;
 
         position: relative;
 
         display: flex;
 
-        align-items: flex-end;
+        align-items: center;
 
-        padding: 50px;
+        padding: 30px;
 
         box-sizing: border-box;
 
@@ -275,7 +278,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         text-transform: uppercase;
 
-        margin-bottom: 17px;
+        margin-bottom: 14px;
     }
 
 
@@ -287,7 +290,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         background: #d4af37;
 
-        margin-bottom: 22px;
+        margin-bottom: 18px;
     }
 
 
@@ -301,7 +304,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         font-weight: 700;
 
-        margin: 0 0 18px 0;
+        margin: 0 0 14px 0;
     }
 
 
@@ -327,7 +330,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         display: inline-block;
 
-        margin-top: 25px;
+        margin-top: 20px;
 
         padding: 9px 16px;
 
@@ -351,7 +354,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         width: 50%;
 
-        padding: 48px 65px;
+        padding: 20px 40px;
 
         box-sizing: border-box;
 
@@ -427,7 +430,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         line-height: 1.7;
 
-        margin: 0 0 27px 0;
+        margin: 0 0 16px 0;
     }
 
 
@@ -443,7 +446,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         gap: 10px;
 
-        margin-bottom: 22px;
+        margin-bottom: 14px;
     }
 
 
@@ -489,7 +492,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         font-size: 13px;
 
-        margin-bottom: 18px;
+        margin-bottom: 14px;
     }
 
 
@@ -513,7 +516,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         font-size: 13px;
 
-        margin-bottom: 18px;
+        margin-bottom: 14px;
     }
 
 
@@ -531,7 +534,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         font-weight: 600;
 
-        margin-bottom: 7px;
+        margin-bottom: 5px;
     }
 
 
@@ -559,7 +562,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         outline: none;
 
-        margin-bottom: 15px;
+        margin-bottom: 10px;
 
         font-size: 14px;
     }
@@ -631,9 +634,9 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         border-top: 1px solid #eeeeee;
 
-        margin-top: 22px;
+        margin-top: 14px;
 
-        padding-top: 18px;
+        padding-top: 12px;
 
         color: #777;
 
@@ -975,10 +978,3 @@ require_once __DIR__ . '/../includes/navbar.php';
     </div>
 
 </section>
-
-
-<?php
-
-require_once __DIR__ . '/../includes/footer.php';
-
-?>

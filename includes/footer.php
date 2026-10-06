@@ -23,9 +23,9 @@
 
             <h3>Discover</h3>
 
-            <a href="index.php">Home</a>
+            <a href="/urbannest/index.php">Home</a>
 
-            <a href="about.php">About Us</a>
+            <a href="/urbannest/about.php">About Us</a>
 
         </div>
 
@@ -69,9 +69,9 @@
 
         color: white;
 
-        margin-top: 60px;
+        margin-top: 45px;
 
-        padding-top: 55px;
+        padding-top: 36px;
 
     }
 
@@ -94,7 +94,7 @@
 
         gap: 70px;
 
-        padding-bottom: 45px;
+        padding-bottom: 30px;
 
     }
 
@@ -114,11 +114,13 @@
 
     .footer-box h2 {
 
+        color: #fff;
+
         font-size: 30px;
 
         font-weight: 700;
 
-        margin-bottom: 18px;
+        margin-bottom: 12px;
 
         letter-spacing: 0.5px;
 
@@ -142,13 +144,15 @@
 
         position: relative;
 
+        color: #fff;
+
         font-size: 19px;
 
         font-weight: 600;
 
-        margin-bottom: 25px;
+        margin-bottom: 17px;
 
-        padding-bottom: 10px;
+        padding-bottom: 8px;
 
     }
 
@@ -186,7 +190,7 @@
 
         line-height: 1.8;
 
-        margin: 0 0 12px 0;
+        margin: 0 0 9px 0;
 
     }
 
@@ -205,7 +209,7 @@
 
         font-size: 14px;
 
-        margin-bottom: 13px;
+        margin-bottom: 9px;
 
         transition: 0.3s;
 
@@ -233,7 +237,7 @@
 
         text-align: center;
 
-        padding: 20px;
+        padding: 14px 20px;
 
     }
 
@@ -249,6 +253,17 @@
         font-size: 13px;
 
     }
+
+    @media (max-width: 767px) {
+        .footer-container {
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        .company-box {
+            padding-right: 0;
+        }
+    }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/urbannest/assets/js/bootstrap.bundle.min.js"></script>

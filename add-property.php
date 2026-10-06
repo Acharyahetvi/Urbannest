@@ -802,12 +802,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Add Property | UrbanNest</title>
+<?php
+$pageTitle = "Add Property - UrbanNest";
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/includes/navbar.php';
+?>
 
 <style>
 /* =========================================================
@@ -817,11 +816,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 *{box-sizing:border-box}
 
-body{
-    margin:0;
+.property-page{
     font-family:Arial,sans-serif;
-    background:#f5f6f8;
+    background:#f8f7f2;
     color:#172033;
+    padding:1px 0;
 }
 
 .property-container{
@@ -1343,10 +1342,8 @@ input[type="file"]{
     .photo-preview,.review-photos{grid-template-columns:1fr}
 }
 </style>
-</head>
 
-<body>
-
+<main class="property-page">
 <div class="property-container">
 
     <div class="page-header">
@@ -2036,6 +2033,7 @@ input[type="file"]{
     </form>
     </div><!-- /property-workflow -->
 </div>
+</main>
 
 <script>
 /* =========================================================
@@ -2946,5 +2944,4 @@ window.addEventListener("pageshow", function () {
 });
 </script>
 
-</body>
-</html>
+<?php require_once __DIR__ . '/includes/footer.php'; ?>

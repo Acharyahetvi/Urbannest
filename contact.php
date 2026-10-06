@@ -17,12 +17,14 @@ require_once __DIR__ . '/includes/navbar.php';
     }
 
     .contact-hero h1 {
+        color: #fff;
         font-size: 38px;
         font-weight: 700;
     }
 
     .contact-section {
         padding: 60px 0;
+        background: #f8f7f2;
     }
 
     .contact-info {

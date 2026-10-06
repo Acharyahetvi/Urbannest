@@ -75,10 +75,10 @@ if ($propertyId > 0) {
    WISHLIST
 ------------------------------------------------- */
 
-$wishlistUserId = 2; // TEMPORARY until login is fixed
+$wishlistUserId = (int)($_SESSION['user_id'] ?? 0);
 $isWishlisted = false;
 
-if ($property) {
+if ($property && $wishlistUserId > 0) {
 
     $wishlistCheck = mysqli_prepare(
         $conn,
@@ -391,8 +391,9 @@ if (!$property): ?>
 
         .details-main-img {
             width: 100%;
-            height: 500px;
+            height: 540px;
             object-fit: cover;
+            object-position: center center;
             display: block;
         }
 
@@ -548,6 +549,22 @@ if (!$property): ?>
             align-items: center;
             gap: 13px;
             margin-bottom: 18px;
+        }
+
+        .listed-profile-link {
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .listed-profile-link:hover {
+            opacity: 0.82;
+        }
+
+        .listed-profile-link:focus-visible {
+            outline: 2px solid #d4af37;
+            outline-offset: 4px;
         }
 
         .listed-avatar {
@@ -947,7 +964,10 @@ if (!$property): ?>
                         <h2>Listed By</h2>
 
                         <?php if ($listedBy): ?>
-                            <div class="listed-heading">
+                            <a
+                                class="listed-heading listed-profile-link"
+                                href="<?= strcasecmp($roleName, 'Agent') === 0 ? '../agent-details.php' : '../owner-details.php' ?>?id=<?= (int)$listedBy['user_id'] ?>"
+                            >
                                 <div class="listed-avatar">
                                     <?php if (!empty($profilePhoto)): ?>
                                         <img src="<?= detailsEsc($profilePhoto) ?>" alt="<?= detailsEsc($listedBy['full_name']) ?>" style="width:100%;height:100%;object-fit:cover;">
@@ -959,7 +979,7 @@ if (!$property): ?>
                                     <h3><?= detailsEsc($listedBy['full_name']) ?></h3>
                                     <div class="listed-role"><?= detailsEsc($roleName) ?></div>
                                 </div>
-                            </div>
+                            </a>
 
                             <?php if (!empty($listedBy['agency_name']) && strcasecmp($roleName, 'Agent') === 0): ?>
                                 <div class="listed-detail"><i class="fa-solid fa-building"></i><?= detailsEsc($listedBy['agency_name']) ?></div>

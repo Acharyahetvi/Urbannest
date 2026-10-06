@@ -135,7 +135,8 @@ foreach (array_slice($nameParts ?: [], 0, 2) as $namePart) {
         .un-offcanvas {
             position: fixed !important;
             top: 0;
-            right: 0;
+            left: 0;
+            right: auto;
             height: 100vh;
             width: min(390px, 100vw);
             max-width: 100vw;
@@ -146,8 +147,9 @@ foreach (array_slice($nameParts ?: [], 0, 2) as $namePart) {
         }
 
         /* When Bootstrap toggles the show class, make sure panel is visible */
-        .un-offcanvas.show {
-            transform: translateX(0) !important;
+        .un-offcanvas.show,
+        .un-offcanvas.showing {
+            transform: none !important;
         }
     }</style>
 

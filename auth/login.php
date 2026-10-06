@@ -94,15 +94,20 @@ require_once __DIR__ . '/../includes/navbar.php';
 
 
 <style>
+    .un-topbar {
+        display: none !important;
+    }
+
+
     /* =====================================
    LOGIN BACKGROUND
 ===================================== */
 
     .login-section {
 
-        min-height: 85vh;
+        min-height: calc(100vh - 76px);
 
-        padding: 55px 25px;
+        padding: 38px 24px 24px;
 
         display: flex;
 
@@ -111,6 +116,7 @@ require_once __DIR__ . '/../includes/navbar.php';
         justify-content: center;
 
         position: relative;
+        box-sizing: border-box;
 
         background-image:
             linear-gradient(rgba(11, 31, 58, 0.68),
@@ -121,7 +127,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         background-position: center;
 
-        background-attachment: fixed;
+        background-attachment: scroll;
     }
 
 
@@ -133,9 +139,9 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         width: 100%;
 
-        max-width: 1050px;
+        max-width: 900px;
 
-        min-height: 560px;
+        min-height: 440px;
 
         display: flex;
 
@@ -161,15 +167,15 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         width: 50%;
 
-        min-height: 560px;
+        min-height: 440px;
 
         position: relative;
 
         display: flex;
 
-        align-items: flex-end;
+        align-items: center;
 
-        padding: 50px;
+        padding: 30px;
 
         box-sizing: border-box;
 
@@ -236,7 +242,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         text-transform: uppercase;
 
-        margin-bottom: 17px;
+        margin-bottom: 14px;
     }
 
 
@@ -248,7 +254,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         background: #d4af37;
 
-        margin-bottom: 22px;
+        margin-bottom: 18px;
     }
 
 
@@ -256,13 +262,13 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         color: white;
 
-        font-size: 39px;
+        font-size: 36px;
 
         line-height: 1.16;
 
         font-weight: 700;
 
-        margin: 0 0 18px 0;
+        margin: 0 0 14px 0;
     }
 
 
@@ -288,7 +294,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         display: inline-block;
 
-        margin-top: 25px;
+        margin-top: 20px;
 
         padding: 9px 16px;
 
@@ -328,7 +334,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         width: 50%;
 
-        padding: 55px 65px;
+        padding: 26px 40px;
 
         box-sizing: border-box;
 
@@ -388,7 +394,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         color: #0b1f3a;
 
-        font-size: 34px;
+        font-size: 32px;
 
         font-weight: 700;
 
@@ -404,7 +410,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         line-height: 1.7;
 
-        margin: 0 0 32px 0;
+        margin: 0 0 18px 0;
     }
 
 
@@ -420,7 +426,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         gap: 10px;
 
-        margin-bottom: 25px;
+        margin-bottom: 14px;
     }
 
 
@@ -458,7 +464,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         color: #a00000;
 
-        padding: 11px;
+        padding: 10px;
 
         border-radius: 7px;
 
@@ -466,7 +472,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         font-size: 13px;
 
-        margin-bottom: 20px;
+        margin-bottom: 14px;
     }
 
 
@@ -484,7 +490,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         font-weight: 600;
 
-        margin-bottom: 8px;
+        margin-bottom: 6px;
     }
 
 
@@ -496,7 +502,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         width: 100%;
 
-        height: 51px;
+        height: 48px;
 
         padding: 0 15px;
 
@@ -512,7 +518,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         outline: none;
 
-        margin-bottom: 21px;
+        margin-bottom: 16px;
 
         font-size: 14px;
     }
@@ -543,7 +549,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         width: 100%;
 
-        height: 52px;
+        height: 50px;
 
         border: none;
 
@@ -584,9 +590,9 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         border-top: 1px solid #eeeeee;
 
-        margin-top: 28px;
+        margin-top: 16px;
 
-        padding-top: 22px;
+        padding-top: 12px;
 
         color: #777;
 
@@ -622,7 +628,88 @@ require_once __DIR__ . '/../includes/navbar.php';
 
         font-size: 11px;
 
-        margin-top: 18px;
+        margin-top: 10px;
+    }
+
+
+    @media (max-width: 768px) {
+
+        .login-section {
+            padding: 28px 20px;
+        }
+
+        .login-container {
+            max-width: 560px;
+            min-height: 0;
+            flex-direction: column;
+        }
+
+        .login-image,
+        .login-form-section {
+            width: 100%;
+        }
+
+        .login-image {
+            min-height: 250px;
+            padding: 36px;
+        }
+
+        .login-image::before {
+            top: 16px;
+            right: 16px;
+            bottom: 16px;
+            left: 16px;
+        }
+
+        .image-content {
+            max-width: 460px;
+        }
+
+        .image-content h1 {
+            font-size: 32px;
+        }
+
+        .login-form-section {
+            padding: 40px 48px;
+        }
+
+        .login-form-section::before {
+            top: 0;
+            left: 50%;
+            width: 90px;
+            height: 3px;
+            transform: translateX(-50%);
+        }
+    }
+
+
+    @media (max-width: 480px) {
+
+        .login-section {
+            padding: 20px 14px;
+        }
+
+        .login-image {
+            min-height: 205px;
+            padding: 30px;
+        }
+
+        .image-content h1 {
+            font-size: 28px;
+        }
+
+        .image-content p,
+        .luxury-badge {
+            display: none;
+        }
+
+        .login-form-section {
+            padding: 34px 26px;
+        }
+
+        .login-form h2 {
+            font-size: 29px;
+        }
     }
 </style>
 
@@ -814,10 +901,3 @@ require_once __DIR__ . '/../includes/navbar.php';
     </div>
 
 </section>
-
-
-<?php
-
-require_once __DIR__ . '/../includes/footer.php';
-
-?>

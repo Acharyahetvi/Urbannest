@@ -105,10 +105,10 @@ $message_type = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $visit_date = $_POST['visit_date'];
-    $visit_time = $_POST['visit_time'];
+    $visit_date = $_POST['visit_date'] ?? '';
+    $visit_time = $_POST['visit_time'] ?? '';
 
-    if (empty($visit_date) || empty($visit_time)) {
+    if (!is_string($visit_date) || !is_string($visit_time) || empty($visit_date) || empty($visit_time)) {
 
         $message = "Please select visit date and time.";
         $message_type = "error";
@@ -116,10 +116,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $sql = "INSERT INTO appoinments
                 (user_id, property_id, visit_date, visit_time, status)
-                VALUES
-                ($user_id, $property_id, '$visit_date', '$visit_time', 'Pending')";
+                VALUES (?, ?, ?, ?, 'Pending')";
 
-        $result = mysqli_query($conn, $sql);
+        $stmt = mysqli_prepare($conn, $sql);
+        $result = false;
+
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, "iiss", $user_id, $property_id, $visit_date, $visit_time);
+            $result = mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+        }
 
         if ($result) {
 
