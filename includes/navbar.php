@@ -6,8 +6,126 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $isLoggedIn = isset($_SESSION['user_id']);
 $userName = $_SESSION['user_name'] ?? '';
+$userRole = $_SESSION['user_role'] ?? null;
+$roleLabels = [
+    1 => 'Admin',
+    2 => 'Buyer',
+    3 => 'Agent',
+    4 => 'Seller',
+    5 => 'Owner'
+];
+$userRoleLabel = $roleLabels[(int)$userRole] ?? '';
+$nameParts = preg_split('/\s+/', trim($userName), -1, PREG_SPLIT_NO_EMPTY);
+$userInitials = '';
+
+foreach (array_slice($nameParts ?: [], 0, 2) as $namePart) {
+    $userInitials .= strtoupper(function_exists('mb_substr')
+        ? mb_substr($namePart, 0, 1, 'UTF-8')
+        : substr($namePart, 0, 1));
+}
 
 ?>
+
+<style>
+    .un-account-menu {
+        width: 248px;
+        max-width: calc(100vw - 24px);
+        padding: 8px;
+        border: 1px solid #e4ddd0;
+        border-radius: 8px;
+        box-shadow: 0 8px 22px rgba(11, 31, 58, 0.12);
+    }
+
+    .un-account-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .un-account-toggle > i {
+        color: #a88727;
+        font-size: 13px;
+    }
+
+    .un-account-header {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 10px 9px 13px;
+    }
+
+    .un-account-profile-link {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .un-account-header > div {
+        min-width: 0;
+    }
+
+    .un-account-avatar {
+        display: grid;
+        width: 42px;
+        height: 42px;
+        flex: 0 0 42px;
+        place-items: center;
+        border-radius: 50%;
+        background: #0b1f3a;
+        color: #d4af37;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .un-account-name {
+        overflow: hidden;
+        color: #0b1f3a;
+        font-size: 14px;
+        font-weight: 600;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .un-account-role {
+        margin-top: 2px;
+        color: #8a7440;
+        font-size: 11px;
+    }
+
+    .un-account-menu .dropdown-divider {
+        margin: 4px 0;
+        border-color: #edf0f4;
+    }
+
+    .un-account-menu .dropdown-item {
+        display: flex;
+        min-height: 38px;
+        align-items: center;
+        gap: 10px;
+        border-radius: 5px;
+        color: #26364d;
+        font-size: 13px;
+        transition: background-color 0.16s ease, color 0.16s ease;
+    }
+
+    .un-account-menu .dropdown-item:hover,
+    .un-account-menu .dropdown-item:focus {
+        background: #f8f5ea;
+        color: #0b1f3a;
+    }
+
+    .un-account-menu .dropdown-item i {
+        width: 16px;
+        color: #a88727;
+        text-align: center;
+    }
+
+    .un-account-menu .un-logout-item {
+        color: #566174;
+    }
+
+\ \ \ \ @media\ \(max-width:\ 991\.98px\)\ \{\n\ \ \ \ \ \ \ \ /\*\ Prevent\ closed\ offcanvas\ from\ causing\ horizontal\ overflow\ \*/\n\ \ \ \ \ \ \ \ html\ \{\n\ \ \ \ \ \ \ \ \ \ \ \ overflow-x:\ clip;\n\ \ \ \ \ \ \ \ }\n\n\ \ \ \ \ \ \ \ /\*\ Ensure\ the\ mobile\ offcanvas\ is\ fixed,\ constrained\ to\ viewport\ width,\n\ \ \ \ \ \ \ \ \ \ \ and\ slid\ fully\ onscreen\ when\ shown\.\ Use\ a\ safe\ max\ width\ of\ 390px\.\ \*/\n\ \ \ \ \ \ \ \ \.un-offcanvas\ \{\n\ \ \ \ \ \ \ \ \ \ \ \ position:\ fixed\ !important;\n\ \ \ \ \ \ \ \ \ \ \ \ top:\ 0;\n\ \ \ \ \ \ \ \ \ \ \ \ right:\ 0;\n\ \ \ \ \ \ \ \ \ \ \ \ height:\ 100vh;\n\ \ \ \ \ \ \ \ \ \ \ \ width:\ min\(390px,\ 100vw\);\n\ \ \ \ \ \ \ \ \ \ \ \ max-width:\ 100vw;\n\ \ \ \ \ \ \ \ \ \ \ \ transform:\ translateX\(100%\);\n\ \ \ \ \ \ \ \ \ \ \ \ transition:\ transform\ 0\.3s\ ease-in-out;\n\ \ \ \ \ \ \ \ \ \ \ \ will-change:\ transform;\n\ \ \ \ \ \ \ \ \ \ \ \ overflow-y:\ auto;\n\ \ \ \ \ \ \ \ }\n\n\ \ \ \ \ \ \ \ /\*\ When\ Bootstrap\ toggles\ the\ show\ class,\ make\ sure\ panel\ is\ visible\ \*/\n\ \ \ \ \ \ \ \ \.un-offcanvas\.show\ \{\n\ \ \ \ \ \ \ \ \ \ \ \ transform:\ translateX\(0\)\ !important;\n\ \ \ \ \ \ \ \ }\n\ \ \ \ }
+</style>
 
 <nav class="navbar navbar-expand-lg un-navbar sticky-top">
 
@@ -120,9 +238,9 @@ $userName = $_SESSION['user_name'] ?? '';
 
                         <!-- Profile -->
 
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown d-flex align-items-center">
 
-                            <a class="nav-link dropdown-toggle"
+                            <a class="nav-link dropdown-toggle un-account-toggle"
                                 href="#"
                                 id="profileDropdown"
                                 role="button"
@@ -134,50 +252,53 @@ $userName = $_SESSION['user_name'] ?? '';
 
                             </a>
 
-
-                        <ul class="dropdown-menu dropdown-menu-end"
+                        <ul class="dropdown-menu dropdown-menu-end un-account-menu"
                             aria-labelledby="profileDropdown">
+
+                            <li>
+                                <a class="un-account-header un-account-profile-link"
+                                    href="/urbannest/auth/profile.php">
+                                    <span class="un-account-avatar" aria-hidden="true">
+                                        <?= htmlspecialchars($userInitials !== '' ? $userInitials : 'U') ?>
+                                    </span>
+                                    <div>
+                                        <div class="un-account-name"><?= htmlspecialchars($userName) ?></div>
+                                        <?php if ($userRoleLabel !== ''): ?>
+                                            <div class="un-account-role"><?= htmlspecialchars($userRoleLabel) ?></div>
+                                        <?php endif; ?>
+                                </div>
+                                </a>
+                            </li>
+
+                            <li><hr class="dropdown-divider"></li>
 
                             <li>
                                 <a class="dropdown-item"
                                     href="/urbannest/add-property.php">
-
                                     <i class="fa-solid fa-house"></i>
-                                    Sell Property
-
+                                    Add Property
                                 </a>
                             </li>
 
+                            <li>
+                                <a class="dropdown-item"
+                                    href="/urbannest/wishlist.php">
+                                    <i class="fa-solid fa-heart"></i>
+                                    Wishlist
+                                </a>
+                            </li>
 
-            <li>
-                <a class="dropdown-item"
-                    href="/urbannest/wishlist.php">
+                            <li><hr class="dropdown-divider"></li>
 
-                    <i class="fa-solid fa-heart"></i>
-                    Wishlist
-
-                </a>
-            </li>
-
-
-            <li>
-                <hr class="dropdown-divider">
-            </li>
-
-
-            <li>
-                <a class="dropdown-item"
-                    href="/urbannest/auth/logout.php">
-
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    Logout
-
-                </a>
-            </li>
-
-        </ul>
-
-    </li>
+                            <li>
+                                <a class="dropdown-item un-logout-item"
+                                    href="/urbannest/auth/logout.php">
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                    Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
 <?php } ?>
 
