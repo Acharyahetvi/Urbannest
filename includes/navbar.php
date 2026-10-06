@@ -124,8 +124,32 @@ foreach (array_slice($nameParts ?: [], 0, 2) as $namePart) {
         color: #566174;
     }
 
-\ \ \ \ @media\ \(max-width:\ 991\.98px\)\ \{\n\ \ \ \ \ \ \ \ /\*\ Prevent\ closed\ offcanvas\ from\ causing\ horizontal\ overflow\ \*/\n\ \ \ \ \ \ \ \ html\ \{\n\ \ \ \ \ \ \ \ \ \ \ \ overflow-x:\ clip;\n\ \ \ \ \ \ \ \ }\n\n\ \ \ \ \ \ \ \ /\*\ Ensure\ the\ mobile\ offcanvas\ is\ fixed,\ constrained\ to\ viewport\ width,\n\ \ \ \ \ \ \ \ \ \ \ and\ slid\ fully\ onscreen\ when\ shown\.\ Use\ a\ safe\ max\ width\ of\ 390px\.\ \*/\n\ \ \ \ \ \ \ \ \.un-offcanvas\ \{\n\ \ \ \ \ \ \ \ \ \ \ \ position:\ fixed\ !important;\n\ \ \ \ \ \ \ \ \ \ \ \ top:\ 0;\n\ \ \ \ \ \ \ \ \ \ \ \ right:\ 0;\n\ \ \ \ \ \ \ \ \ \ \ \ height:\ 100vh;\n\ \ \ \ \ \ \ \ \ \ \ \ width:\ min\(390px,\ 100vw\);\n\ \ \ \ \ \ \ \ \ \ \ \ max-width:\ 100vw;\n\ \ \ \ \ \ \ \ \ \ \ \ transform:\ translateX\(100%\);\n\ \ \ \ \ \ \ \ \ \ \ \ transition:\ transform\ 0\.3s\ ease-in-out;\n\ \ \ \ \ \ \ \ \ \ \ \ will-change:\ transform;\n\ \ \ \ \ \ \ \ \ \ \ \ overflow-y:\ auto;\n\ \ \ \ \ \ \ \ }\n\n\ \ \ \ \ \ \ \ /\*\ When\ Bootstrap\ toggles\ the\ show\ class,\ make\ sure\ panel\ is\ visible\ \*/\n\ \ \ \ \ \ \ \ \.un-offcanvas\.show\ \{\n\ \ \ \ \ \ \ \ \ \ \ \ transform:\ translateX\(0\)\ !important;\n\ \ \ \ \ \ \ \ }\n\ \ \ \ }
-</style>
+    @media (max-width: 991.98px) {
+        /* Prevent closed offcanvas from causing horizontal overflow */
+        html {
+            overflow-x: clip;
+        }
+
+        /* Ensure the mobile offcanvas is fixed, constrained to viewport width,
+           and slid fully onscreen when shown. Use a safe max width of 390px. */
+        .un-offcanvas {
+            position: fixed !important;
+            top: 0;
+            right: 0;
+            height: 100vh;
+            width: min(390px, 100vw);
+            max-width: 100vw;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            will-change: transform;
+            overflow-y: auto;
+        }
+
+        /* When Bootstrap toggles the show class, make sure panel is visible */
+        .un-offcanvas.show {
+            transform: translateX(0) !important;
+        }
+    }</style>
 
 <nav class="navbar navbar-expand-lg un-navbar sticky-top">
 
