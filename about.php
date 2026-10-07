@@ -101,7 +101,7 @@ require_once __DIR__ . '/includes/navbar.php';
 
     .un-about-section {
 
-        padding: 80px 0;
+        padding: 48px 0 80px;
 
         background: #f8f7f2;
     }
@@ -406,6 +406,8 @@ require_once __DIR__ . '/includes/navbar.php';
 
         margin-bottom: 18px;
 
+        color: #fff;
+
         font-size: 38px;
 
         font-weight: 700;
@@ -496,7 +498,7 @@ require_once __DIR__ . '/includes/navbar.php';
 
         .un-about-section {
 
-            padding: 60px 0;
+            padding: 40px 0 60px;
         }
 
 

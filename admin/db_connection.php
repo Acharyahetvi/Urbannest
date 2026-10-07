@@ -17,4 +17,6 @@ mysqli_set_charset($conn, "utf8mb4");
 // Make both variable names available
 $con = $conn;
 
+require_once __DIR__ . "/includes/auth.php";
+
 // echo "Database connection established successfully.";

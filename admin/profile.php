@@ -6,27 +6,14 @@ session_start();
 // =====================================
 
 require_once __DIR__ . "/../includes/db.php";
-
-
-// =====================================
-// CHECK ADMIN LOGIN
-// =====================================
-
-if (
-    !isset($_SESSION['admin_logged_in']) ||
-    $_SESSION['admin_logged_in'] !== true ||
-    !isset($_SESSION['admin_id'])
-) {
-    header("Location: /urbannest/admin/login.php");
-    exit;
-}
+require_once __DIR__ . "/includes/auth.php";
 
 
 // =====================================
 // GET ADMIN ID
 // =====================================
 
-$admin_id = (int) $_SESSION['admin_id'];
+$admin_id = (int) $_SESSION['user_id'];
 
 
 // =====================================
@@ -97,11 +84,6 @@ $email = $admin['email'] ?? '';
 $phone = $admin['phoneno'] ?? '';
 $status = $admin['status'] ?? '';
 
-
-// Update session details
-
-$_SESSION['admin_name'] = $full_name;
-$_SESSION['admin_email'] = $email;
 
 ?>
 

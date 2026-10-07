@@ -113,13 +113,15 @@ $result = mysqli_query($conn, $sql);
         display: block;
     }
 
-    .owner-card:nth-child(4) .owner-photo,
-    .owner-card:nth-child(5) .owner-photo,
-    .owner-card:nth-child(6) .owner-photo {
-    object-fit: cover;
-    object-position: center center;
+    .owner-photo[alt="Asha Desai"] {
+        transform: scale(0.9);
     }
-    .owner-card:nth-child(7) .owner-photo {
+
+    .owner-photo[alt="Mihir Shah"] {
+        object-position: 50% 0%;
+    }
+
+    .owner-photo[alt="Rajesh Patel"] {
         object-position: 50% 12%;
     }
 

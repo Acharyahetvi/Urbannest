@@ -108,9 +108,17 @@ $result = mysqli_query($con, $sql);
         display: block;
     }
 
-    .agent-card:nth-child(4) .agent-photo,
-    .agent-card:nth-child(5) .agent-photo {
-        object-position: 50% 10%;
+    .agent-photo[alt="Kavya Mehta"] {
+        object-position: 50% 25%;
+    }
+
+    .agent-photo[alt="Rohan Desai"] {
+        object-position: 50% 0%;
+    }
+
+    .agent-photo[alt="Shivanjali Verma"],
+    .agent-photo[alt="Vivek Patel"] {
+        object-position: 50% 30%;
     }
 
     .agent-placeholder {

@@ -64,9 +64,14 @@ if (isset($_POST['login'])) {
                 $_SESSION['user_role'] = $user['role_id'];
 
 
-                /* GO TO HOME */
+                /* ADMIN USERS GO TO THE ADMIN DASHBOARD */
 
-                header("Location: /urbannest/index.php");
+                if ((int) $user['role_id'] === 1) {
+                    header("Location: /urbannest/admin/dashboard.php");
+                } else {
+                    header("Location: /urbannest/index.php");
+                }
+
                 exit();
 
             } else {
@@ -94,18 +99,13 @@ require_once __DIR__ . '/../includes/navbar.php';
 
 
 <style>
-    .un-topbar {
-        display: none !important;
-    }
-
-
     /* =====================================
    LOGIN BACKGROUND
 ===================================== */
 
     .login-section {
 
-        min-height: calc(100vh - 76px);
+        min-height: calc(100vh - 96px);
 
         padding: 38px 24px 24px;
 

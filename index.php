@@ -233,7 +233,7 @@ if ($result) {
         margin-top: 0;
 
         padding-top: 45px;
-        padding-bottom: 65px;
+        padding-bottom: 48px;
         background: #f8f7f2;
     }
 
@@ -250,7 +250,7 @@ if ($result) {
 
     .un-purpose-heading h2 {
 
-        margin-bottom: 8px;
+        margin-bottom: 0;
 
         font-size: 30px;
         font-weight: 700;
@@ -434,30 +434,10 @@ if ($result) {
 
         position: relative;
 
-        padding: 58px 0;
+        padding: 44px 0 48px;
 
         background: #f8f7f2;
     }
-
-
-    /* GOLD DECORATIVE LINE */
-
-    .un-review-section::before {
-
-        content: "";
-
-        display: block;
-
-        width: 70px;
-        height: 3px;
-
-        margin: 0 auto 25px;
-
-        background: #d4af37;
-
-        border-radius: 10px;
-    }
-
 
     /* =====================================
    REVIEW HEADING
@@ -465,7 +445,7 @@ if ($result) {
 
     .un-review-heading {
 
-        margin-bottom: 32px;
+        margin-bottom: 28px;
 
         text-align: center;
     }
@@ -473,7 +453,7 @@ if ($result) {
 
     .un-review-heading h2 {
 
-        margin-bottom: 8px;
+        margin-bottom: 0;
 
         color: #0b1f3a;
 
@@ -502,41 +482,32 @@ if ($result) {
 
         width: 100%;
 
-        overflow-x: auto;
+        overflow: hidden;
 
-        touch-action: pan-x pan-y;
-        cursor: grab;
+        margin: -6px 0;
+        padding: 6px 0;
         user-select: none;
-        scroll-behavior: smooth;
-        scroll-snap-type: x mandatory;
-        scrollbar-width: none;
-    }
-
-    .un-review-slider-wrapper::-webkit-scrollbar {
-        display: none;
-    }
-
-    .un-review-slider-wrapper.is-dragging {
-        cursor: grabbing;
-        scroll-snap-type: none;
-        scroll-behavior: auto;
     }
 
     .un-review-track {
 
         display: flex;
+        gap: 20px;
 
-        width: 100%;
-
+        width: max-content;
+        padding-right: 20px;
+        animation: un-review-scroll var(--review-duration, 40s) linear infinite;
     }
 
+    @keyframes un-review-scroll {
+        to {
+            transform: translateX(-50%);
+        }
+    }
 
     .un-review-slide {
 
-        flex: 0 0 100%;
-
-        width: 100%;
-        scroll-snap-align: start;
+        flex: 0 0 auto;
     }
 
 
@@ -544,9 +515,14 @@ if ($result) {
 
         display: grid;
 
-        grid-template-columns: repeat(3, 1fr);
+        grid-auto-columns: var(--review-card-width, 1fr);
+        grid-auto-flow: column;
 
         gap: 20px;
+    }
+
+    .un-review-card {
+        width: var(--review-card-width, 100%);
     }
 
 
@@ -666,56 +642,6 @@ if ($result) {
 
 
     /* =====================================
-   REVIEW PAGINATION
-===================================== */
-
-    .un-review-controls {
-
-        display: flex;
-
-        align-items: center;
-        justify-content: center;
-
-        gap: 14px;
-
-        margin-top: 22px;
-    }
-
-
-    .un-review-dots {
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 6px;
-    }
-
-
-    .un-review-dot {
-
-        width: 7px;
-        height: 7px;
-
-        border-radius: 50%;
-
-        background: #d6d6d6;
-
-        transition: 0.2s;
-    }
-
-
-    .un-review-dot.active {
-
-        width: 20px;
-
-        border-radius: 10px;
-
-        background: #d4af37;
-    }
-
-
-    /* =====================================
    NO REVIEW
 ===================================== */
 
@@ -734,17 +660,17 @@ if ($result) {
 ===================================== */
 
     .un-category-section {
-        padding: 54px 0 46px;
+        padding: 44px 0;
         background: #f8f7f2;
     }
 
     .un-category-heading {
-        margin-bottom: 26px;
+        margin-bottom: 24px;
         text-align: center;
     }
 
     .un-category-heading h2 {
-        margin: 0 0 8px;
+        margin: 0;
         color: #0b1f3a;
         font-size: 30px;
         font-weight: 700;
@@ -753,6 +679,18 @@ if ($result) {
     .un-category-heading p {
         margin: 0;
         color: #687386;
+    }
+
+    .un-purpose-heading h2::after,
+    .un-category-heading h2::after,
+    .un-review-heading h2::after {
+        content: "";
+        display: block;
+        width: 58px;
+        height: 2px;
+        margin: 10px auto 8px;
+        border-radius: 10px;
+        background: #d4af37;
     }
 
     .un-category-carousel {
@@ -858,7 +796,7 @@ if ($result) {
         }
 
         .un-category-section {
-            padding: 42px 0 38px;
+            padding: 36px 0;
         }
 
         .un-category-card {
@@ -874,17 +812,12 @@ if ($result) {
 
         .un-review-section {
 
-            padding: 46px 0 55px;
+            padding: 38px 0 42px;
         }
 
         .un-review-heading h2 {
 
             font-size: 29px;
-        }
-
-        .un-review-slide-row {
-
-            grid-template-columns: 1fr;
         }
 
         .un-review-card {
@@ -1148,7 +1081,7 @@ if ($result) {
 
         <div class="un-category-carousel">
             <div class="un-category-track" id="categoryTrack">
-                <a class="un-category-card" href="requirements.php">
+                <a class="un-category-card" href="properties/category.php?category_id=1">
                     <div class="un-category-image">
                         <img src="admin/assets/images/category/residential.png" alt="Residential homes">
                     </div>
@@ -1158,7 +1091,7 @@ if ($result) {
                     </div>
                 </a>
 
-                <a class="un-category-card" href="requirements.php">
+                <a class="un-category-card" href="properties/category.php?category_id=2">
                     <div class="un-category-image">
                         <img src="admin/assets/images/category/commercial.jpeg" alt="Commercial property">
                     </div>
@@ -1168,7 +1101,7 @@ if ($result) {
                     </div>
                 </a>
 
-                <a class="un-category-card" href="requirements.php">
+                <a class="un-category-card" href="properties/category.php?category_id=5">
                     <div class="un-category-image">
                         <img src="admin/assets/images/category/luxury.jpeg" alt="Luxury property">
                     </div>
@@ -1178,7 +1111,7 @@ if ($result) {
                     </div>
                 </a>
 
-                <a class="un-category-card" href="requirements.php">
+                <a class="un-category-card" href="properties/category.php?category_id=3">
                     <div class="un-category-image">
                         <img src="admin/assets/images/category/land.jpeg" alt="Land and plots">
                     </div>
@@ -1188,7 +1121,7 @@ if ($result) {
                     </div>
                 </a>
 
-                <a class="un-category-card" href="requirements.php">
+                <a class="un-category-card" href="properties/category.php?category_id=4">
                     <div class="un-category-image">
                         <img src="admin/assets/images/category/industrial.webp" alt="Industrial property">
                     </div>
@@ -1316,29 +1249,6 @@ if ($result) {
             </div>
 
 
-            <!-- REVIEW CONTROLS -->
-
-            <?php if (count($reviewSlides) > 1) { ?>
-
-                <div class="un-review-controls">
-                    <div class="un-review-dots" id="reviewDots">
-
-                        <?php foreach ($reviewSlides as $index => $slide) { ?>
-
-                            <span
-                                class="un-review-dot <?php echo ($index === 0) ? 'active' : ''; ?>">
-                            </span>
-
-                        <?php } ?>
-
-                    </div>
-
-
-                </div>
-
-            <?php } ?>
-
-
         <?php } else { ?>
 
             <div class="un-no-review">
@@ -1413,93 +1323,39 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 <script>
-
 document.addEventListener("DOMContentLoaded", function () {
-
     const wrapper = document.getElementById("reviewSliderWrapper");
-    const dots = document.querySelectorAll(".un-review-dot");
+    const track = document.getElementById("reviewTrack");
 
-    if (!wrapper) {
+    if (!wrapper || !track) {
         return;
     }
 
-    const slides = wrapper.querySelectorAll(".un-review-slide");
+    const slides = Array.from(track.children);
+    const cloneFragment = document.createDocumentFragment();
 
-    if (slides.length <= 1) {
-        return;
+    slides.forEach(function (slide) {
+        const clone = slide.cloneNode(true);
+        clone.setAttribute("aria-hidden", "true");
+        cloneFragment.appendChild(clone);
+    });
+
+    track.appendChild(cloneFragment);
+
+    function sizeReviewTrack() {
+        const isMobile = window.matchMedia("(max-width: 767px)").matches;
+        const cardWidth = isMobile
+            ? wrapper.clientWidth
+            : (wrapper.clientWidth - 40) / 3;
+
+        track.style.setProperty("--review-card-width", cardWidth + "px");
+        const cycleWidth = track.children[slides.length].offsetLeft;
+        track.style.setProperty("--review-duration", Math.max(30, cycleWidth / 36) + "s");
     }
 
-    let dragStartX = 0;
-    let dragStartScroll = 0;
-    let isDragging = false;
-    let suppressClick = false;
-
-    function updateDots() {
-        const currentSlide = Math.round(wrapper.scrollLeft / wrapper.clientWidth);
-        dots.forEach(function (dot, index) {
-            dot.classList.toggle(
-                "active",
-                index === currentSlide
-            );
-        });
-    }
-
-    dots.forEach(function (dot, index) {
-        dot.addEventListener("click", function () {
-            wrapper.scrollTo({
-                left: index * wrapper.clientWidth,
-                behavior: "smooth"
-            });
-        });
-    });
-
-    wrapper.addEventListener("pointerdown", function (event) {
-        if (event.pointerType !== "mouse" || event.button !== 0) {
-            return;
-        }
-
-        dragStartX = event.clientX;
-        dragStartScroll = wrapper.scrollLeft;
-        isDragging = true;
-        wrapper.classList.add("is-dragging");
-        wrapper.setPointerCapture(event.pointerId);
-    });
-
-    wrapper.addEventListener("pointermove", function (event) {
-        if (isDragging) {
-            const distance = event.clientX - dragStartX;
-            if (Math.abs(distance) > 5) {
-                suppressClick = true;
-                wrapper.scrollLeft = dragStartScroll - distance;
-            }
-        }
-    });
-
-    function finishReviewDrag() {
-        isDragging = false;
-        wrapper.classList.remove("is-dragging");
-    }
-
-    wrapper.addEventListener("pointerup", finishReviewDrag);
-    wrapper.addEventListener("pointercancel", finishReviewDrag);
-    wrapper.addEventListener("click", function (event) {
-        if (suppressClick) {
-            event.preventDefault();
-            event.stopPropagation();
-            suppressClick = false;
-        }
-    }, true);
-
-    wrapper.addEventListener("dragstart", function (event) {
-        event.preventDefault();
-    });
-
-    wrapper.addEventListener("scroll", updateDots, { passive: true });
-    window.addEventListener("resize", updateDots);
-    updateDots();
-
+    sizeReviewTrack();
+    window.addEventListener("resize", sizeReviewTrack);
 });
-
 </script>
 
 

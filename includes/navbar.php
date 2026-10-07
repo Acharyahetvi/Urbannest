@@ -215,6 +215,14 @@ foreach (array_slice($nameParts ?: [], 0, 2) as $namePart) {
                         </a>
                     </li>
 
+                    <!-- Properties -->
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="/urbannest/properties/list.php">
+                            Properties
+                        </a>
+                    </li>
+
                     <!-- Agents -->
                     <li class="nav-item">
                         <a class="nav-link"
@@ -302,7 +310,7 @@ foreach (array_slice($nameParts ?: [], 0, 2) as $namePart) {
                                 <a class="dropdown-item"
                                     href="/urbannest/add-property.php">
                                     <i class="fa-solid fa-house"></i>
-                                    Add Property
+                                    List your Property
                                 </a>
                             </li>
 

@@ -134,11 +134,6 @@ require_once __DIR__ . '/../includes/navbar.php';
 ?>
 
 <style>
-    .un-topbar {
-        display: none !important;
-    }
-
-
     /* =====================================
    REGISTER BACKGROUND
 ===================================== */

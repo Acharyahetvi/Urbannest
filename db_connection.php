@@ -16,3 +16,7 @@ if (!$conn) {
 
 // For files using $con
 $con = $conn;
+
+if (strpos($_SERVER['SCRIPT_NAME'] ?? '', '/admin/') !== false) {
+    require_once __DIR__ . '/admin/includes/auth.php';
+}

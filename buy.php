@@ -27,7 +27,7 @@ $sql = "SELECT properties.*, property_images.image_path
             AND pi.is_main = 1
         )
         ORDER BY properties.property_id ASC
-        LIMIT 10";
+        LIMIT 9";
 
 $result = mysqli_query($conn, $sql);
 
