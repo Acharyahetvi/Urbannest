@@ -33,13 +33,6 @@ $pageDesc  = $pageDesc  ?? 'Discover premium homes, penthouses & investment prop
                 <span class="me-3"><i class="fa-regular fa-envelope me-2"></i>hello@urbannest.com</span>
                 <span><i class="fa-solid fa-phone me-2"></i>+1 (212) 555‑0117</span>
             </div>
-            <div class="small d-flex align-items-center gap-3">
-                <span class="d-inline-flex align-items-center gap-2"><i class="fa-solid fa-location-dot"></i> 5th Ave, New York</span>
-                <span class="vr opacity-25"></span>
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
-                <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
-            </div>
+
         </div>
     </div>

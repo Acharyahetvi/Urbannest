@@ -9,9 +9,9 @@ require_once __DIR__ . '/includes/data.php';
 require_once __DIR__ . '/includes/navbar.php';
 
 
-// ===================================== 
-// GET REVIEWS FROM DATABASE 
-// ===================================== 
+// =====================================
+// GET REVIEWS FROM DATABASE
+// =====================================
 
 $reviews = [];
 
@@ -24,7 +24,7 @@ $sql = "SELECT users.full_name, reviews.rating, reviews.review, reviews.created_
 $result = mysqli_query($conn, $sql);
 
 
-// STORE REVIEWS 
+// STORE REVIEWS
 
 if ($result) {
 
@@ -34,11 +34,29 @@ if ($result) {
     }
 }
 
+
+// =====================================
+// GET TOTAL CITIES FROM DATABASE
+// =====================================
+
+$city_query = "SELECT COUNT(DISTINCT city) AS total_cities FROM properties";
+
+$city_result = mysqli_query($conn, $city_query);
+
+$total_cities = 0;
+
+if ($city_result) {
+
+    $city_data = mysqli_fetch_assoc($city_result);
+
+    $total_cities = $city_data['total_cities'];
+}
+
 ?>
 
 <style>
-    /* ===================================== 
-   URBANNEST HOME PAGE 
+    /* =====================================
+   URBANNEST HOME PAGE
 ===================================== */
 
     body {
@@ -841,58 +859,6 @@ if ($result) {
         font-size: 13px;
         line-height: 1.6;
     }
-
-    /* =====================================
-   RESPONSIVE
-===================================== */
-
-    @media (max-width: 991px) {
-        .un-category-card {
-            flex-basis: calc((100% - 20px) / 2);
-        }
-    }
-
-    @media (max-width: 575px) {
-        .un-purpose-section {
-            padding-top: 32px;
-        }
-
-        .un-category-section {
-            padding: 42px 0 38px;
-        }
-
-        .un-category-card {
-            flex-basis: 100%;
-        }
-
-        .un-category-image {
-            height: 205px;
-        }
-    }
-
-    @media (max-width: 767px) {
-
-        .un-review-section {
-
-            padding: 46px 0 55px;
-        }
-
-        .un-review-heading h2 {
-
-            font-size: 29px;
-        }
-
-        .un-review-slide-row {
-
-            grid-template-columns: 1fr;
-        }
-
-        .un-review-card {
-
-            min-height: 190px;
-        }
-
-    }
 </style>
 
 
@@ -972,7 +938,11 @@ if ($result) {
 
                 <div class="un-stat">
 
-                    <div class="num">180</div>
+                    <!-- DYNAMIC CITY COUNT -->
+
+                    <div class="num">
+                        <?php echo $total_cities; ?>
+                    </div>
 
                     <div class="lbl">Cities</div>
 
@@ -1004,8 +974,6 @@ if ($result) {
 
     <div class="container">
 
-        <!-- SECTION HEADING -->
-
         <div class="un-purpose-heading">
 
             <h2>What are you looking for?</h2>
@@ -1023,8 +991,6 @@ if ($result) {
             <div class="col-md-4">
 
                 <a href="buy.php" class="un-purpose-card">
-
-                    <!-- Property Image -->
 
                     <div class="un-purpose-image">
 
@@ -1060,8 +1026,6 @@ if ($result) {
 
                 <a href="rent.php" class="un-purpose-card">
 
-                    <!-- Property Image -->
-
                     <div class="un-purpose-image">
 
                         <img src="assets/images/rent.jpg"
@@ -1095,8 +1059,6 @@ if ($result) {
             <div class="col-md-4">
 
                 <a href="sale.php" class="un-purpose-card">
-
-                    <!-- Property Image -->
 
                     <div class="un-purpose-image">
 
@@ -1142,61 +1104,133 @@ if ($result) {
     <div class="container">
 
         <div class="un-category-heading">
-            <h2 id="category-heading">Explore Property Categories</h2>
-            <p>Find a space that fits your plans and lifestyle.</p>
+
+            <h2 id="category-heading">
+                Explore Property Categories
+            </h2>
+
+            <p>
+                Find a space that fits your plans and lifestyle.
+            </p>
+
         </div>
 
+
         <div class="un-category-carousel">
+
             <div class="un-category-track" id="categoryTrack">
+
+
                 <a class="un-category-card" href="requirements.php">
+
                     <div class="un-category-image">
-                        <img src="admin/assets/images/category/residential.png" alt="Residential homes">
+
+                        <img src="admin/assets/images/category/residential.png"
+                            alt="Residential homes">
+
                     </div>
+
                     <div class="un-category-content">
+
                         <h3>Residential</h3>
-                        <p>Discover welcoming homes and apartments for every chapter.</p>
+
+                        <p>
+                            Discover welcoming homes and apartments for every chapter.
+                        </p>
+
                     </div>
+
                 </a>
 
+
                 <a class="un-category-card" href="requirements.php">
+
                     <div class="un-category-image">
-                        <img src="admin/assets/images/category/commercial.jpeg" alt="Commercial property">
+
+                        <img src="admin/assets/images/category/commercial.jpeg"
+                            alt="Commercial property">
+
                     </div>
+
                     <div class="un-category-content">
+
                         <h3>Commercial</h3>
-                        <p>Explore practical spaces for your business and next venture.</p>
+
+                        <p>
+                            Explore practical spaces for your business and next venture.
+                        </p>
+
                     </div>
+
                 </a>
 
+
                 <a class="un-category-card" href="requirements.php">
+
                     <div class="un-category-image">
-                        <img src="admin/assets/images/category/luxury.jpeg" alt="Luxury property">
+
+                        <img src="admin/assets/images/category/luxury.jpeg"
+                            alt="Luxury property">
+
                     </div>
+
                     <div class="un-category-content">
+
                         <h3>Luxury</h3>
-                        <p>Experience distinctive homes with considered details.</p>
+
+                        <p>
+                            Experience distinctive homes with considered details.
+                        </p>
+
                     </div>
+
                 </a>
 
+
                 <a class="un-category-card" href="requirements.php">
+
                     <div class="un-category-image">
-                        <img src="admin/assets/images/category/land.jpeg" alt="Land and plots">
+
+                        <img src="admin/assets/images/category/land.jpeg"
+                            alt="Land and plots">
+
                     </div>
+
                     <div class="un-category-content">
+
                         <h3>Land &amp; Plots</h3>
-                        <p>Find land with room to plan and build for the future.</p>
+
+                        <p>
+                            Find land with room to plan and build for the future.
+                        </p>
+
                     </div>
+
                 </a>
 
+
                 <a class="un-category-card" href="requirements.php">
+
                     <div class="un-category-image">
-                        <img src="admin/assets/images/category/industrial.webp" alt="Industrial property">
+
+                        <img src="admin/assets/images/category/industrial.webp"
+                            alt="Industrial property">
+
                     </div>
+
                     <div class="un-category-content">
+
                         <h3>Industrial</h3>
-                        <p>Browse adaptable spaces for operations and production.</p>
+
+                        <p>
+                            Browse adaptable spaces for operations and production.
+                        </p>
+
                     </div>
+
                 </a>
+
+
             </div>
 
         </div>
@@ -1214,8 +1248,6 @@ if ($result) {
 
     <div class="container">
 
-        <!-- REVIEW HEADING -->
-
         <div class="un-review-heading">
 
             <h2>What Our Customers Say</h2>
@@ -1229,21 +1261,32 @@ if ($result) {
 
         <?php if (count($reviews) > 0) { ?>
 
+
             <?php $reviewSlides = array_chunk($reviews, 3); ?>
 
-            <div class="un-review-slider-wrapper" id="reviewSliderWrapper">
 
-                <div class="un-review-track" id="reviewTrack">
+            <div class="un-review-slider-wrapper"
+                id="reviewSliderWrapper">
+
+
+                <div class="un-review-track"
+                    id="reviewTrack">
+
 
                     <?php foreach ($reviewSlides as $slide) { ?>
 
+
                         <div class="un-review-slide">
+
 
                             <div class="un-review-slide-row">
 
+
                                 <?php foreach ($slide as $review) { ?>
 
+
                                     <div class="un-review-card">
+
 
                                         <!-- RATING -->
 
@@ -1256,7 +1299,6 @@ if ($result) {
                                             for ($i = 1; $i <= 5; $i++) {
 
                                                 echo ($i <= $rating) ? "★" : "☆";
-
                                             }
 
                                             ?>
@@ -1269,7 +1311,11 @@ if ($result) {
                                         <p class="un-review-text">
 
                                             <?php
-                                            echo htmlspecialchars($review["review"]);
+
+                                            echo htmlspecialchars(
+                                                $review["review"]
+                                            );
+
                                             ?>
 
                                         </p>
@@ -1280,7 +1326,11 @@ if ($result) {
                                         <div class="un-review-name">
 
                                             <?php
-                                            echo htmlspecialchars($review["full_name"]);
+
+                                            echo htmlspecialchars(
+                                                $review["full_name"]
+                                            );
+
                                             ?>
 
                                         </div>
@@ -1294,22 +1344,29 @@ if ($result) {
 
                                             echo date(
                                                 "d M Y",
-                                                strtotime($review["created_at"])
+                                                strtotime(
+                                                    $review["created_at"]
+                                                )
                                             );
 
                                             ?>
 
                                         </div>
 
+
                                     </div>
 
+
                                 <?php } ?>
+
 
                             </div>
 
                         </div>
 
+
                     <?php } ?>
+
 
                 </div>
 
@@ -1320,26 +1377,36 @@ if ($result) {
 
             <?php if (count($reviewSlides) > 1) { ?>
 
-                <div class="un-review-controls">
-                    <div class="un-review-dots" id="reviewDots">
 
-                        <?php foreach ($reviewSlides as $index => $slide) { ?>
+                <div class="un-review-controls">
+
+                    <div class="un-review-dots"
+                        id="reviewDots">
+
+
+                        <?php foreach (
+                            $reviewSlides as $index => $slide
+                        ) { ?>
+
 
                             <span
                                 class="un-review-dot <?php echo ($index === 0) ? 'active' : ''; ?>">
                             </span>
 
+
                         <?php } ?>
+
 
                     </div>
 
-
                 </div>
+
 
             <?php } ?>
 
 
         <?php } else { ?>
+
 
             <div class="un-no-review">
 
@@ -1347,159 +1414,328 @@ if ($result) {
 
             </div>
 
+
         <?php } ?>
+
 
     </div>
 
 </section>
 
+
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const track = document.getElementById("categoryTrack");
+    document.addEventListener("DOMContentLoaded", function() {
 
-    if (!track) {
-        return;
-    }
+        const track = document.getElementById("categoryTrack");
 
-    let dragStartX = 0;
-    let dragStartScroll = 0;
-    let isDragging = false;
-    let suppressClick = false;
-
-    track.addEventListener("pointerdown", function (event) {
-        if (event.pointerType !== "mouse" || event.button !== 0) {
+        if (!track) {
             return;
         }
 
-        dragStartX = event.clientX;
-        dragStartScroll = track.scrollLeft;
-        isDragging = true;
-        suppressClick = false;
-        track.classList.add("is-dragging");
-    });
 
-    track.addEventListener("pointermove", function (event) {
-        if (isDragging) {
-            const distance = event.clientX - dragStartX;
-            if (Math.abs(distance) > 5) {
-                if (!suppressClick) {
-                    track.setPointerCapture(event.pointerId);
-                }
-                suppressClick = true;
-                track.scrollLeft = dragStartScroll - distance;
+        let dragStartX = 0;
+        let dragStartScroll = 0;
+        let isDragging = false;
+        let suppressClick = false;
+
+
+        track.addEventListener("pointerdown", function(event) {
+
+            if (event.pointerType !== "mouse" || event.button !== 0) {
+                return;
             }
-        }
-    });
 
-    function finishCategoryDrag() {
-        isDragging = false;
-        track.classList.remove("is-dragging");
-    }
 
-    track.addEventListener("pointerup", finishCategoryDrag);
-    track.addEventListener("pointercancel", finishCategoryDrag);
-    track.addEventListener("click", function (event) {
-        if (suppressClick) {
-            event.preventDefault();
-            event.stopPropagation();
+            dragStartX = event.clientX;
+            dragStartScroll = track.scrollLeft;
+
+            isDragging = true;
             suppressClick = false;
-        }
-    }, true);
 
-    track.addEventListener("dragstart", function (event) {
-        event.preventDefault();
+            track.classList.add("is-dragging");
+
+        });
+
+
+        track.addEventListener("pointermove", function(event) {
+
+            if (isDragging) {
+
+                const distance = event.clientX - dragStartX;
+
+
+                if (Math.abs(distance) > 5) {
+
+                    if (!suppressClick) {
+
+                        track.setPointerCapture(event.pointerId);
+
+                    }
+
+                    suppressClick = true;
+
+                    track.scrollLeft =
+                        dragStartScroll - distance;
+
+                }
+
+            }
+
+        });
+
+
+        function finishCategoryDrag() {
+
+            isDragging = false;
+
+            track.classList.remove("is-dragging");
+
+        }
+
+
+        track.addEventListener(
+            "pointerup",
+            finishCategoryDrag
+        );
+
+
+        track.addEventListener(
+            "pointercancel",
+            finishCategoryDrag
+        );
+
+
+        track.addEventListener(
+            "click",
+            function(event) {
+
+                if (suppressClick) {
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    suppressClick = false;
+
+                }
+
+            },
+            true
+        );
+
+
+        track.addEventListener(
+            "dragstart",
+            function(event) {
+
+                event.preventDefault();
+
+            }
+        );
+
     });
-});
 </script>
 
+
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
 
-document.addEventListener("DOMContentLoaded", function () {
+        const wrapper =
+            document.getElementById("reviewSliderWrapper");
 
-    const wrapper = document.getElementById("reviewSliderWrapper");
-    const dots = document.querySelectorAll(".un-review-dot");
+        const dots =
+            document.querySelectorAll(".un-review-dot");
 
-    if (!wrapper) {
-        return;
-    }
 
-    const slides = wrapper.querySelectorAll(".un-review-slide");
-
-    if (slides.length <= 1) {
-        return;
-    }
-
-    let dragStartX = 0;
-    let dragStartScroll = 0;
-    let isDragging = false;
-    let suppressClick = false;
-
-    function updateDots() {
-        const currentSlide = Math.round(wrapper.scrollLeft / wrapper.clientWidth);
-        dots.forEach(function (dot, index) {
-            dot.classList.toggle(
-                "active",
-                index === currentSlide
-            );
-        });
-    }
-
-    dots.forEach(function (dot, index) {
-        dot.addEventListener("click", function () {
-            wrapper.scrollTo({
-                left: index * wrapper.clientWidth,
-                behavior: "smooth"
-            });
-        });
-    });
-
-    wrapper.addEventListener("pointerdown", function (event) {
-        if (event.pointerType !== "mouse" || event.button !== 0) {
+        if (!wrapper) {
             return;
         }
 
-        dragStartX = event.clientX;
-        dragStartScroll = wrapper.scrollLeft;
-        isDragging = true;
-        wrapper.classList.add("is-dragging");
-        wrapper.setPointerCapture(event.pointerId);
-    });
 
-    wrapper.addEventListener("pointermove", function (event) {
-        if (isDragging) {
-            const distance = event.clientX - dragStartX;
-            if (Math.abs(distance) > 5) {
-                suppressClick = true;
-                wrapper.scrollLeft = dragStartScroll - distance;
+        const slides =
+            wrapper.querySelectorAll(".un-review-slide");
+
+
+        if (slides.length <= 1) {
+            return;
+        }
+
+
+        let dragStartX = 0;
+        let dragStartScroll = 0;
+        let isDragging = false;
+        let suppressClick = false;
+
+
+        function updateDots() {
+
+            const currentSlide =
+                Math.round(
+                    wrapper.scrollLeft /
+                    wrapper.clientWidth
+                );
+
+
+            dots.forEach(function(dot, index) {
+
+                dot.classList.toggle(
+                    "active",
+                    index === currentSlide
+                );
+
+            });
+
+        }
+
+
+        dots.forEach(function(dot, index) {
+
+            dot.addEventListener(
+                "click",
+                function() {
+
+                    wrapper.scrollTo({
+
+                        left: index *
+                            wrapper.clientWidth,
+
+                        behavior: "smooth"
+
+                    });
+
+                }
+            );
+
+        });
+
+
+        wrapper.addEventListener(
+            "pointerdown",
+            function(event) {
+
+                if (
+                    event.pointerType !== "mouse" ||
+                    event.button !== 0
+                ) {
+
+                    return;
+
+                }
+
+
+                dragStartX = event.clientX;
+
+                dragStartScroll =
+                    wrapper.scrollLeft;
+
+                isDragging = true;
+
+                wrapper.classList.add(
+                    "is-dragging"
+                );
+
+                wrapper.setPointerCapture(
+                    event.pointerId
+                );
+
             }
+        );
+
+
+        wrapper.addEventListener(
+            "pointermove",
+            function(event) {
+
+                if (isDragging) {
+
+                    const distance =
+                        event.clientX -
+                        dragStartX;
+
+
+                    if (Math.abs(distance) > 5) {
+
+                        suppressClick = true;
+
+                        wrapper.scrollLeft =
+                            dragStartScroll -
+                            distance;
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        function finishReviewDrag() {
+
+            isDragging = false;
+
+            wrapper.classList.remove(
+                "is-dragging"
+            );
+
         }
+
+
+        wrapper.addEventListener(
+            "pointerup",
+            finishReviewDrag
+        );
+
+
+        wrapper.addEventListener(
+            "pointercancel",
+            finishReviewDrag
+        );
+
+
+        wrapper.addEventListener(
+            "click",
+            function(event) {
+
+                if (suppressClick) {
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    suppressClick = false;
+
+                }
+
+            },
+            true
+        );
+
+
+        wrapper.addEventListener(
+            "dragstart",
+            function(event) {
+
+                event.preventDefault();
+
+            }
+        );
+
+
+        wrapper.addEventListener(
+            "scroll",
+            updateDots, {
+                passive: true
+            }
+        );
+
+
+        window.addEventListener(
+            "resize",
+            updateDots
+        );
+
+
+        updateDots();
+
     });
-
-    function finishReviewDrag() {
-        isDragging = false;
-        wrapper.classList.remove("is-dragging");
-    }
-
-    wrapper.addEventListener("pointerup", finishReviewDrag);
-    wrapper.addEventListener("pointercancel", finishReviewDrag);
-    wrapper.addEventListener("click", function (event) {
-        if (suppressClick) {
-            event.preventDefault();
-            event.stopPropagation();
-            suppressClick = false;
-        }
-    }, true);
-
-    wrapper.addEventListener("dragstart", function (event) {
-        event.preventDefault();
-    });
-
-    wrapper.addEventListener("scroll", updateDots, { passive: true });
-    window.addEventListener("resize", updateDots);
-    updateDots();
-
-});
-
 </script>
 
 

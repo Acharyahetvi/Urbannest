@@ -253,17 +253,6 @@
         font-size: 13px;
 
     }
-
-    @media (max-width: 767px) {
-        .footer-container {
-            grid-template-columns: 1fr;
-            gap: 24px;
-        }
-
-        .company-box {
-            padding-right: 0;
-        }
-    }
 </style>
 
 <script src="/urbannest/assets/js/bootstrap.bundle.min.js"></script>

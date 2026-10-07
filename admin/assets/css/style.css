@@ -87,25 +87,44 @@ a {
   display: block;
 }
 
+/* =========================================================
+   URBANNEST BRAND TEXT
+========================================================= */
+
 .un-brand-text {
-  display: flex;
-  align-items: center;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 23px;
-  font-weight: 700;
-  letter-spacing: -1px;
-  white-space: nowrap;
+  display: inline-block !important;
+
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif !important;
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+
+  color: #0a2342 !important;
+
+  white-space: nowrap !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+
+  letter-spacing: -0.02em;
 }
 
-.un-urban {
-  color: #0b1f3a;
-  font-style: normal;
+/* Nest */
+.un-brand-text span {
+  color: #d4af37 !important;
+  font-style: italic !important;
+  font-weight: 700 !important;
 }
 
-.un-nest {
-  color: #d4af37;
-  font-style: italic;
+/* If parent has .un-brand-light, still keep Urban navy */
+.un-brand-light .un-brand-text {
+  color: #0a2342 !important;
 }
+
+/* Keep Nest gold even inside light brand */
+.un-brand-light .un-brand-text span {
+  color: #d4af37 !important;
+}
+
 /* SIDEBAR TITLE */
 
 .un-sidebar-title {

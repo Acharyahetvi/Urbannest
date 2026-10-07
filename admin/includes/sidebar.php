@@ -52,14 +52,16 @@ $appointment_active = (
             <img src="/urbannest/assets/images/img1.png" alt="UrbanNest Logo">
         </div>
 
-        <div class="un-brand-text">
-            <span class="un-urban">Urban</span>
-            <span class="un-nest">Nest</span>
-        </div>
+        <span class="un-brand-text">
+            Urban<span>Nest</span>
+        </span>
+
+
+
 
     </div>
 
-    
+
 
     <!-- NAVIGATION -->
     <nav class="un-sidebar-nav">
