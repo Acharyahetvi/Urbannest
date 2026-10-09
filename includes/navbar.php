@@ -42,7 +42,7 @@ foreach (array_slice($nameParts ?: [], 0, 2) as $namePart) {
         gap: 7px;
     }
 
-    .un-account-toggle > i {
+    .un-account-toggle>i {
         color: #a88727;
         font-size: 13px;
     }
@@ -59,7 +59,7 @@ foreach (array_slice($nameParts ?: [], 0, 2) as $namePart) {
         text-decoration: none;
     }
 
-    .un-account-header > div {
+    .un-account-header>div {
         min-width: 0;
     }
 
@@ -125,6 +125,7 @@ foreach (array_slice($nameParts ?: [], 0, 2) as $namePart) {
     }
 
     @media (max-width: 991.98px) {
+
         /* Prevent closed offcanvas from causing horizontal overflow */
         html {
             overflow-x: clip;
@@ -151,7 +152,8 @@ foreach (array_slice($nameParts ?: [], 0, 2) as $namePart) {
         .un-offcanvas.showing {
             transform: none !important;
         }
-    }</style>
+    }
+</style>
 
 <nav class="navbar navbar-expand-lg un-navbar sticky-top">
 
@@ -165,12 +167,12 @@ foreach (array_slice($nameParts ?: [], 0, 2) as $namePart) {
                 alt="UrbanNest Logo">
 
             <span class="un-brand-text">
-                Urban<span>Nest</span>
+                <h2>Urban<span>Nest</span></h2>
             </span>
 
         </a>
 
-        <!-- Mobile Menu Button -->
+        <!-- Mobile Menu Button
         <button class="navbar-toggler border-0"
             type="button"
             data-bs-toggle="offcanvas"
@@ -180,7 +182,7 @@ foreach (array_slice($nameParts ?: [], 0, 2) as $namePart) {
 
             <i class="fa-solid fa-bars fs-4"></i>
 
-        </button>
+        </button> -->
 
         <!-- Navbar Menu -->
         <div class="offcanvas offcanvas-end un-offcanvas"
@@ -249,24 +251,24 @@ foreach (array_slice($nameParts ?: [], 0, 2) as $namePart) {
 
                     <?php if (!$isLoggedIn) { ?>
 
-                    <!-- Login -->
+                        <!-- Login -->
 
-                    <li class="nav-item">
-                        <a class="nav-link"
-                            href="/urbannest/auth/login.php">
-                            Login
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="/urbannest/auth/login.php">
+                                Login
+                            </a>
+                        </li>
 
 
-                    <!-- Register -->
+                        <!-- Register -->
 
-                    <li class="nav-item">
-                        <a class="nav-link"
-                            href="/urbannest/auth/register.php">
-                            Register
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="/urbannest/auth/register.php">
+                                Register
+                            </a>
+                        </li>
 
                     <?php } else { ?>
 
@@ -275,7 +277,7 @@ foreach (array_slice($nameParts ?: [], 0, 2) as $namePart) {
                         <li class="nav-item dropdown d-flex align-items-center">
 
                             <a class="nav-link dropdown-toggle un-account-toggle"
-                                href="#"
+                                href=""
                                 id="profileDropdown"
                                 role="button"
                                 data-bs-toggle="dropdown"
@@ -286,55 +288,59 @@ foreach (array_slice($nameParts ?: [], 0, 2) as $namePart) {
 
                             </a>
 
-                        <ul class="dropdown-menu dropdown-menu-end un-account-menu"
-                            aria-labelledby="profileDropdown">
+                            <ul class="dropdown-menu dropdown-menu-end un-account-menu"
+                                aria-labelledby="profileDropdown">
 
-                            <li>
-                                <a class="un-account-header un-account-profile-link"
-                                    href="/urbannest/auth/profile.php">
-                                    <span class="un-account-avatar" aria-hidden="true">
-                                        <?= htmlspecialchars($userInitials !== '' ? $userInitials : 'U') ?>
-                                    </span>
-                                    <div>
-                                        <div class="un-account-name"><?= htmlspecialchars($userName) ?></div>
-                                        <?php if ($userRoleLabel !== ''): ?>
-                                            <div class="un-account-role"><?= htmlspecialchars($userRoleLabel) ?></div>
-                                        <?php endif; ?>
-                                </div>
-                                </a>
-                            </li>
+                                <li>
+                                    <a class="un-account-header un-account-profile-link"
+                                        href="/urbannest/auth/profile.php">
+                                        <span class="un-account-avatar" aria-hidden="true">
+                                            <?= htmlspecialchars($userInitials !== '' ? $userInitials : 'U') ?>
+                                        </span>
+                                        <div>
+                                            <div class="un-account-name"><?= htmlspecialchars($userName) ?></div>
+                                            <?php if ($userRoleLabel !== ''): ?>
+                                                <div class="un-account-role"><?= htmlspecialchars($userRoleLabel) ?></div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </a>
+                                </li>
 
-                            <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
 
                             <li>
                                 <a class="dropdown-item"
                                     href="/urbannest/add-property.php">
                                     <i class="fa-solid fa-house"></i>
-                                    List your Property
+                                    Add Property
                                 </a>
                             </li>
 
-                            <li>
-                                <a class="dropdown-item"
-                                    href="/urbannest/wishlist.php">
-                                    <i class="fa-solid fa-heart"></i>
-                                    Wishlist
-                                </a>
-                            </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="/urbannest/wishlist.php">
+                                        <i class="fa-solid fa-heart"></i>
+                                        Wishlist
+                                    </a>
+                                </li>
 
-                            <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
 
-                            <li>
-                                <a class="dropdown-item un-logout-item"
-                                    href="/urbannest/auth/logout.php">
-                                    <i class="fa-solid fa-right-from-bracket"></i>
-                                    Logout
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                                <li>
+                                    <a class="dropdown-item un-logout-item"
+                                        href="/urbannest/auth/logout.php">
+                                        <i class="fa-solid fa-right-from-bracket"></i>
+                                        Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
 
-<?php } ?>
+                    <?php } ?>
 
                 </ul>
 

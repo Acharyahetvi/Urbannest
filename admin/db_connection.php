@@ -12,6 +12,7 @@ if (!$conn) {
     die("Database Connection Failed: " . mysqli_connect_error());
 }
 
+// Set UTF-8 character encoding for the database connection
 mysqli_set_charset($conn, "utf8mb4");
 
 // Make both variable names available

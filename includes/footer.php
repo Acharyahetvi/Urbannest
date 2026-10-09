@@ -139,6 +139,7 @@
     .footer-box h2 span {
 
         color: #d4af37;
+        font-style: italic;
 
     }
 
@@ -263,7 +264,7 @@
 
         color: #bfc4cc;
 
-        font-size: 15px;
+        font-size: 13px;
 
     }
 
@@ -293,17 +294,6 @@
 
         color: #d4af37;
 
-    }
-
-    @media (max-width: 767px) {
-        .footer-container {
-            grid-template-columns: 1fr;
-            gap: 24px;
-        }
-
-        .company-box {
-            padding-right: 0;
-        }
     }
 </style>
 

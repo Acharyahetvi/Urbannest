@@ -93,7 +93,7 @@ $totalAmenities   = getCount($con, "amenities");
                     <h2><?php echo $totalUsers; ?></h2>
 
                     <a href="/urbannest/admin/users/view.php">
-                        View Users →
+                        View Users
                     </a>
                 </div>
 
@@ -107,7 +107,7 @@ $totalAmenities   = getCount($con, "amenities");
                     <h2><?php echo $totalProperties; ?></h2>
 
                     <a href="/urbannest/admin/property/view.php">
-                        View Properties →
+                        View Properties
                     </a>
                 </div>
 
@@ -121,7 +121,7 @@ $totalAmenities   = getCount($con, "amenities");
                     <h2><?php echo $totalCategories; ?></h2>
 
                     <a href="/urbannest/admin/category/view.php">
-                        View Categories →
+                        View Categories
                     </a>
                 </div>
 
@@ -135,7 +135,7 @@ $totalAmenities   = getCount($con, "amenities");
                     <h2><?php echo $totalSubCategories; ?></h2>
 
                     <a href="/urbannest/admin/sub-category/view.php">
-                        View Sub Categories →
+                        View Sub Categories
                     </a>
                 </div>
 
@@ -149,7 +149,7 @@ $totalAmenities   = getCount($con, "amenities");
                     <h2><?php echo $totalAmenities; ?></h2>
 
                     <a href="/urbannest/admin/amenities/view.php">
-                        View Amenities →
+                        View Amenities
                     </a>
                 </div>
 
