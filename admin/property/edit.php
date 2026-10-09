@@ -255,8 +255,7 @@ $image_result = mysqli_query($con, $image_sql);
 
         <main class="main-content">
 
-            <main class="main-content">
-                <div class="page-container">
+            <div class="page-container">
 
                     <!-- PAGE HEADER -->
                     <div class="page-header">
@@ -448,8 +447,7 @@ $image_result = mysqli_query($con, $image_sql);
                         </form>
                     </div>
 
-                </div>
-            </main>
+            </div>
 
             <?php include __DIR__ . "/../includes/footer.php"; ?>
 

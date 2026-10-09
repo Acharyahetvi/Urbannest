@@ -896,7 +896,7 @@ if ($result) {
 
                 <div class="un-stat">
 
-                    <div class="num">2,400+</div>
+                    <div class="num">350+</div>
 
                     <div class="lbl">Listings</div>
 
@@ -905,7 +905,7 @@ if ($result) {
 
                 <div class="un-stat">
 
-                    <div class="num">180</div>
+                    <div class="num">7</div>
 
                     <div class="lbl">Cities</div>
 
