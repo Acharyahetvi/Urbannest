@@ -1,3 +1,4 @@
+
 /* =========================================================
    URBANNEST - COMMON STYLE
    Sidebar + Header + Footer + Main Layout
@@ -72,9 +73,11 @@ a {
   width: 42px;
   height: 42px;
   flex-shrink: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   background: #0b1f3a;
   border-radius: 10px;
   overflow: hidden;
@@ -88,41 +91,25 @@ a {
 }
 
 /* =========================================================
-   URBANNEST BRAND TEXT
+   URBANNEST BRAND TEXT - UPDATED
+   Home Page Jaisa Elegant Font
 ========================================================= */
 
-.un-brand-text {
-  display: inline-block !important;
-
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif !important;
-  font-size: 1.35rem !important;
+.un-sidebar-brand .un-brand-text {
+  font-family: "Playfair Display", Georgia, serif !important;
+  font-size: 1.8rem !important;
   font-weight: 700 !important;
+  color: #0b1f3a !important;
+  letter-spacing: -1px !important;
   line-height: 1 !important;
-
-  color: #0a2342 !important;
-
   white-space: nowrap !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-
-  letter-spacing: -0.02em;
+  display: inline-block;
 }
 
-/* Nest */
-.un-brand-text span {
+.un-sidebar-brand .un-brand-text span {
   color: #d4af37 !important;
   font-style: italic !important;
   font-weight: 700 !important;
-}
-
-/* If parent has .un-brand-light, still keep Urban navy */
-.un-brand-light .un-brand-text {
-  color: #0a2342 !important;
-}
-
-/* Keep Nest gold even inside light brand */
-.un-brand-light .un-brand-text span {
-  color: #d4af37 !important;
 }
 
 /* SIDEBAR TITLE */
@@ -278,12 +265,12 @@ a {
   border-bottom: none;
 }
 
-.un-sidebar-offcanvas .offcanvas-body {
-  padding: 0;
-}
-
 .un-sidebar-offcanvas .btn-close {
   margin-right: 5px;
+}
+
+.un-sidebar-offcanvas .offcanvas-body {
+  padding: 0;
 }
 
 /* =========================================================

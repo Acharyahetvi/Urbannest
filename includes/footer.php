@@ -15,6 +15,13 @@
                 Buy, sell and rent properties easily.
             </p>
 
+            <div class="footer-socials" aria-label="Social media">
+                <i class="fa-brands fa-instagram" role="img" aria-label="Instagram"></i>
+                <i class="fa-brands fa-linkedin-in" role="img" aria-label="LinkedIn"></i>
+                <i class="fa-brands fa-youtube" role="img" aria-label="YouTube"></i>
+                <i class="fa-brands fa-facebook-f" role="img" aria-label="Facebook"></i>
+            </div>
+
         </div>
 
 
@@ -94,7 +101,7 @@
 
         gap: 70px;
 
-        padding-bottom: 30px;
+        padding-bottom: 28px;
 
     }
 
@@ -132,6 +139,7 @@
     .footer-box h2 span {
 
         color: #d4af37;
+        font-style: italic;
 
     }
 
@@ -233,11 +241,17 @@
 
     .footer-bottom {
 
+        width: 88%;
+
+        max-width: 1200px;
+
+        margin: 0 auto;
+
         border-top: 1px solid rgba(255, 255, 255, 0.15);
 
         text-align: center;
 
-        padding: 14px 20px;
+        padding: 14px 0;
 
     }
 
@@ -250,7 +264,35 @@
 
         color: #bfc4cc;
 
-        font-size: 13px;
+        font-size: 15px;
+
+    }
+
+    .footer-socials {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+        margin-top: 12px;
+
+        color: #fff;
+
+        font-size: 14px;
+
+    }
+
+    .footer-socials i {
+
+        transition: color 0.25s ease;
+
+    }
+
+    .footer-socials i:hover {
+
+        color: #d4af37;
 
     }
 </style>

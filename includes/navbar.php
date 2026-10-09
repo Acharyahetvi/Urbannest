@@ -7,7 +7,6 @@ if (session_status() === PHP_SESSION_NONE) {
 $isLoggedIn = isset($_SESSION['user_id']);
 $userName = $_SESSION['user_name'] ?? '';
 $userRole = $_SESSION['user_role'] ?? null;
-
 $roleLabels = [
     1 => 'Admin',
     2 => 'Buyer',
@@ -15,22 +14,15 @@ $roleLabels = [
     4 => 'Seller',
     5 => 'Owner'
 ];
-
 $userRoleLabel = $roleLabels[(int)$userRole] ?? '';
-
 $nameParts = preg_split('/\s+/', trim($userName), -1, PREG_SPLIT_NO_EMPTY);
 $userInitials = '';
 
 foreach (array_slice($nameParts ?: [], 0, 2) as $namePart) {
-    $userInitials .= strtoupper(
-        function_exists('mb_substr')
-            ? mb_substr($namePart, 0, 1, 'UTF-8')
-            : substr($namePart, 0, 1)
-    );
+    $userInitials .= strtoupper(function_exists('mb_substr')
+        ? mb_substr($namePart, 0, 1, 'UTF-8')
+        : substr($namePart, 0, 1));
 }
-
-/* Current Page */
-$currentPage = basename($_SERVER['PHP_SELF']);
 
 ?>
 
@@ -132,33 +124,6 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         color: #566174;
     }
 
-
-    /* =========================================
-       ACTIVE NAVBAR PAGE
-       ========================================= */
-
-    .un-navbar .nav-link {
-        position: relative;
-    }
-
-    .un-navbar .nav-link.active {
-        color: #d4af37;
-    }
-
-    /* Small mustard dot below active page */
-    .un-navbar .nav-link.active::after {
-        content: "";
-        position: absolute;
-        width: 5px;
-        height: 5px;
-        background: #d4af37;
-        border-radius: 50%;
-        left: 50%;
-        bottom: 2px;
-        transform: translateX(-50%);
-    }
-
-
     @media (max-width: 991.98px) {
 
         /* Prevent closed offcanvas from causing horizontal overflow */
@@ -166,9 +131,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             overflow-x: clip;
         }
 
-        /* Ensure the mobile offcanvas is fixed,
-           constrained to viewport width,
-           and slid fully onscreen when shown. */
+        /* Ensure the mobile offcanvas is fixed, constrained to viewport width,
+           and slid fully onscreen when shown. Use a safe max width of 390px. */
         .un-offcanvas {
             position: fixed !important;
             top: 0;
@@ -183,21 +147,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             overflow-y: auto;
         }
 
-        /* When Bootstrap toggles the show class */
+        /* When Bootstrap toggles the show class, make sure panel is visible */
         .un-offcanvas.show,
         .un-offcanvas.showing {
             transform: none !important;
         }
-
-        /* Mobile active dot */
-        .un-navbar .nav-link.active::after {
-            left: 0;
-            bottom: 3px;
-            transform: none;
-        }
     }
 </style>
-
 
 <nav class="navbar navbar-expand-lg un-navbar sticky-top">
 
@@ -211,13 +167,12 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 alt="UrbanNest Logo">
 
             <span class="un-brand-text">
-                Urban<span>Nest</span>
+                <h2>Urban<span>Nest</span></h2>
             </span>
 
         </a>
 
-
-        <!-- Mobile Menu Button -->
+        <!-- Mobile Menu Button
         <button class="navbar-toggler border-0"
             type="button"
             data-bs-toggle="offcanvas"
@@ -227,14 +182,12 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
             <i class="fa-solid fa-bars fs-4"></i>
 
-        </button>
-
+        </button> -->
 
         <!-- Navbar Menu -->
         <div class="offcanvas offcanvas-end un-offcanvas"
             tabindex="-1"
             id="unMenu">
-
 
             <!-- Offcanvas Header -->
             <div class="offcanvas-header">
@@ -251,223 +204,143 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
             </div>
 
-
             <!-- Offcanvas Body -->
             <div class="offcanvas-body">
 
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
 
-
                     <!-- Home -->
                     <li class="nav-item">
-
-                        <a class="nav-link <?= $currentPage == 'index.php' ? 'active' : '' ?>"
+                        <a class="nav-link"
                             href="/urbannest/index.php">
-
                             Home
-
                         </a>
-
                     </li>
 
+                    <!-- Properties -->
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="/urbannest/properties/list.php">
+                            Properties
+                        </a>
+                    </li>
 
                     <!-- Agents -->
                     <li class="nav-item">
-
-                        <a class="nav-link <?= $currentPage == 'agents.php' ? 'active' : '' ?>"
+                        <a class="nav-link"
                             href="/urbannest/agents.php">
-
                             Agents
-
                         </a>
-
                     </li>
-
 
                     <!-- Owners -->
                     <li class="nav-item">
-
-                        <a class="nav-link <?= $currentPage == 'owners.php' ? 'active' : '' ?>"
+                        <a class="nav-link"
                             href="/urbannest/owners.php">
-
                             Owners
-
                         </a>
-
                     </li>
-
 
                     <!-- About -->
                     <li class="nav-item">
-
-                        <a class="nav-link <?= $currentPage == 'about.php' ? 'active' : '' ?>"
+                        <a class="nav-link"
                             href="/urbannest/about.php">
-
                             About Us
-
                         </a>
-
                     </li>
-
 
                     <?php if (!$isLoggedIn) { ?>
 
-
                         <!-- Login -->
+
                         <li class="nav-item">
-
-                            <a class="nav-link <?= $currentPage == 'login.php' ? 'active' : '' ?>"
+                            <a class="nav-link"
                                 href="/urbannest/auth/login.php">
-
                                 Login
-
                             </a>
-
                         </li>
 
 
                         <!-- Register -->
+
                         <li class="nav-item">
-
-                            <a class="nav-link <?= $currentPage == 'register.php' ? 'active' : '' ?>"
+                            <a class="nav-link"
                                 href="/urbannest/auth/register.php">
-
                                 Register
-
                             </a>
-
                         </li>
-
 
                     <?php } else { ?>
 
-
                         <!-- Profile -->
+
                         <li class="nav-item dropdown d-flex align-items-center">
 
                             <a class="nav-link dropdown-toggle un-account-toggle"
-                                href="#"
+                                href=""
                                 id="profileDropdown"
                                 role="button"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false">
 
                                 <i class="fa-solid fa-user"></i>
-
                                 <?= htmlspecialchars($userName) ?>
 
                             </a>
 
-
                             <ul class="dropdown-menu dropdown-menu-end un-account-menu"
                                 aria-labelledby="profileDropdown">
 
-
                                 <li>
-
                                     <a class="un-account-header un-account-profile-link"
                                         href="/urbannest/auth/profile.php">
-
                                         <span class="un-account-avatar" aria-hidden="true">
-
-                                            <?= htmlspecialchars(
-                                                $userInitials !== ''
-                                                    ? $userInitials
-                                                    : 'U'
-                                            ) ?>
-
+                                            <?= htmlspecialchars($userInitials !== '' ? $userInitials : 'U') ?>
                                         </span>
-
-
                                         <div>
-
-                                            <div class="un-account-name">
-
-                                                <?= htmlspecialchars($userName) ?>
-
-                                            </div>
-
-
+                                            <div class="un-account-name"><?= htmlspecialchars($userName) ?></div>
                                             <?php if ($userRoleLabel !== ''): ?>
-
-                                                <div class="un-account-role">
-
-                                                    <?= htmlspecialchars($userRoleLabel) ?>
-
-                                                </div>
-
+                                                <div class="un-account-role"><?= htmlspecialchars($userRoleLabel) ?></div>
                                             <?php endif; ?>
-
                                         </div>
-
                                     </a>
-
                                 </li>
 
-
                                 <li>
-
                                     <hr class="dropdown-divider">
-
                                 </li>
 
-
                                 <li>
-
                                     <a class="dropdown-item"
                                         href="/urbannest/add-property.php">
-
                                         <i class="fa-solid fa-house"></i>
-
-                                        Add Property
-
+                                        List your Property
                                     </a>
-
                                 </li>
 
-
                                 <li>
-
                                     <a class="dropdown-item"
                                         href="/urbannest/wishlist.php">
-
                                         <i class="fa-solid fa-heart"></i>
-
                                         Wishlist
-
                                     </a>
-
                                 </li>
 
-
                                 <li>
-
                                     <hr class="dropdown-divider">
-
                                 </li>
 
-
                                 <li>
-
                                     <a class="dropdown-item un-logout-item"
                                         href="/urbannest/auth/logout.php">
-
                                         <i class="fa-solid fa-right-from-bracket"></i>
-
                                         Logout
-
                                     </a>
-
                                 </li>
-
-
                             </ul>
-
                         </li>
 
-
                     <?php } ?>
-
 
                 </ul>
 

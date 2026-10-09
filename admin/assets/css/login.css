@@ -14,15 +14,11 @@
 
 body {
   font-family: "Poppins", sans-serif;
-
   background-color: #f4f6f8;
-
   min-height: 100vh;
 
   display: flex;
-
   justify-content: center;
-
   align-items: center;
 }
 
@@ -34,9 +30,7 @@ body {
   width: 100%;
 
   display: flex;
-
   justify-content: center;
-
   align-items: center;
 
   padding: 20px;
@@ -48,11 +42,9 @@ body {
 
 .login-card {
   width: 100%;
-
   max-width: 430px;
 
   background-color: white;
-
   padding: 45px 40px;
 
   border-radius: 15px;
@@ -66,13 +58,10 @@ body {
 
 .card-brand {
   display: flex;
-
   justify-content: center;
-
   align-items: center;
 
   gap: 10px;
-
   margin-bottom: 10px;
 }
 
@@ -81,14 +70,12 @@ body {
   height: 45px;
 
   object-fit: cover;
-
   border-radius: 10px;
 }
-ss .card-brand h1 {
+
+.card-brand h1 {
   font-size: 25px;
-
   font-weight: 600;
-
   color: #0b1f3a;
 }
 
@@ -102,15 +89,12 @@ ss .card-brand h1 {
 
 .tagline {
   text-align: center;
-
   color: #d4af37;
 
   font-size: 11px;
-
   font-weight: 600;
 
   letter-spacing: 1px;
-
   margin-bottom: 30px;
 }
 
@@ -120,21 +104,17 @@ ss .card-brand h1 {
 
 .login-card h2 {
   color: #0b1f3a;
-
   font-size: 25px;
 
   text-align: center;
-
   margin-bottom: 8px;
 }
 
 .subtitle {
   text-align: center;
-
   color: #777;
 
   font-size: 14px;
-
   margin-bottom: 25px;
 }
 
@@ -148,11 +128,9 @@ ss .card-brand h1 {
 
 .field label {
   display: block;
-
   color: #0b1f3a;
 
   font-size: 14px;
-
   font-weight: 500;
 
   margin-bottom: 7px;
@@ -164,15 +142,12 @@ ss .card-brand h1 {
 
 .input-box {
   display: flex;
-
   align-items: center;
 
   gap: 10px;
 
   background-color: #f5f5f5;
-
   border: 1px solid #ddd;
-
   border-radius: 8px;
 
   padding: 13px 15px;
@@ -180,22 +155,23 @@ ss .card-brand h1 {
   transition: 0.3s;
 }
 
-.input-box i {
+.input-box > i {
   color: #0b1f3a;
+  flex-shrink: 0;
 }
 
 .input-box input {
   width: 100%;
+  min-width: 0;
 
   border: none;
-
   outline: none;
 
   background: transparent;
 
   font-family: "Poppins", sans-serif;
-
   font-size: 14px;
+  color: #0b1f3a;
 }
 
 /* ===============================
@@ -209,15 +185,44 @@ ss .card-brand h1 {
 }
 
 /* ===============================
-   PASSWORD EYE
+   PASSWORD EYE ICON
 ================================ */
 
-.toggle-password {
+.password-toggle {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+
+  background: transparent !important;
+
+  color: #0b1f3a;
+
+  font-size: 16px;
   cursor: pointer;
+
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
 }
 
-.toggle-password:hover {
+.password-toggle i {
+  color: #0b1f3a;
+}
+
+.password-toggle:hover i {
   color: #d4af37;
+}
+
+/* Remove browser's extra password reveal icon */
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
 }
 
 /* ===============================
@@ -228,27 +233,21 @@ ss .card-brand h1 {
   width: 100%;
 
   border: none;
-
   border-radius: 8px;
 
   padding: 14px;
 
   background-color: #d4af37;
-
   color: #0b1f3a;
 
   font-family: "Poppins", sans-serif;
-
   font-size: 15px;
-
   font-weight: 600;
 
   cursor: pointer;
 
   display: flex;
-
   justify-content: center;
-
   align-items: center;
 
   gap: 10px;
@@ -258,7 +257,6 @@ ss .card-brand h1 {
 
 .login-btn:hover {
   background-color: #c39b2f;
-
   transform: translateY(-2px);
 }
 
@@ -268,19 +266,15 @@ ss .card-brand h1 {
 
 .error-message {
   background-color: #ffecec;
-
   color: #c62828;
 
   border: 1px solid #ffbaba;
-
   padding: 12px;
 
   border-radius: 8px;
-
   margin-bottom: 20px;
 
   font-size: 13px;
-
   text-align: center;
 }
 
@@ -290,20 +284,8 @@ ss .card-brand h1 {
 
 .footer-note {
   text-align: center;
-
   color: #999;
 
   font-size: 12px;
-
   margin-top: 25px;
-}
-
-/* ===============================
-   MOBILE
-================================ */
-
-@media (max-width: 500px) {
-  .login-card {
-    padding: 35px 25px;
-  }
 }

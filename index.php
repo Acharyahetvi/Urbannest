@@ -9,9 +9,9 @@ require_once __DIR__ . '/includes/data.php';
 require_once __DIR__ . '/includes/navbar.php';
 
 
-// =====================================
-// GET REVIEWS FROM DATABASE
-// =====================================
+// ===================================== 
+// GET REVIEWS FROM DATABASE 
+// ===================================== 
 
 $reviews = [];
 
@@ -24,7 +24,7 @@ $sql = "SELECT users.full_name, reviews.rating, reviews.review, reviews.created_
 $result = mysqli_query($conn, $sql);
 
 
-// STORE REVIEWS
+// STORE REVIEWS 
 
 if ($result) {
 
@@ -34,29 +34,11 @@ if ($result) {
     }
 }
 
-
-// =====================================
-// GET TOTAL CITIES FROM DATABASE
-// =====================================
-
-$city_query = "SELECT COUNT(DISTINCT city) AS total_cities FROM properties";
-
-$city_result = mysqli_query($conn, $city_query);
-
-$total_cities = 0;
-
-if ($city_result) {
-
-    $city_data = mysqli_fetch_assoc($city_result);
-
-    $total_cities = $city_data['total_cities'];
-}
-
 ?>
 
 <style>
-    /* =====================================
-   URBANNEST HOME PAGE
+    /* ===================================== 
+   URBANNEST HOME PAGE 
 ===================================== */
 
     body {
@@ -251,7 +233,7 @@ if ($city_result) {
         margin-top: 0;
 
         padding-top: 45px;
-        padding-bottom: 65px;
+        padding-bottom: 48px;
         background: #f8f7f2;
     }
 
@@ -268,7 +250,7 @@ if ($city_result) {
 
     .un-purpose-heading h2 {
 
-        margin-bottom: 8px;
+        margin-bottom: 0;
 
         font-size: 30px;
         font-weight: 700;
@@ -452,30 +434,10 @@ if ($city_result) {
 
         position: relative;
 
-        padding: 58px 0;
+        padding: 44px 0 48px;
 
         background: #f8f7f2;
     }
-
-
-    /* GOLD DECORATIVE LINE */
-
-    .un-review-section::before {
-
-        content: "";
-
-        display: block;
-
-        width: 70px;
-        height: 3px;
-
-        margin: 0 auto 25px;
-
-        background: #d4af37;
-
-        border-radius: 10px;
-    }
-
 
     /* =====================================
    REVIEW HEADING
@@ -483,7 +445,7 @@ if ($city_result) {
 
     .un-review-heading {
 
-        margin-bottom: 32px;
+        margin-bottom: 28px;
 
         text-align: center;
     }
@@ -491,7 +453,7 @@ if ($city_result) {
 
     .un-review-heading h2 {
 
-        margin-bottom: 8px;
+        margin-bottom: 0;
 
         color: #0b1f3a;
 
@@ -520,41 +482,32 @@ if ($city_result) {
 
         width: 100%;
 
-        overflow-x: auto;
+        overflow: hidden;
 
-        touch-action: pan-x pan-y;
-        cursor: grab;
+        margin: -6px 0;
+        padding: 6px 0;
         user-select: none;
-        scroll-behavior: smooth;
-        scroll-snap-type: x mandatory;
-        scrollbar-width: none;
-    }
-
-    .un-review-slider-wrapper::-webkit-scrollbar {
-        display: none;
-    }
-
-    .un-review-slider-wrapper.is-dragging {
-        cursor: grabbing;
-        scroll-snap-type: none;
-        scroll-behavior: auto;
     }
 
     .un-review-track {
 
         display: flex;
+        gap: 20px;
 
-        width: 100%;
-
+        width: max-content;
+        padding-right: 20px;
+        animation: un-review-scroll var(--review-duration, 40s) linear infinite;
     }
 
+    @keyframes un-review-scroll {
+        to {
+            transform: translateX(-50%);
+        }
+    }
 
     .un-review-slide {
 
-        flex: 0 0 100%;
-
-        width: 100%;
-        scroll-snap-align: start;
+        flex: 0 0 auto;
     }
 
 
@@ -562,9 +515,14 @@ if ($city_result) {
 
         display: grid;
 
-        grid-template-columns: repeat(3, 1fr);
+        grid-auto-columns: var(--review-card-width, 1fr);
+        grid-auto-flow: column;
 
         gap: 20px;
+    }
+
+    .un-review-card {
+        width: var(--review-card-width, 100%);
     }
 
 
@@ -684,56 +642,6 @@ if ($city_result) {
 
 
     /* =====================================
-   REVIEW PAGINATION
-===================================== */
-
-    .un-review-controls {
-
-        display: flex;
-
-        align-items: center;
-        justify-content: center;
-
-        gap: 14px;
-
-        margin-top: 22px;
-    }
-
-
-    .un-review-dots {
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 6px;
-    }
-
-
-    .un-review-dot {
-
-        width: 7px;
-        height: 7px;
-
-        border-radius: 50%;
-
-        background: #d6d6d6;
-
-        transition: 0.2s;
-    }
-
-
-    .un-review-dot.active {
-
-        width: 20px;
-
-        border-radius: 10px;
-
-        background: #d4af37;
-    }
-
-
-    /* =====================================
    NO REVIEW
 ===================================== */
 
@@ -752,17 +660,17 @@ if ($city_result) {
 ===================================== */
 
     .un-category-section {
-        padding: 54px 0 46px;
+        padding: 44px 0;
         background: #f8f7f2;
     }
 
     .un-category-heading {
-        margin-bottom: 26px;
+        margin-bottom: 24px;
         text-align: center;
     }
 
     .un-category-heading h2 {
-        margin: 0 0 8px;
+        margin: 0;
         color: #0b1f3a;
         font-size: 30px;
         font-weight: 700;
@@ -771,6 +679,18 @@ if ($city_result) {
     .un-category-heading p {
         margin: 0;
         color: #687386;
+    }
+
+    .un-purpose-heading h2::after,
+    .un-category-heading h2::after,
+    .un-review-heading h2::after {
+        content: "";
+        display: block;
+        width: 58px;
+        height: 2px;
+        margin: 10px auto 8px;
+        border-radius: 10px;
+        background: #d4af37;
     }
 
     .un-category-carousel {
@@ -859,6 +779,53 @@ if ($city_result) {
         font-size: 13px;
         line-height: 1.6;
     }
+
+    /* =====================================
+   RESPONSIVE
+===================================== */
+
+    @media (max-width: 991px) {
+        .un-category-card {
+            flex-basis: calc((100% - 20px) / 2);
+        }
+    }
+
+    @media (max-width: 575px) {
+        .un-purpose-section {
+            padding-top: 32px;
+        }
+
+        .un-category-section {
+            padding: 36px 0;
+        }
+
+        .un-category-card {
+            flex-basis: 100%;
+        }
+
+        .un-category-image {
+            height: 205px;
+        }
+    }
+
+    @media (max-width: 767px) {
+
+        .un-review-section {
+
+            padding: 38px 0 42px;
+        }
+
+        .un-review-heading h2 {
+
+            font-size: 29px;
+        }
+
+        .un-review-card {
+
+            min-height: 190px;
+        }
+
+    }
 </style>
 
 
@@ -938,11 +905,7 @@ if ($city_result) {
 
                 <div class="un-stat">
 
-                    <!-- DYNAMIC CITY COUNT -->
-
-                    <div class="num">
-                        <?php echo $total_cities; ?>
-                    </div>
+                    <div class="num">180</div>
 
                     <div class="lbl">Cities</div>
 
@@ -974,6 +937,8 @@ if ($city_result) {
 
     <div class="container">
 
+        <!-- SECTION HEADING -->
+
         <div class="un-purpose-heading">
 
             <h2>What are you looking for?</h2>
@@ -991,6 +956,8 @@ if ($city_result) {
             <div class="col-md-4">
 
                 <a href="buy.php" class="un-purpose-card">
+
+                    <!-- Property Image -->
 
                     <div class="un-purpose-image">
 
@@ -1026,6 +993,8 @@ if ($city_result) {
 
                 <a href="rent.php" class="un-purpose-card">
 
+                    <!-- Property Image -->
+
                     <div class="un-purpose-image">
 
                         <img src="assets/images/rent.jpg"
@@ -1059,6 +1028,8 @@ if ($city_result) {
             <div class="col-md-4">
 
                 <a href="sale.php" class="un-purpose-card">
+
+                    <!-- Property Image -->
 
                     <div class="un-purpose-image">
 
@@ -1104,133 +1075,61 @@ if ($city_result) {
     <div class="container">
 
         <div class="un-category-heading">
-
-            <h2 id="category-heading">
-                Explore Property Categories
-            </h2>
-
-            <p>
-                Find a space that fits your plans and lifestyle.
-            </p>
-
+            <h2 id="category-heading">Explore Property Categories</h2>
+            <p>Find a space that fits your plans and lifestyle.</p>
         </div>
 
-
         <div class="un-category-carousel">
-
             <div class="un-category-track" id="categoryTrack">
-
-
-                <a class="un-category-card" href="requirements.php">
-
+                <a class="un-category-card" href="properties/category.php?category_id=1">
                     <div class="un-category-image">
-
-                        <img src="admin/assets/images/category/residential.png"
-                            alt="Residential homes">
-
+                        <img src="admin/assets/images/category/residential.png" alt="Residential homes">
                     </div>
-
                     <div class="un-category-content">
-
                         <h3>Residential</h3>
-
-                        <p>
-                            Discover welcoming homes and apartments for every chapter.
-                        </p>
-
+                        <p>Discover welcoming homes and apartments for every chapter.</p>
                     </div>
-
                 </a>
 
-
-                <a class="un-category-card" href="requirements.php">
-
+                <a class="un-category-card" href="properties/category.php?category_id=2">
                     <div class="un-category-image">
-
-                        <img src="admin/assets/images/category/commercial.jpeg"
-                            alt="Commercial property">
-
+                        <img src="admin/assets/images/category/commercial.jpeg" alt="Commercial property">
                     </div>
-
                     <div class="un-category-content">
-
                         <h3>Commercial</h3>
-
-                        <p>
-                            Explore practical spaces for your business and next venture.
-                        </p>
-
+                        <p>Explore practical spaces for your business and next venture.</p>
                     </div>
-
                 </a>
 
-
-                <a class="un-category-card" href="requirements.php">
-
+                <a class="un-category-card" href="properties/category.php?category_id=5">
                     <div class="un-category-image">
-
-                        <img src="admin/assets/images/category/luxury.jpeg"
-                            alt="Luxury property">
-
+                        <img src="admin/assets/images/category/luxury.jpeg" alt="Luxury property">
                     </div>
-
                     <div class="un-category-content">
-
                         <h3>Luxury</h3>
-
-                        <p>
-                            Experience distinctive homes with considered details.
-                        </p>
-
+                        <p>Experience distinctive homes with considered details.</p>
                     </div>
-
                 </a>
 
-
-                <a class="un-category-card" href="requirements.php">
-
+                <a class="un-category-card" href="properties/category.php?category_id=3">
                     <div class="un-category-image">
-
-                        <img src="admin/assets/images/category/land.jpeg"
-                            alt="Land and plots">
-
+                        <img src="admin/assets/images/category/land.jpeg" alt="Land and plots">
                     </div>
-
                     <div class="un-category-content">
-
                         <h3>Land &amp; Plots</h3>
-
-                        <p>
-                            Find land with room to plan and build for the future.
-                        </p>
-
+                        <p>Find land with room to plan and build for the future.</p>
                     </div>
-
                 </a>
 
-
-                <a class="un-category-card" href="requirements.php">
-
+                <a class="un-category-card" href="properties/category.php?category_id=4">
                     <div class="un-category-image">
-
-                        <img src="admin/assets/images/category/industrial.webp"
-                            alt="Industrial property">
-
+                        <img src="admin/assets/images/category/industrial.webp" alt="Industrial property">
                     </div>
-
                     <div class="un-category-content">
-
                         <h3>Industrial</h3>
-
-                        <p>
-                            Browse adaptable spaces for operations and production.
-                        </p>
-
+                        <p>Browse adaptable spaces for operations and production.</p>
                     </div>
-
                 </a>
-
-
             </div>
 
         </div>
@@ -1248,6 +1147,8 @@ if ($city_result) {
 
     <div class="container">
 
+        <!-- REVIEW HEADING -->
+
         <div class="un-review-heading">
 
             <h2>What Our Customers Say</h2>
@@ -1261,32 +1162,21 @@ if ($city_result) {
 
         <?php if (count($reviews) > 0) { ?>
 
-
             <?php $reviewSlides = array_chunk($reviews, 3); ?>
 
+            <div class="un-review-slider-wrapper" id="reviewSliderWrapper">
 
-            <div class="un-review-slider-wrapper"
-                id="reviewSliderWrapper">
-
-
-                <div class="un-review-track"
-                    id="reviewTrack">
-
+                <div class="un-review-track" id="reviewTrack">
 
                     <?php foreach ($reviewSlides as $slide) { ?>
 
-
                         <div class="un-review-slide">
-
 
                             <div class="un-review-slide-row">
 
-
                                 <?php foreach ($slide as $review) { ?>
 
-
                                     <div class="un-review-card">
-
 
                                         <!-- RATING -->
 
@@ -1299,6 +1189,7 @@ if ($city_result) {
                                             for ($i = 1; $i <= 5; $i++) {
 
                                                 echo ($i <= $rating) ? "★" : "☆";
+
                                             }
 
                                             ?>
@@ -1311,11 +1202,7 @@ if ($city_result) {
                                         <p class="un-review-text">
 
                                             <?php
-
-                                            echo htmlspecialchars(
-                                                $review["review"]
-                                            );
-
+                                            echo htmlspecialchars($review["review"]);
                                             ?>
 
                                         </p>
@@ -1326,11 +1213,7 @@ if ($city_result) {
                                         <div class="un-review-name">
 
                                             <?php
-
-                                            echo htmlspecialchars(
-                                                $review["full_name"]
-                                            );
-
+                                            echo htmlspecialchars($review["full_name"]);
                                             ?>
 
                                         </div>
@@ -1344,69 +1227,29 @@ if ($city_result) {
 
                                             echo date(
                                                 "d M Y",
-                                                strtotime(
-                                                    $review["created_at"]
-                                                )
+                                                strtotime($review["created_at"])
                                             );
 
                                             ?>
 
                                         </div>
 
-
                                     </div>
 
-
                                 <?php } ?>
-
 
                             </div>
 
                         </div>
 
-
                     <?php } ?>
-
 
                 </div>
 
             </div>
 
 
-            <!-- REVIEW CONTROLS -->
-
-            <?php if (count($reviewSlides) > 1) { ?>
-
-
-                <div class="un-review-controls">
-
-                    <div class="un-review-dots"
-                        id="reviewDots">
-
-
-                        <?php foreach (
-                            $reviewSlides as $index => $slide
-                        ) { ?>
-
-
-                            <span
-                                class="un-review-dot <?php echo ($index === 0) ? 'active' : ''; ?>">
-                            </span>
-
-
-                        <?php } ?>
-
-
-                    </div>
-
-                </div>
-
-
-            <?php } ?>
-
-
         <?php } else { ?>
-
 
             <div class="un-no-review">
 
@@ -1414,328 +1257,105 @@ if ($city_result) {
 
             </div>
 
-
         <?php } ?>
-
 
     </div>
 
 </section>
 
-
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
+    const track = document.getElementById("categoryTrack");
 
-        const track = document.getElementById("categoryTrack");
+    if (!track) {
+        return;
+    }
 
-        if (!track) {
+    let dragStartX = 0;
+    let dragStartScroll = 0;
+    let isDragging = false;
+    let suppressClick = false;
+
+    track.addEventListener("pointerdown", function (event) {
+        if (event.pointerType !== "mouse" || event.button !== 0) {
             return;
         }
 
-
-        let dragStartX = 0;
-        let dragStartScroll = 0;
-        let isDragging = false;
-        let suppressClick = false;
-
-
-        track.addEventListener("pointerdown", function(event) {
-
-            if (event.pointerType !== "mouse" || event.button !== 0) {
-                return;
-            }
-
-
-            dragStartX = event.clientX;
-            dragStartScroll = track.scrollLeft;
-
-            isDragging = true;
-            suppressClick = false;
-
-            track.classList.add("is-dragging");
-
-        });
-
-
-        track.addEventListener("pointermove", function(event) {
-
-            if (isDragging) {
-
-                const distance = event.clientX - dragStartX;
-
-
-                if (Math.abs(distance) > 5) {
-
-                    if (!suppressClick) {
-
-                        track.setPointerCapture(event.pointerId);
-
-                    }
-
-                    suppressClick = true;
-
-                    track.scrollLeft =
-                        dragStartScroll - distance;
-
-                }
-
-            }
-
-        });
-
-
-        function finishCategoryDrag() {
-
-            isDragging = false;
-
-            track.classList.remove("is-dragging");
-
-        }
-
-
-        track.addEventListener(
-            "pointerup",
-            finishCategoryDrag
-        );
-
-
-        track.addEventListener(
-            "pointercancel",
-            finishCategoryDrag
-        );
-
-
-        track.addEventListener(
-            "click",
-            function(event) {
-
-                if (suppressClick) {
-
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    suppressClick = false;
-
-                }
-
-            },
-            true
-        );
-
-
-        track.addEventListener(
-            "dragstart",
-            function(event) {
-
-                event.preventDefault();
-
-            }
-        );
-
+        dragStartX = event.clientX;
+        dragStartScroll = track.scrollLeft;
+        isDragging = true;
+        suppressClick = false;
+        track.classList.add("is-dragging");
     });
+
+    track.addEventListener("pointermove", function (event) {
+        if (isDragging) {
+            const distance = event.clientX - dragStartX;
+            if (Math.abs(distance) > 5) {
+                if (!suppressClick) {
+                    track.setPointerCapture(event.pointerId);
+                }
+                suppressClick = true;
+                track.scrollLeft = dragStartScroll - distance;
+            }
+        }
+    });
+
+    function finishCategoryDrag() {
+        isDragging = false;
+        track.classList.remove("is-dragging");
+    }
+
+    track.addEventListener("pointerup", finishCategoryDrag);
+    track.addEventListener("pointercancel", finishCategoryDrag);
+    track.addEventListener("click", function (event) {
+        if (suppressClick) {
+            event.preventDefault();
+            event.stopPropagation();
+            suppressClick = false;
+        }
+    }, true);
+
+    track.addEventListener("dragstart", function (event) {
+        event.preventDefault();
+    });
+});
 </script>
 
-
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-
-        const wrapper =
-            document.getElementById("reviewSliderWrapper");
-
-        const dots =
-            document.querySelectorAll(".un-review-dot");
-
-
-        if (!wrapper) {
-            return;
-        }
-
-
-        const slides =
-            wrapper.querySelectorAll(".un-review-slide");
-
-
-        if (slides.length <= 1) {
-            return;
-        }
-
-
-        let dragStartX = 0;
-        let dragStartScroll = 0;
-        let isDragging = false;
-        let suppressClick = false;
-
-
-        function updateDots() {
-
-            const currentSlide =
-                Math.round(
-                    wrapper.scrollLeft /
-                    wrapper.clientWidth
-                );
-
-
-            dots.forEach(function(dot, index) {
-
-                dot.classList.toggle(
-                    "active",
-                    index === currentSlide
-                );
-
-            });
-
-        }
-
-
-        dots.forEach(function(dot, index) {
-
-            dot.addEventListener(
-                "click",
-                function() {
-
-                    wrapper.scrollTo({
-
-                        left: index *
-                            wrapper.clientWidth,
-
-                        behavior: "smooth"
-
-                    });
-
-                }
-            );
-
-        });
-
-
-        wrapper.addEventListener(
-            "pointerdown",
-            function(event) {
-
-                if (
-                    event.pointerType !== "mouse" ||
-                    event.button !== 0
-                ) {
-
-                    return;
-
-                }
-
-
-                dragStartX = event.clientX;
-
-                dragStartScroll =
-                    wrapper.scrollLeft;
-
-                isDragging = true;
-
-                wrapper.classList.add(
-                    "is-dragging"
-                );
-
-                wrapper.setPointerCapture(
-                    event.pointerId
-                );
-
-            }
-        );
-
-
-        wrapper.addEventListener(
-            "pointermove",
-            function(event) {
-
-                if (isDragging) {
-
-                    const distance =
-                        event.clientX -
-                        dragStartX;
-
-
-                    if (Math.abs(distance) > 5) {
-
-                        suppressClick = true;
-
-                        wrapper.scrollLeft =
-                            dragStartScroll -
-                            distance;
-
-                    }
-
-                }
-
-            }
-        );
-
-
-        function finishReviewDrag() {
-
-            isDragging = false;
-
-            wrapper.classList.remove(
-                "is-dragging"
-            );
-
-        }
-
-
-        wrapper.addEventListener(
-            "pointerup",
-            finishReviewDrag
-        );
-
-
-        wrapper.addEventListener(
-            "pointercancel",
-            finishReviewDrag
-        );
-
-
-        wrapper.addEventListener(
-            "click",
-            function(event) {
-
-                if (suppressClick) {
-
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    suppressClick = false;
-
-                }
-
-            },
-            true
-        );
-
-
-        wrapper.addEventListener(
-            "dragstart",
-            function(event) {
-
-                event.preventDefault();
-
-            }
-        );
-
-
-        wrapper.addEventListener(
-            "scroll",
-            updateDots, {
-                passive: true
-            }
-        );
-
-
-        window.addEventListener(
-            "resize",
-            updateDots
-        );
-
-
-        updateDots();
-
+document.addEventListener("DOMContentLoaded", function () {
+    const wrapper = document.getElementById("reviewSliderWrapper");
+    const track = document.getElementById("reviewTrack");
+
+    if (!wrapper || !track) {
+        return;
+    }
+
+    const slides = Array.from(track.children);
+    const cloneFragment = document.createDocumentFragment();
+
+    slides.forEach(function (slide) {
+        const clone = slide.cloneNode(true);
+        clone.setAttribute("aria-hidden", "true");
+        cloneFragment.appendChild(clone);
     });
+
+    track.appendChild(cloneFragment);
+
+    function sizeReviewTrack() {
+        const isMobile = window.matchMedia("(max-width: 767px)").matches;
+        const cardWidth = isMobile
+            ? wrapper.clientWidth
+            : (wrapper.clientWidth - 40) / 3;
+
+        track.style.setProperty("--review-card-width", cardWidth + "px");
+        const cycleWidth = track.children[slides.length].offsetLeft;
+        track.style.setProperty("--review-duration", Math.max(30, cycleWidth / 36) + "s");
+    }
+
+    sizeReviewTrack();
+    window.addEventListener("resize", sizeReviewTrack);
+});
 </script>
 
 

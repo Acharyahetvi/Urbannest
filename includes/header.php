@@ -28,11 +28,4 @@ $pageDesc  = $pageDesc  ?? 'Discover premium homes, penthouses & investment prop
 
 <body>
     <div class="un-topbar d-none d-lg-block">
-        <div class="container d-flex justify-content-between align-items-center">
-            <div class="small">
-                <span class="me-3"><i class="fa-regular fa-envelope me-2"></i>hello@urbannest.com</span>
-                <span><i class="fa-solid fa-phone me-2"></i>+1 (212) 555‑0117</span>
-            </div>
-
-        </div>
     </div>
